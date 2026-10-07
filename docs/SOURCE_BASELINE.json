@@ -1,0 +1,9 @@
+{
+  "product": "BinderCopy",
+  "frozenPwaPath": "F:/Desktop/new_proto/binder_app",
+  "frozenCommit": "f35163d346de9b5b005ece9033d6675a91350d70",
+  "handoffCommit": "000b623da272712489962e36588528de36a50464",
+  "handoffPath": "F:/Desktop/new_proto/BinderCopy-native-port-handoff-2026-10-07",
+  "handoffZipSha256": "e78b9c4b0ef5e049c7d91d0d6f92ff906eeca981205a4ee25d19ced2fd0da519",
+  "readOnlyReference": true
+}

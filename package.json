@@ -1,0 +1,13 @@
+{
+  "name": "binder-copy-desktop",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "verify:docs": "node scripts/check-docs.mjs",
+    "setup:hooks": "git config core.hooksPath .githooks"
+  },
+  "engines": {
+    "node": ">=22.16"
+  }
+}
