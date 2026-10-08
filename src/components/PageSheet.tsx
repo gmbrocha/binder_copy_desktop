@@ -38,6 +38,7 @@ export default function PageSheet({
   onDragging,
   titleFont,
   maximumWidth = 820,
+  showLocks = false,
 }: {
   api: ApiClient;
   page: Page;
@@ -49,6 +50,7 @@ export default function PageSheet({
   onDragging?: (active: boolean) => void;
   titleFont?: string;
   maximumWidth?: number;
+  showLocks?: boolean;
 }) {
   const [width, setWidth] = useState(0);
   const [floating, setFloating] = useState<number | null>(null);
@@ -58,19 +60,16 @@ export default function PageSheet({
   const offset = useRef(new Animated.ValueXY()).current;
   const layout = getPageLayout(page.size);
   const scale = width / layout.width;
-  const rects = page.slots.map(
-    (_slot, i): Rect => ({
-      left:
-        (layout.pad + (i % page.size) * (layout.cardWidth + layout.gap)) *
-        scale,
-      top:
-        (layout.top +
-          Math.floor(i / page.size) * (layout.cardHeight + layout.gap)) *
-        scale,
-      width: layout.cardWidth * scale,
-      height: layout.cardHeight * scale,
-    }),
-  );
+  const rects = page.slots.map((_slot, i): Rect => ({
+    left:
+      (layout.pad + (i % page.size) * (layout.cardWidth + layout.gap)) * scale,
+    top:
+      (layout.top +
+        Math.floor(i / page.size) * (layout.cardHeight + layout.gap)) *
+      scale,
+    width: layout.cardWidth * scale,
+    height: layout.cardHeight * scale,
+  }));
   const current = useRef({ page, rects, onSwap, onDragging });
   current.current = { page, rects, onSwap, onDragging };
   const finish = (commit: boolean) => {
@@ -164,7 +163,9 @@ export default function PageSheet({
       {page.backdropMode !== "color" && page.backdrop && (
         <BackgroundImage api={api} id={page.backdrop.assetId} />
       )}
-      {page.backdropMode === undefined && !page.backdrop && <CraftedBackground palette={page.palette} />}
+      {page.backdropMode === undefined && !page.backdrop && (
+        <CraftedBackground palette={page.palette} />
+      )}
       <Text
         numberOfLines={1}
         style={{
@@ -232,9 +233,17 @@ export default function PageSheet({
             }}
             style={[
               s.slot,
+              !slot.cardId && {
+                borderWidth: 1,
+                borderStyle: "dashed",
+                borderColor: "#858c864d",
+              },
+              selected >= 0 && selected !== i && { opacity: 0.82 },
               {
                 borderColor:
-                  target === i || selected === i ? colors.accent : palette.line,
+                  target === i || selected === i ? colors.text : "transparent",
+                borderWidth:
+                  target === i || selected === i ? 2 : slot.cardId ? 0 : 1,
               },
             ]}
           >
@@ -245,7 +254,12 @@ export default function PageSheet({
                 style={{ width: "100%", height: "100%" }}
               />
             ) : (
-              <Text style={{ color: colors.muted }}>{i + 1}</Text>
+              <View style={{ alignItems: "center", gap: 2 }}>
+                <Icon name="plus" size={18} color={colors.muted} />
+                <Text style={{ color: colors.muted, fontSize: 12 }}>
+                  {i + 1}
+                </Text>
+              </View>
             )}
           </Pressable>
           {selected === i && onSelect && (
@@ -253,14 +267,16 @@ export default function PageSheet({
               <Text style={s.badgeText}>{i + 1}</Text>
             </View>
           )}
-          {slot.cardId && onLock && (
+          {slot.cardId && slot.locked && (onLock || showLocks) && (
             <Pressable
               accessibilityRole="button"
-              accessibilityLabel={`${slot.locked ? "Unlock" : "Lock"} slot ${i + 1}`}
-              onPress={() => onLock(i)}
+              accessibilityLabel={`Unlock slot ${i + 1}`}
+              disabled={!onLock}
+              onPress={() => onLock?.(i)}
+              hitSlop={8}
               style={s.lockButton}
             >
-              <Icon name={slot.locked ? "lock" : "unlock"} />
+              <Icon name="lock" size={14} />
             </Pressable>
           )}
         </View>
@@ -292,7 +308,7 @@ const s = StyleSheet.create({
   board: {
     width: "100%",
     maxWidth: 820,
-    borderRadius: 10,
+    borderRadius: 8,
     alignSelf: "center",
     overflow: "hidden",
   },
@@ -301,22 +317,22 @@ const s = StyleSheet.create({
     width: "100%",
     height: "100%",
     borderRadius: 6,
-    borderWidth: 2,
-    backgroundColor: colors.sunken,
+    borderWidth: 0,
+    backgroundColor: "#ffffff03",
     alignItems: "center",
     justifyContent: "center",
     overflow: "hidden",
   },
   lockButton: {
     position: "absolute",
-    bottom: 0,
-    right: 0,
-    width: 38,
-    height: 38,
+    top: 4,
+    right: 4,
+    width: 22,
+    height: 22,
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#151816e8",
-    borderTopLeftRadius: 8,
+    borderRadius: 5,
   },
   shackle: {
     position: "absolute",

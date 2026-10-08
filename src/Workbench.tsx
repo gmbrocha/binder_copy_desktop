@@ -1,4 +1,4 @@
-import Modal from './components/DesktopDialog';
+import Modal from "./components/DesktopDialog";
 import React, { useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
@@ -16,7 +16,13 @@ import {
 import { ApiClient, ApiError, type Bootstrap } from "./api/client";
 import CardImage from "./components/CardImage";
 import PageSheet from "./components/PageSheet";
-import Icon from "./components/Icon";
+import Icon, { type IconName } from "./components/Icon";
+import ScreenInsets from "./components/ScreenInsets";
+import {
+  beginReplacement,
+  keepReplacement,
+  type Replacement,
+} from "./features/build/replacement";
 import { swapSlots } from "./features/build/dragGeometry";
 import CardDetails from "./features/catalog/CardDetails";
 import { emptyFilters, type Card, type Page } from "./shared/contracts/index";
@@ -44,25 +50,34 @@ function Button({
   onPress,
   disabled = false,
   primary = false,
+  icon,
+  plain = false,
 }: {
   label: string;
   onPress: () => void;
   disabled?: boolean;
   primary?: boolean;
+  icon?: IconName;
+  plain?: boolean;
 }) {
   return (
     <Pressable
       accessibilityRole="button"
+      accessibilityLabel={label}
       accessibilityState={{ disabled }}
       disabled={disabled}
       onPress={onPress}
       style={({ pressed }) => [
         s.button,
         primary && s.primary,
+        plain && { borderWidth: 0 },
         disabled && s.disabled,
         pressed && s.pressed,
       ]}
     >
+      {icon && (
+        <Icon name={icon} size={18} color={primary ? c.onAccent : c.text} />
+      )}
       <Text style={[s.buttonText, primary && { color: c.onAccent }]}>
         {label}
       </Text>
@@ -122,10 +137,14 @@ export default function Workbench({
   const [picker, setPicker] = useState<"manual" | "favorite" | "colors" | null>(
     null,
   );
+  const [replacement, setReplacement] = useState<Replacement | null>(null);
+  const [similar, setSimilar] = useState<Card[]>([]);
   const [detail, setDetail] = useState<Card | null>(null);
   const [settings, setSettings] = useState(false);
   const [tagsOpen, setTagsOpen] = useState(false);
   const [proposal, setProposal] = useState<Proposal | null>(null);
+  const [nameOpen, setNameOpen] = useState(false);
+  const [nameDraft, setNameDraft] = useState("");
   const [themeOpen, setThemeOpen] = useState(false);
   const [theme, setTheme] = useState("");
   const [preview, setPreview] = useState(false);
@@ -146,8 +165,9 @@ export default function Workbench({
   const report = (e: unknown) => {
     const message = e instanceof Error ? e.message : "Something went wrong.";
     if (/KeyChain|SecureStore|entitlement/i.test(message)) {
-      if (__DEV__) console.warn('Secure storage initialization failed:', message);
-      setError('Secure storage is unavailable. Restart the app and try again.');
+      if (__DEV__)
+        console.warn("Secure storage initialization failed:", message);
+      setError("Secure storage is unavailable. Restart the app and try again.");
     } else setError(message);
   };
   const run = async (fn: () => Promise<void>) => {
@@ -384,6 +404,57 @@ export default function Workbench({
     setPicker(null);
     setThemeOpen(false);
   };
+  const startReplacement = (card?: Card) => {
+    const next = beginReplacement(session.page, selected, card);
+    setReplacement(next);
+    setSimilar([]);
+    setQuery("");
+    setPicker("manual");
+    const seedCardId =
+      session.page.seedCardId ?? session.page.slots[selected]?.cardId;
+    if (seedCardId)
+      void api
+        .request<{ cards: Card[] }>("/cards/similar", "POST", {
+          seedCardId,
+          filters: session.page.filters,
+        })
+        .then((result) => {
+          remember(result.cards);
+          setSimilar(result.cards);
+        })
+        .catch(() => {});
+  };
+  const reroll = () =>
+    run(async () => {
+      const source = fingerprint(session.page),
+        target = selected;
+      if (session.page.slots[target]?.locked)
+        throw new Error("Unlock this slot first.");
+      const result = await api.request<{
+        slots: Page["slots"];
+        cards: Card[];
+        note?: string;
+      }>("/generate", "POST", {
+        slots: session.page.slots,
+        filters: session.page.filters,
+        seedCardId: session.page.seedCardId,
+        target,
+      });
+      if (
+        source !== fingerprint(session.page) ||
+        sessionRef.current !== session
+      )
+        throw new Error("Your page changed. Reroll again.");
+      remember(result.cards);
+      const candidate = result.cards.find(
+        (card) => card.id === result.slots[target]?.cardId,
+      );
+      if (!candidate || candidate.id === session.page.slots[target]?.cardId)
+        throw new Error(
+          result.note || "No different card matches these filters.",
+        );
+      startReplacement(candidate);
+    });
   const choose = async (card: Card) => {
     remember([card]);
     if (picker === "favorite" || picker === "colors")
@@ -391,7 +462,9 @@ export default function Workbench({
         { kind: picker === "favorite" ? "favorite" : "card-colors", card },
         { ...session.page, filters: activeFilters },
       );
-    else {
+    else if (replacement) {
+      setReplacement({ ...replacement, card });
+    } else {
       if (session.page.slots[selected]?.locked)
         throw new Error("Unlock this slot first.");
       session.edit((p) => ({
@@ -400,6 +473,10 @@ export default function Workbench({
           i === selected ? { ...slot, cardId: card.id } : slot,
         ),
       }));
+      const next = session.page.slots.findIndex(
+        (slot, i) => i > selected && !slot.cardId,
+      );
+      setSelected(next >= 0 ? next : selected);
       setPicker(null);
     }
   };
@@ -436,11 +513,17 @@ export default function Workbench({
       setResults((current) => [...current, ...result.cards]);
       setTotal(result.total);
     });
-  const columns = desktop ? Math.max(3, Math.floor((gridWidth + 12) / 172)) : 3;
+  const columns = desktop
+    ? Math.max(3, Math.floor((gridWidth + 12) / 132))
+    : picker
+      ? 3
+      : width >= 600
+        ? 3
+        : 2;
   const cardWidth = Math.max(1, (gridWidth - (columns - 1) * 12) / columns);
   const cardGrid = (select: (card: Card) => void) => (
     <View
-      style={{ flex: 1 }}
+      style={{ flex: 1, gap: 12 }}
       onLayout={(event) => setGridWidth(event.nativeEvent.layout.width)}
     >
       <SearchControls
@@ -478,8 +561,11 @@ export default function Workbench({
               style={s.cardArt}
               resizeMode="contain"
             />
-            <Text numberOfLines={1} style={s.caption}>
+            <Text numberOfLines={1} style={[s.buttonText, { marginTop: 8 }]}>
               {item.name}
+            </Text>
+            <Text numberOfLines={1} style={s.caption}>
+              {item.setName} · {item.number}
             </Text>
           </Pressable>
         )}
@@ -504,6 +590,7 @@ export default function Workbench({
       page={shown}
       cards={cards}
       titleFont="Audiowide"
+      showLocks={!interactive}
       maximumWidth={interactive && zoom ? 1400 : 820}
       selected={interactive ? selected : -1}
       onDragging={interactive ? setDragging : undefined}
@@ -526,6 +613,7 @@ export default function Workbench({
                 !busy
               ) {
                 setQuery("");
+                setReplacement(null);
                 setPicker("manual");
               }
             }
@@ -572,6 +660,7 @@ export default function Workbench({
       {(["Build", "Cards", "Library"] as const).map((name) => (
         <Pressable
           key={name}
+          testID={`nav-${name.toLowerCase()}`}
           accessibilityRole="tab"
           accessibilityLabel={name}
           accessibilityState={{ selected: tab === name, disabled: busy }}
@@ -579,21 +668,31 @@ export default function Workbench({
           onPress={() => setTab(name)}
           style={[
             s.tab,
-            tab === name && s.activeTab,
+            desktop && tab === name && s.activeTab,
             desktop && { flexDirection: "row", gap: 8 },
           ]}
         >
-          <Icon
-            name={
-              { Build: "grid", Cards: "cards", Library: "library" }[name] as
-                "grid" | "cards" | "library"
+          <View
+            style={
+              !desktop && [
+                s.navPill,
+                tab === name && { backgroundColor: c.accentSoft },
+              ]
             }
-            size={18}
-          />
+          >
+            <Icon
+              color={tab === name ? c.accent : c.muted}
+              name={
+                { Build: "grid", Cards: "cards", Library: "library" }[name] as
+                  "grid" | "cards" | "library"
+              }
+              size={20}
+            />
+          </View>
           <Text
             style={[
               s.buttonText,
-              !desktop && { fontSize: 12 },
+              !desktop && { fontSize: 12, lineHeight: 16, color: c.muted },
               tab === name && { color: c.accent },
             ]}
           >
@@ -615,11 +714,17 @@ export default function Workbench({
         : "";
   const sourceTiles = (
     <View style={{ gap: 8 }}>
-      <Text style={s.heading}>Build a page</Text>
+      <Text style={s.heading}>{desktop ? "Build a page" : "Start from"}</Text>
+      {!desktop && (
+        <Text style={s.caption}>
+          Each one opens a proposal you can shuffle before keeping.
+        </Text>
+      )}
       <View style={[s.row, { flexWrap: "wrap" }]}>
         {[
           {
             label: "A favorite card",
+            icon: "favorite" as IconName,
             action: () => {
               setSourceOptions(false);
               setQuery("");
@@ -628,6 +733,7 @@ export default function Workbench({
           },
           {
             label: "A card’s colors",
+            icon: "droplet" as IconName,
             action: () => {
               setSourceOptions(false);
               setQuery("");
@@ -636,6 +742,7 @@ export default function Workbench({
           },
           {
             label: "A photo",
+            icon: "camera" as IconName,
             action: () => {
               setSourceOptions(false);
               void fromPhoto();
@@ -643,6 +750,7 @@ export default function Workbench({
           },
           {
             label: "A theme",
+            icon: "star" as IconName,
             action: () => {
               setSourceOptions(false);
               setTheme(page.themeSource ?? "");
@@ -650,19 +758,44 @@ export default function Workbench({
             },
           },
         ].map((option) => (
-          <View key={option.label} style={{ width: "47%", flexGrow: 1 }}>
-            <Button
-              label={option.label}
-              disabled={busy}
-              onPress={option.action}
-            />
-          </View>
+          <Pressable
+            key={option.label}
+            accessibilityRole="button"
+            accessibilityLabel={option.label}
+            disabled={busy}
+            onPress={option.action}
+            style={[
+              s.sourceTile,
+              { width: desktop ? "100%" : "47%", minHeight: desktop ? 48 : 60 },
+              busy && s.disabled,
+            ]}
+          >
+            <View style={s.sourceIcon}>
+              <Icon name={option.icon} size={16} color={c.accent} />
+            </View>
+            <Text style={[s.buttonText, { flex: 1, fontWeight: "600" }]}>
+              {option.label}
+            </Text>
+          </Pressable>
         ))}
       </View>
     </View>
   );
   const sourceControls = sourceLabel ? (
-    <View style={[s.panel, s.row]}>
+    <View style={[s.sourceStrip, desktop && { flexWrap: "wrap" }]}>
+      <View style={s.sourceIcon}>
+        <Icon
+          name={
+            page.seedCardId
+              ? "favorite"
+              : page.colorInspiration
+                ? "droplet"
+                : "star"
+          }
+          color={c.accent}
+          size={20}
+        />
+      </View>
       <Pressable
         accessibilityRole="button"
         accessibilityLabel="Generation source options"
@@ -670,17 +803,24 @@ export default function Workbench({
         onPress={() => setSourceOptions(true)}
         style={{ flex: 1, gap: 4 }}
       >
-        <Text style={s.buttonText}>{sourceLabel} ▾</Text>
+        <Text numberOfLines={1} style={[s.buttonText, { fontWeight: "600" }]}>
+          {sourceLabel} ▾
+        </Text>
+        <Text style={s.caption}>
+          Replaces the {page.slots.filter((slot) => !slot.locked).length}{" "}
+          unlocked slots
+        </Text>
       </Pressable>
       <Button
         label="Regenerate"
-        disabled={busy}
+        icon="shuffle"
+        disabled={busy || page.slots.every((slot) => slot.locked)}
         onPress={() => run(() => generate({ kind: "repeat" }))}
       />
     </View>
-  ) : (
+  ) : !filled ? (
     sourceTiles
-  );
+  ) : null;
   const appearance = (
     <Appearance
       key={page.id}
@@ -699,58 +839,154 @@ export default function Workbench({
       }
     />
   );
-  const slotControls = selected >= 0 && (
+  const selectedSlot = page.slots[selected];
+  const selectedCard = selectedSlot?.cardId
+    ? cards[selectedSlot.cardId]
+    : undefined;
+  const slotAction = (
+    label: string,
+    icon: IconName,
+    action: () => void,
+    disabled = false,
+  ) => (
+    <Pressable
+      key={label}
+      accessibilityRole="button"
+      accessibilityLabel={label}
+      disabled={busy || disabled}
+      onPress={action}
+      style={[
+        s.slotAction,
+        desktop && {
+          width: "47%",
+          flexGrow: 1,
+          borderWidth: 1,
+          borderColor: c.border,
+          borderRadius: 6,
+        },
+        (busy || disabled) && s.disabled,
+      ]}
+    >
+      <Icon name={icon} size={20} />
+      <Text style={s.caption}>{label}</Text>
+    </Pressable>
+  );
+  const slotControls = selected >= 0 && selectedSlot && (
     <View style={{ gap: 8 }}>
       <View style={s.row}>
-        <Text style={[s.heading, { flex: 1 }]}>Slot {selected + 1}</Text>
-        <Button
-          label="Done"
+        <View style={s.slotNumber}>
+          <Text style={{ color: c.background, fontWeight: "600" }}>
+            {selected + 1}
+          </Text>
+        </View>
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel="Details"
+          onPress={() => selectedCard && setDetail(selectedCard)}
+          style={{ flex: 1 }}
+        >
+          <Text numberOfLines={1} style={s.buttonText}>
+            {selectedCard?.name ?? "Empty slot"}
+          </Text>
+          {selectedCard && (
+            <Text numberOfLines={1} style={s.caption}>
+              {selectedCard.setName} · {selectedCard.number}
+            </Text>
+          )}
+        </Pressable>
+        {selectedCard && (
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel={selectedCard.owned ? "Owned" : "Mark owned"}
+            disabled={busy}
+            onPress={() =>
+              run(async () => {
+                const result = await api.ownership(
+                  selectedCard.id,
+                  !selectedCard.owned,
+                );
+                remember([{ ...selectedCard, owned: result.owned }]);
+                setSearchEpoch((n) => n + 1);
+              })
+            }
+            style={{
+              borderWidth: 1,
+              borderColor: c.lineStrong,
+              borderRadius: 99,
+              padding: 8,
+            }}
+          >
+            <Text style={s.caption}>
+              {selectedCard.owned ? "Owned" : "Mark owned"}
+            </Text>
+          </Pressable>
+        )}
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel="Deselect slot"
           onPress={() => {
             setSelected(-1);
             setMoveFrom(null);
           }}
-        />
+          style={s.iconButton}
+        >
+          <Icon name="close" />
+        </Pressable>
       </View>
-      <View style={[s.row, { flexWrap: "wrap" }]}>
-        <Button
-          label={page.slots[selected]?.cardId ? "Replace card" : "Fill slot"}
-          onPress={() => {
-            setQuery("");
-            setPicker("manual");
-          }}
-          disabled={page.slots[selected]?.locked || busy}
-        />
-        {page.slots[selected]?.cardId && (
-          <>
-            <Button
-              label="Details"
-              onPress={() => {
-                const card = cards[page.slots[selected].cardId!];
-                if (card) setDetail(card);
-              }}
-            />
-            <Button
-              label={moveFrom === null ? "Move" : "Cancel move"}
-              disabled={page.slots[selected].locked || busy}
-              onPress={() =>
-                setMoveFrom((previous) => (previous === null ? selected : null))
-              }
-            />
-            <Button
-              label="Remove"
-              disabled={page.slots[selected].locked || busy}
-              onPress={() =>
-                session.edit((p) => ({
-                  ...p,
-                  slots: p.slots.map((slot, i) =>
-                    i === selected ? { cardId: null, locked: false } : slot,
-                  ),
-                }))
-              }
-            />
-          </>
+      <View style={[s.row, desktop && { flexWrap: "wrap" }]}>
+        {slotAction(
+          selectedSlot.locked ? "Unlock slot" : "Lock slot",
+          selectedSlot.locked ? "lock" : "unlock",
+          () =>
+            session.edit((p) => ({
+              ...p,
+              slots: p.slots.map((slot, i) =>
+                i === selected ? { ...slot, locked: !slot.locked } : slot,
+              ),
+            })),
+        )}
+        {slotAction(
+          selectedSlot.cardId ? "Replace" : "Fill slot",
+          "replace",
+          () => {
+            if (selectedSlot.cardId) startReplacement();
+            else {
+              setReplacement(null);
+              setQuery("");
+              setPicker("manual");
+            }
+          },
+          selectedSlot.locked,
+        )}
+        {slotAction(
+          moveFrom === null ? "Move" : "Cancel move",
+          "move",
+          () =>
+            setMoveFrom((previous) => (previous === null ? selected : null)),
+          selectedSlot.locked || !selectedSlot.cardId,
+        )}
+        {slotAction(
+          "Reroll",
+          "shuffle",
+          reroll,
+          selectedSlot.locked || !selectedSlot.cardId,
+        )}
+        {slotAction(
+          "Remove card",
+          "trash",
+          () =>
+            session.edit((p) => ({
+              ...p,
+              slots: p.slots.map((slot, i) =>
+                i === selected ? { cardId: null, locked: false } : slot,
+              ),
+            })),
+          selectedSlot.locked || !selectedSlot.cardId,
         )}
       </View>
+      {moveFrom !== null && (
+        <Text style={s.caption}>Tap a destination slot</Text>
+      )}
     </View>
   );
   const builderActions = (
@@ -779,44 +1015,71 @@ export default function Workbench({
       />
     </View>
   );
-  const activeDialog = confirm
-    ? "confirm"
-    : tagsOpen
-      ? "tags"
-      : detail
-        ? "detail"
-        : proposal
-          ? "proposal"
-          : picker
-            ? "picker"
-            : themeOpen
-              ? "theme"
-              : sourceOptions
-                ? "sources"
-                : missingOpen
-                  ? "missing"
-                  : exportOpen
-                    ? "export"
-                    : preview
-                      ? "preview"
-                      : settings
-                        ? "settings"
-                        : null;
+  const activeDialog = nameOpen
+    ? "name"
+    : confirm
+      ? "confirm"
+      : tagsOpen
+        ? "tags"
+        : detail
+          ? "detail"
+          : proposal
+            ? "proposal"
+            : picker
+              ? "picker"
+              : themeOpen
+                ? "theme"
+                : sourceOptions
+                  ? "sources"
+                  : missingOpen
+                    ? "missing"
+                    : exportOpen
+                      ? "export"
+                      : preview
+                        ? "preview"
+                        : settings
+                          ? "settings"
+                          : null;
   const closeDialog = () => {
     if (busy) return;
-    if (activeDialog === "confirm") setConfirm(null);
+    if (activeDialog === "name") setNameOpen(false);
+    else if (activeDialog === "confirm") setConfirm(null);
     else if (activeDialog === "tags") setTagsOpen(false);
     else if (activeDialog === "detail") setDetail(null);
     else if (activeDialog === "proposal") setProposal(null);
-    else if (activeDialog === "picker") setPicker(null);
-    else if (activeDialog === "theme") setThemeOpen(false);
+    else if (activeDialog === "picker") {
+      setPicker(null);
+      setReplacement(null);
+    } else if (activeDialog === "theme") setThemeOpen(false);
     else if (activeDialog === "sources") setSourceOptions(false);
     else if (activeDialog === "export") setExportOpen(false);
     else if (activeDialog === "missing") setMissingOpen(false);
     else if (activeDialog === "preview") setPreview(false);
     else setSettings(false);
   };
-  if (accountDeleted) return <View style={[s.root, {padding: 24, justifyContent: 'center', gap: 20}]}><Text style={s.heading}>Account deletion requested</Text><Text style={s.body}>Your private content has been removed. Sign-in removal is being completed.</Text>{modalStatus}<Button label="Return to sign in" disabled={busy} onPress={() => run(async () => { await journal.current?.clear(); await onAccountDeleted?.(); })} /></View>;
+  if (accountDeleted)
+    return (
+      <View
+        style={[s.root, { padding: 24, justifyContent: "center", gap: 20 }]}
+      >
+        <Text style={s.heading}>Account deletion requested</Text>
+        <Text style={s.body}>
+          Your private content has been removed. Sign-in removal is being
+          completed.
+        </Text>
+        {modalStatus}
+        <Button
+          label="Return to sign in"
+          disabled={busy}
+          onPress={() =>
+            run(async () => {
+              await journal.current?.clear();
+              await onAccountDeleted?.();
+            })
+          }
+        />
+      </View>
+    );
   if (!draftReady || recovery)
     return (
       <View
@@ -882,11 +1145,13 @@ export default function Workbench({
     );
   return (
     <View style={s.root}>
-      <View style={s.header}>
+      <View
+        style={[s.header, desktop && { height: 64, paddingHorizontal: 24 }]}
+      >
         <Image
           accessibilityLabel="BinderCopy"
           source={require("../assets/brand/wordmark.png")}
-          style={{ width: 176, height: 38 }}
+          style={{ width: desktop ? 176 : 150, height: 38 }}
           resizeMode="contain"
         />
         {desktop && (
@@ -919,7 +1184,7 @@ export default function Workbench({
         </Pressable>
       )}
       {busy && <ActivityIndicator color={c.accent} />}
-      <View style={s.body}>
+      <View style={[s.body, desktop && { paddingHorizontal: 24 }]}>
         {tab === "Build" && (
           <ScrollView
             scrollEnabled={!dragging}
@@ -927,25 +1192,32 @@ export default function Workbench({
             contentContainerStyle={{ paddingBottom: 24, alignItems: "center" }}
           >
             <View
-              style={{ width: "100%", maxWidth: desktop ? 1240 : 580, gap: 20 }}
+              style={{ width: "100%", maxWidth: desktop ? 1252 : 580, gap: 24 }}
             >
               <View style={s.row}>
                 <View style={{ flex: 1 }}>
-                  <TextInput
+                  <Pressable
+                    accessibilityRole="button"
                     accessibilityLabel="Page name"
-                    style={[s.title, { minHeight: 40, padding: 0 }]}
-                    value={page.name}
-                    maxLength={100}
-                    onChangeText={(name) =>
-                      session.edit((p) => ({ ...p, name }))
-                    }
-                    onEndEditing={() => {
-                      if (!page.name.trim())
-                        session.edit((p) => ({ ...p, name: "Untitled page" }));
+                    onPress={() => {
+                      setNameDraft(
+                        page.name === "Untitled page" ? "" : page.name,
+                      );
+                      setNameOpen(true);
                     }}
-                  />
+                    style={[s.row, { minHeight: 28 }]}
+                  >
+                    <Text style={[s.title, { flexShrink: 1 }]}>
+                      {page.name}
+                    </Text>
+                    <Icon name="pencil" size={16} color={c.muted} />
+                  </Pressable>
                   <Text
-                    style={[s.caption, !session.dirty && { color: c.accent }]}
+                    style={[
+                      s.caption,
+                      { marginTop: 4 },
+                      !session.dirty && { color: c.accent },
+                    ]}
                   >
                     {session.error
                       ? "Not saved"
@@ -957,7 +1229,8 @@ export default function Workbench({
                   </Text>
                 </View>
                 <Button
-                  label="+ New"
+                  label="New"
+                  icon="plus"
                   disabled={busy}
                   onPress={() => run(() => openPage(newPage(createId())))}
                 />
@@ -995,9 +1268,26 @@ export default function Workbench({
                   }
                 }
               >
-                <View style={{ flex: 1, gap: 16 }}>
+                <View style={{ flex: 1, gap: desktop ? 16 : 24 }}>
                   <View style={s.row}>
-                    <View style={[s.row, { flex: 1 }]}>
+                    {!desktop && !filled && (
+                      <Text
+                        style={[s.buttonText, { flex: 1, fontWeight: "600" }]}
+                      >
+                        Or fill it by hand
+                      </Text>
+                    )}
+                    <View
+                      style={[
+                        s.row,
+                        {
+                          backgroundColor: c.sunken,
+                          borderRadius: 8,
+                          padding: 2,
+                          gap: 2,
+                        },
+                      ]}
+                    >
                       {(
                         [2, 3, 4, ...(desktop ? [5] : [])] as Page["size"][]
                       ).map((size) => (
@@ -1009,8 +1299,8 @@ export default function Workbench({
                           disabled={busy}
                           onPress={() => resize(size)}
                           style={{
-                            padding: 10,
-                            minHeight: 44,
+                            paddingHorizontal: 10,
+                            minHeight: 40,
                             justifyContent: "center",
                             borderRadius: 6,
                             backgroundColor:
@@ -1028,25 +1318,34 @@ export default function Workbench({
                         </Pressable>
                       ))}
                     </View>
-                    {!desktop && (
+                    {!!filled && !desktop && (
                       <Pressable
                         accessibilityRole="button"
                         accessibilityLabel="Undo"
                         disabled={!session.history.length || busy}
                         onPress={() => session.undo()}
                         style={{
-                          padding: 12,
+                          padding: 10,
+                          marginLeft: "auto",
                           opacity: session.history.length ? 1 : 0.4,
                         }}
                       >
                         <Icon name="undo" size={20} />
                       </Pressable>
                     )}
-                    <Button
-                      label={zoom ? "Show whole page" : "Zoom in"}
-                      disabled={busy}
-                      onPress={() => setZoom((value) => !value)}
-                    />
+                    {(desktop || !!filled) && (
+                      <Pressable
+                        accessibilityRole="button"
+                        accessibilityLabel={
+                          zoom ? "Show whole page" : "Zoom in"
+                        }
+                        disabled={busy}
+                        onPress={() => setZoom((v) => !v)}
+                        style={s.iconButton}
+                      >
+                        <Icon name="zoom" />
+                      </Pressable>
+                    )}
                   </View>
                   <View>
                     {zoom ? (
@@ -1077,7 +1376,12 @@ export default function Workbench({
                   )}
                 </View>
                 {desktop && (
-                  <View style={[s.panel, { width: 290, gap: 24 }]}>
+                  <View
+                    style={[
+                      s.panel,
+                      { width: 300, gap: 20, backgroundColor: c.surface },
+                    ]}
+                  >
                     {slotControls}
                     {sourceControls}
                     {appearance}
@@ -1089,29 +1393,64 @@ export default function Workbench({
         )}
         {tab === "Cards" && (
           <View style={{ flex: 1 }}>
-            {bootstrap?.capabilities?.curateTags && (
-              <View
-                style={[s.row, { justifyContent: "flex-end", marginBottom: 8 }]}
-              >
-                <Button label="Shared tags" onPress={() => setTagsOpen(true)} />
+            <View style={[s.row, { marginBottom: 24 }]}>
+              <View style={{ flex: 1, gap: 4 }}>
+                <Text style={s.title}>Cards</Text>
+                <Text style={s.caption}>
+                  {bootstrap?.catalog?.count?.toLocaleString()} in the shared
+                  catalog
+                </Text>
               </View>
-            )}
+              {bootstrap?.capabilities?.curateTags && (
+                <Button
+                  label="Tags"
+                  icon="tag"
+                  onPress={() => setTagsOpen(true)}
+                />
+              )}
+            </View>
             {cardGrid(setDetail)}
           </View>
         )}
         {tab === "Library" && (
           <View style={{ flex: 1, gap: 12 }}>
             <View style={s.row}>
+              <View style={{ flex: 1, gap: 4 }}>
+                <Text style={s.title}>Library</Text>
+                <Text style={s.caption}>
+                  {bootstrap?.user.name} · only you see this
+                </Text>
+              </View>
               <Button
-                label="My pages"
-                primary={library === "Pages"}
+                label="New"
+                icon="plus"
+                disabled={busy}
+                onPress={() => run(() => openPage(newPage(createId())))}
+              />
+            </View>
+            <View style={s.segmented}>
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel="My pages"
                 onPress={() => setLibrary("Pages")}
-              />
-              <Button
-                label="My collection"
-                primary={library === "Collection"}
+                style={[
+                  s.segment,
+                  library === "Pages" && { backgroundColor: c.raised },
+                ]}
+              >
+                <Text style={s.buttonText}>Pages</Text>
+              </Pressable>
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel="My collection"
                 onPress={() => setLibrary("Collection")}
-              />
+                style={[
+                  s.segment,
+                  library === "Collection" && { backgroundColor: c.raised },
+                ]}
+              >
+                <Text style={s.buttonText}>Collection</Text>
+              </Pressable>
             </View>
             {library === "Collection" ? (
               cardGrid(setDetail)
@@ -1134,28 +1473,70 @@ export default function Workbench({
       {!desktop && tab === "Build" && (
         <View
           style={{
-            padding: 12,
+            paddingVertical: 12,
+            paddingHorizontal: 16,
             gap: 12,
+            backgroundColor: selected >= 0 ? c.surface : c.background,
             borderTopWidth: 1,
             borderTopColor: c.line,
           }}
         >
           {slotControls}
-          <Button
-            label="Preview & export"
-            primary
-            disabled={!filled || busy}
-            onPress={() => setPreview(true)}
-          />
+          {selected < 0 && (
+            <Button
+              icon="eye"
+              label="Preview & export"
+              primary
+              disabled={!filled || busy}
+              onPress={() => setPreview(true)}
+            />
+          )}
         </View>
       )}
       {!desktop && navigation}
       <Modal
         visible={!!activeDialog}
         animationType="slide"
-        presentationStyle="pageSheet"
+        presentationStyle={
+          activeDialog === "preview" ? "fullScreen" : "pageSheet"
+        }
         onRequestClose={closeDialog}
       >
+        {activeDialog === "name" && (
+          <View style={s.modal}>
+            <View
+              style={[
+                s.row,
+                { padding: 16, borderTopWidth: 1, borderTopColor: c.line },
+              ]}
+            >
+              <Text style={[s.heading, { flex: 1 }]}>Name your page</Text>
+              <Button label="Cancel" plain onPress={() => setNameOpen(false)} />
+            </View>
+            <TextInput
+              accessibilityLabel="Page name"
+              autoFocus
+              value={nameDraft}
+              maxLength={100}
+              onChangeText={setNameDraft}
+              placeholder="Page name"
+              placeholderTextColor={c.muted}
+              style={s.input}
+            />
+            <Button
+              label="Save page"
+              primary
+              disabled={busy || !nameDraft.trim()}
+              onPress={() =>
+                run(async () => {
+                  session.edit((p) => ({ ...p, name: nameDraft.trim() }));
+                  await session.save();
+                  setNameOpen(false);
+                })
+              }
+            />
+          </View>
+        )}
         {activeDialog === "sources" && (
           <View style={s.modal}>
             <Button label="Done" onPress={() => setSourceOptions(false)} />
@@ -1216,105 +1597,241 @@ export default function Workbench({
             <View style={s.row}>
               <Text style={[s.heading, { flex: 1 }]}>
                 {picker === "favorite"
-                  ? "Choose a favorite"
+                  ? "Pick a favorite card"
                   : picker === "colors"
-                    ? "Choose card colors"
-                    : `Choose a card · Slot ${selected + 1}`}
+                    ? "Choose a card’s colors"
+                    : replacement
+                      ? `Replace slot ${replacement.target + 1}`
+                      : `Fill slot ${selected + 1}`}
               </Text>
               <Button
-                label="Done"
-                disabled={busy}
-                onPress={() => setPicker(null)}
-              />
-            </View>
-            {cardGrid((card) => run(() => choose(card)))}
-          </View>
-        )}
-        {activeDialog === "proposal" && (
-          <ScrollView style={s.modal}>
-            {modalStatus}
-            {proposal && sheet(proposal.page, false)}
-            <View style={[s.row, { marginTop: 16 }]}>
-              <Button
-                label="Cancel"
-                disabled={busy}
-                onPress={() => setProposal(null)}
-              />
-              <Button
-                label="Shuffle"
+                label="Close"
+                plain
                 disabled={busy}
                 onPress={() => {
-                  if (proposal)
-                    void run(() =>
-                      generate(
-                        { kind: "repeat" },
-                        proposal.input,
-                        proposal.source,
-                      ),
-                    );
+                  setPicker(null);
+                  setReplacement(null);
                 }}
               />
+            </View>
+            {replacement && (
+              <View style={[s.row, { gap: 12 }]}>
+                <View style={{ width: 100 }}>
+                  {sheet(
+                    {
+                      ...page,
+                      slots: page.slots.map((slot, i) =>
+                        i === replacement.target && replacement.card
+                          ? { ...slot, cardId: replacement.card.id }
+                          : slot,
+                      ),
+                    },
+                    false,
+                  )}
+                </View>
+                <Text style={[s.caption, { flex: 1 }]}>
+                  {replacement.card
+                    ? replacement.card.name
+                    : "Choose a replacement"}
+                </Text>
+              </View>
+            )}
+            {replacement && similar.length > 0 && (
+              <ScrollView
+                horizontal
+                style={{ maxHeight: 82 }}
+                contentContainerStyle={{ gap: 8 }}
+              >
+                {similar.slice(0, 8).map((card) => (
+                  <Pressable
+                    key={card.id}
+                    accessibilityRole="button"
+                    accessibilityLabel={`Preview ${card.name}`}
+                    onPress={() => setReplacement({ ...replacement, card })}
+                  >
+                    <CardImage
+                      api={api}
+                      id={card.id}
+                      style={{ width: 50, height: 70 }}
+                    />
+                  </Pressable>
+                ))}
+              </ScrollView>
+            )}
+            {cardGrid((card) => run(() => choose(card)))}
+            {replacement && (
               <Button
+                label="Keep this card"
                 primary
-                label="Keep this page"
-                disabled={busy}
+                disabled={busy || !replacement.card}
                 onPress={() =>
                   run(async () => {
-                    if (proposal)
-                      session.edit((p) => keepProposal(p, proposal));
-                    setProposal(null);
+                    session.edit((p) => keepReplacement(p, replacement));
+                    setReplacement(null);
+                    setPicker(null);
                   })
                 }
               />
+            )}
+          </View>
+        )}
+        {activeDialog === "proposal" && (
+          <View style={s.modal}>
+            {modalStatus}
+            <View style={s.row}>
+              <View style={{ flex: 1, gap: 4 }}>
+                <Text style={s.heading}>Your page, together</Text>
+                <Text style={s.caption}>
+                  Nothing changes until you keep it.
+                </Text>
+              </View>
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel="Cancel"
+                disabled={busy}
+                onPress={() => setProposal(null)}
+                style={s.iconButton}
+              >
+                <Icon name="close" />
+              </Pressable>
             </View>
-            {!!proposal?.note && <Text style={s.muted}>{proposal.note}</Text>}
-          </ScrollView>
+            <ScrollView contentContainerStyle={{ gap: 16, paddingBottom: 16 }}>
+              {proposal && (
+                <View style={[s.sourceStrip, { borderWidth: 0 }]}>
+                  <Icon
+                    name={
+                      proposal.page.seedCardId
+                        ? "favorite"
+                        : proposal.page.colorInspiration
+                          ? "droplet"
+                          : "star"
+                    }
+                  />
+                  <Text style={[s.buttonText, { flex: 1 }]}>
+                    {proposal.page.seedCardId
+                      ? `Around ${cards[proposal.page.seedCardId]?.name ?? "a favorite card"}`
+                      : proposal.page.colorInspiration
+                        ? "Colors from your inspiration"
+                        : proposal.page.themeSource}
+                  </Text>
+                </View>
+              )}
+              {proposal && sheet(proposal.page, false)}
+              <Text style={s.caption}>
+                Shuffle keeps locked cards. You can lock, swap and reorder after
+                you keep it.
+              </Text>
+              {!!proposal?.note && (
+                <Text style={s.caption}>{proposal.note}</Text>
+              )}
+            </ScrollView>
+            <View
+              style={[
+                s.row,
+                { paddingTop: 12, borderTopWidth: 1, borderTopColor: c.line },
+              ]}
+            >
+              <View style={{ flex: 1 }}>
+                <Button
+                  label="Shuffle"
+                  icon="shuffle"
+                  disabled={busy}
+                  onPress={() => {
+                    if (proposal)
+                      void run(() =>
+                        generate(
+                          { kind: "repeat" },
+                          proposal.input,
+                          proposal.source,
+                        ),
+                      );
+                  }}
+                />
+              </View>
+              <View style={{ flex: 1.4 }}>
+                <Button
+                  label="Keep this page"
+                  primary
+                  disabled={busy}
+                  onPress={() =>
+                    run(async () => {
+                      if (proposal)
+                        session.edit((p) => keepProposal(p, proposal));
+                      setProposal(null);
+                    })
+                  }
+                />
+              </View>
+            </View>
+          </View>
         )}
         {activeDialog === "theme" && (
           <View style={s.modal}>
             {modalStatus}
             <View style={s.row}>
-              <Text style={[s.heading, { flex: 1 }]}>A theme</Text>
+              <View style={{ flex: 1, gap: 4 }}>
+                <Text style={s.heading}>Start from a theme</Text>
+                <Text style={s.caption}>
+                  Describe the cards you have in mind.
+                </Text>
+              </View>
               <Button
                 label="Cancel"
+                plain
                 disabled={busy}
                 onPress={() => setThemeOpen(false)}
               />
             </View>
-            <TextInput
-              accessibilityLabel="Page theme"
-              placeholder="Moonlit forest"
-              placeholderTextColor={c.muted}
-              value={theme}
-              maxLength={300}
-              onChangeText={setTheme}
-              style={[s.input, { marginVertical: 20 }]}
+            <SearchControls
+              api={api}
+              bootstrap={bootstrap}
+              query={theme}
+              onQuery={setTheme}
+              filters={filters}
+              onFilters={setFilters}
+              showInterpretIcon
             />
+            <View style={{ flex: 1 }} />
             <Button
-              label="Generate page"
+              label="Generate from this"
               primary
               disabled={busy || !theme.trim()}
               onPress={() =>
-                run(() => generate({ kind: "theme", query: theme }))
+                run(() =>
+                  generate(
+                    { kind: "theme", query: theme },
+                    { ...session.page, filters },
+                  ),
+                )
               }
             />
           </View>
         )}
         {activeDialog === "preview" && (
-          <View style={s.modal}>
+          <ScreenInsets style={{ flex: 1, backgroundColor: c.background }}>
             {modalStatus}
-            <Button
-              label="Done"
-              disabled={busy}
-              onPress={() => setPreview(false)}
-            />
-            <ScrollView
-              contentContainerStyle={{ gap: 20, paddingVertical: 16 }}
-            >
+            <View style={[s.header, { justifyContent: "flex-start" }]}>
+              <Button
+                label="Builder"
+                plain
+                icon="back"
+                disabled={busy}
+                onPress={() => setPreview(false)}
+              />
+              <Text style={[s.heading, { position: "absolute", left: "40%" }]}>
+                Preview
+              </Text>
+            </View>
+            <ScrollView contentContainerStyle={{ gap: 24, padding: 16 }}>
               {sheet(page, false)}
               {appearance}
             </ScrollView>
-            <View style={s.row}>
+            <View
+              style={[
+                s.row,
+                { padding: 16, borderTopWidth: 1, borderTopColor: c.line },
+              ]}
+            >
               <View style={{ flex: 1 }}>
                 <Button
                   label="Missing list"
@@ -1322,16 +1839,17 @@ export default function Workbench({
                   onPress={() => setMissingOpen(true)}
                 />
               </View>
-              <View style={{ flex: 1 }}>
+              <View style={{ flex: 1.4 }}>
                 <Button
                   label="Download image"
+                  icon="download"
                   primary
                   disabled={busy}
                   onPress={() => exportPage("png")}
                 />
               </View>
             </View>
-          </View>
+          </ScreenInsets>
         )}
         {activeDialog === "missing" && (
           <View style={{ flex: 1, backgroundColor: c.background }}>
@@ -1404,15 +1922,24 @@ export default function Workbench({
               bootstrap={bootstrap}
               onBootstrap={setBootstrap}
               blocked={busy}
-              onDeleteAccount={onAccountDeleted ? async () => {
-                closingAccount.current = true;
-                try {
-                  await api.request('/account', 'DELETE', {confirmation: 'DELETE'});
-                } catch (e) { closingAccount.current = false; throw e; }
-                setAccountDeleted(true);
-                await journal.current?.clear();
-                await onAccountDeleted();
-              } : undefined}
+              onDeleteAccount={
+                onAccountDeleted
+                  ? async () => {
+                      closingAccount.current = true;
+                      try {
+                        await api.request("/account", "DELETE", {
+                          confirmation: "DELETE",
+                        });
+                      } catch (e) {
+                        closingAccount.current = false;
+                        throw e;
+                      }
+                      setAccountDeleted(true);
+                      await journal.current?.clear();
+                      await onAccountDeleted();
+                    }
+                  : undefined
+              }
               onClose={() => setSettings(false)}
               onSignOut={
                 onSignOut
@@ -1440,19 +1967,21 @@ const s = StyleSheet.create({
   root: { flex: 1, backgroundColor: c.background },
   header: {
     paddingHorizontal: 16,
-    height: 64,
+    height: 52,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
     borderBottomColor: c.line,
     borderBottomWidth: 1,
   },
-  body: { flex: 1, paddingHorizontal: 16, paddingTop: 16 },
+  body: { flex: 1, paddingHorizontal: 16, paddingTop: 24 },
   row: { flexDirection: "row", alignItems: "center", gap: 8 },
   button: {
-    minHeight: 44,
+    minHeight: 40,
     paddingHorizontal: 12,
-    paddingVertical: 10,
+    paddingVertical: 9,
+    flexDirection: "row",
+    gap: 8,
     borderWidth: 1,
     borderColor: c.border,
     borderRadius: 6,
@@ -1461,7 +1990,7 @@ const s = StyleSheet.create({
     flexShrink: 1,
   },
   buttonText: { ...typography.label, color: c.text },
-  primary: { backgroundColor: c.accent, borderColor: c.accent },
+  primary: { backgroundColor: c.accent, borderColor: c.accent, minHeight: 44 },
   disabled: { opacity: 0.4 },
   pressed: { opacity: 0.7 },
   input: {
@@ -1481,13 +2010,13 @@ const s = StyleSheet.create({
   tabs: { flexDirection: "row", borderTopWidth: 1, borderTopColor: c.line },
   tab: {
     flex: 1,
-    height: 54,
+    height: 64,
+    gap: 3,
     alignItems: "center",
     justifyContent: "center",
-    borderBottomWidth: 2,
-    borderBottomColor: "transparent",
+    borderRadius: 6,
   },
-  activeTab: { borderBottomColor: c.accent },
+  activeTab: { backgroundColor: c.accentSoft },
   cardArt: {
     width: "100%",
     aspectRatio: 0.716,
@@ -1526,6 +2055,79 @@ const s = StyleSheet.create({
     borderRadius: 4,
     backgroundColor: c.surface,
   },
-  modal: { flex: 1, padding: 20, backgroundColor: c.background },
+  modal: { flex: 1, padding: 16, gap: 16, backgroundColor: c.background },
   error: { padding: 12, backgroundColor: c.surface },
+  iconButton: {
+    width: 40,
+    height: 40,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  navPill: {
+    width: 52,
+    height: 28,
+    borderRadius: 20,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  sourceTile: {
+    flexGrow: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    padding: 10,
+    borderWidth: 1,
+    borderColor: c.lineStrong,
+    borderRadius: 8,
+    backgroundColor: c.surface,
+  },
+  sourceIcon: {
+    width: 24,
+    height: 24,
+    borderRadius: 6,
+    backgroundColor: c.raised,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  sourceStrip: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+    padding: 10,
+    borderWidth: 1,
+    borderColor: c.lineStrong,
+    borderRadius: 8,
+    backgroundColor: c.surface,
+  },
+  slotAction: {
+    flex: 1,
+    minHeight: 56,
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 4,
+  },
+  slotNumber: {
+    width: 24,
+    height: 24,
+    borderRadius: 6,
+    backgroundColor: c.text,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  segmented: {
+    flexDirection: "row",
+    padding: 3,
+    gap: 2,
+    borderWidth: 1,
+    borderColor: c.lineStrong,
+    borderRadius: 8,
+    backgroundColor: c.sunken,
+  },
+  segment: {
+    flex: 1,
+    minHeight: 40,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 6,
+  },
 });

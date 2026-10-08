@@ -13,7 +13,7 @@ Stabilize the full native iPhone/macOS internal betas and shared VPS backend wit
 - Contracts/domain snapshot 0.1.0 from e844450 uses canonical LF hashes checked in both clients. iPhone Expo 57.0.27/RN 0.86.3; Mac RN macOS 0.83.0/RN 0.83.10 and CLI 20.2.0. Runtime versions were not force-downgraded to silence dependency advisories.
 
 ## Active work
-Requested full code/documentation stabilization is complete for the reviewed scope. Fixed autosave/stale Library reopen, duplicate action entry, failed Library retry, vision-worker lifecycle/queue handling, contract checksum drift and documentation encoding/status drift. See docs/AUDIT_2026-10-08.md and the latest docs/VERIFICATION.md checkpoint. No new design changes were introduced while the owner rested.
+PWA fidelity pass authorized October 8. Frozen source audited in isolated WebKit at iPhone 13 Pro dimensions; walkthrough passes with zero paid calls. Native presentation changes restore the current PWA header/navigation, generation tiles/source/tray, proposals/replacement review, preview/swatches, Cards/picker and Library grid. See docs/UI_PARITY.md. Local typechecks and replacement/session tests pass; expanded native screenshots and release verification pending. Build 2 remains live.
 
 ## Blockers
 No audit/release blocker. Broader release acceptance still requires physical gestures/accessibility/larger text, native email recovery/account switching and real output delivery, founder identity linking, Zoho sender review, final shared-catalog reconciliation, privacy/support/asset rights and external distribution review. Native paid features/subscriptions remain off. Minor UI feedback is deferred until the owner returns.
@@ -27,4 +27,6 @@ No audit/release blocker. Broader release acceptance still requires physical ges
 This repo: 17 tests pass; cross-repo total 87 (16 iPhone, 17 Mac, 54 backend). All typechecks, complete bundles, private-credential checks, contract hashes, documentation UTF-8/nonempty checks and relative Markdown links pass. Source CI and native workflows against the audited application sources pass. Backend production dependency audit is clean; inherited native build-tool advisories are triaged, not falsely described as zero.
 
 ## Last checkpoint
+October 8, 2026: PWA-fidelity implementation checkpoint, not a release. iPhone 18 / Mac 19 tests pass; iPhone bundle and both client boundary scans pass. Simulator and signed Mac screenshot runs are next; the previous build-2 release remains available.
+
 October 8, 2026: audit fixes are shipped as both platform build 2s and backend runtime 0234fd3. This checkpoint includes the final documentation and release evidence across all three repos. Shared counted/reserved $157.333235; $342.666765 unreserved. Backend docs/BUDGET.md is authoritative. No new paid AI usage.

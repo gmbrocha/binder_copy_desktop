@@ -25,11 +25,13 @@ final class NativeSmoke: XCTestCase {
     initial.name = "Native desktop builder"
     initial.lifetime = .keepAlways
     add(initial)
+    app.buttons["Page name"].click()
     let name = app.textFields["Page name"]
     XCTAssertTrue(name.exists)
     name.click()
     name.typeKey("a", modifierFlags: .command)
     name.typeText("Desktop test")
+    app.buttons["Save page"].click()
     tab("Cards", in: app).click()
     XCTAssertTrue(app.buttons["Fixture 1, Demo set"].waitForExistence(timeout: 30), app.debugDescription)
     app.buttons["Fixture 1, Demo set"].click()
@@ -47,7 +49,7 @@ final class NativeSmoke: XCTestCase {
     XCTAssertFalse(app.buttons["Dismiss error"].exists, "Native persistence must not report a secure-storage or save error: \(app.debugDescription)")
     app.buttons["Open Desktop test"].click()
     XCTAssertTrue(builder.waitForExistence(timeout: 15), app.debugDescription)
-    XCTAssertEqual(app.textFields["Page name"].value as? String, "Desktop test")
+    XCTAssertTrue(app.staticTexts["Desktop test"].exists, app.debugDescription)
     XCTAssertFalse(app.buttons["Dismiss error"].exists, app.debugDescription)
     app.terminate()
     app.launch()
@@ -56,7 +58,7 @@ final class NativeSmoke: XCTestCase {
     XCTAssertTrue(app.buttons["Open Desktop test"].waitForExistence(timeout: 15), app.debugDescription)
     app.buttons["Open Desktop test"].click()
     XCTAssertTrue(builder.waitForExistence(timeout: 15), app.debugDescription)
-    XCTAssertEqual(app.textFields["Page name"].value as? String, "Desktop test")
+    XCTAssertTrue(app.staticTexts["Desktop test"].exists, app.debugDescription)
     XCTAssertFalse(app.buttons["Dismiss error"].exists, app.debugDescription)
   }
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { View } from "react-native";
+import { View, Text, Image } from "react-native";
 import type { ApiClient } from "../../api/client";
 import type { Page } from "../../shared/contracts";
 import { palettes } from "../../shared/domain/palettes";
@@ -20,18 +20,31 @@ export default function PageThumbnail({
       accessible={false}
       pointerEvents="none"
       style={{
-        width: 88,
-        aspectRatio: 0.74,
-        padding: 5,
+        width: "100%",
+        aspectRatio: 1224 / 1856,
+        padding: 8,
         backgroundColor: palette.bg,
-        borderRadius: 4,
+        borderRadius: 8,
         overflow: "hidden",
       }}
     >
       {page.backdrop?.assetId && page.backdropMode !== "color" && (
         <BackgroundImage api={api} id={page.backdrop.assetId} />
       )}
-      {page.backdropMode === undefined && !page.backdrop && <CraftedBackground palette={page.palette} />}
+      {page.backdropMode === undefined && !page.backdrop && (
+        <CraftedBackground palette={page.palette} />
+      )}
+      <Text
+        numberOfLines={1}
+        style={{
+          fontFamily: "Audiowide",
+          fontSize: 9,
+          color: palette.text,
+          paddingBottom: 8,
+        }}
+      >
+        {page.name}
+      </Text>
       <View style={{ flex: 1, flexDirection: "row", flexWrap: "wrap" }}>
         {page.slots.map((slot, index) => (
           <View
@@ -52,6 +65,11 @@ export default function PageThumbnail({
           </View>
         ))}
       </View>
+      <Image
+        source={require("../../../assets/brand/wordmark.png")}
+        resizeMode="contain"
+        style={{ width: "40%", height: 16, marginTop: 6 }}
+      />
     </View>
   );
 }

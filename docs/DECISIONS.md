@@ -19,3 +19,8 @@ Append dated context, decision, consequences and verification for consequential 
 ## 2026-10-08 - stabilization after first installation
 
 Owner confirmed iPhone installation/use, deferred small UI refinements, and authorized a full code/documentation audit with fixes, commits and pushes in all three repos. Preserve the shipped design; fix correctness, recovery and maintenance defects. Distinguish code checkpoints from installed store builds.
+
+
+## 2026-10-08 - frozen PWA visual authority
+
+Owner explicitly asked to audit and faithfully mimic the frozen PWA on iPhone 13 Pro and macOS before further UI iteration. Use the current PWA code/screens, not obsolete chat decisions: phone Cards are two columns and picker three; locking lives in the contextual tray with a small locked badge; preview uses palette swatches. Preserve native account/permission boundaries. Automated workflow success alone is not visual parity; retain screenshot evidence and physical acceptance separately. See UI_PARITY.md.

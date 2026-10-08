@@ -1,4 +1,4 @@
-import Modal from '../../components/DesktopDialog';
+import Modal from "../../components/DesktopDialog";
 import React, { useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
@@ -8,9 +8,11 @@ import {
   Text,
   TextInput,
   View,
+  useWindowDimensions,
 } from "react-native";
 import type { ApiClient } from "../../api/client";
 import type { Page } from "../../shared/contracts";
+import Icon from "../../components/Icon";
 import PageThumbnail from "./PageThumbnail";
 import type { PageSession } from "../build/pageSession";
 import { colors as c, type as t } from "../../design/tokens";
@@ -30,6 +32,14 @@ export default function PagesLibrary({
   onNew: () => Promise<void>;
   onDeleted: (id: string) => void;
 }) {
+  const { width } = useWindowDimensions();
+  const columns =
+    width >= 900
+      ? Math.max(3, Math.floor((width - 48) / 230))
+      : width >= 600
+        ? 3
+        : 2;
+  const [gridWidth, setGridWidth] = useState(width - 32);
   const [pages, setPages] = useState<Page[]>([]);
   const [selected, setSelected] = useState<Page | null>(null);
   const [name, setName] = useState("");
@@ -45,7 +55,8 @@ export default function PagesLibrary({
   useEffect(() => {
     let active = true;
     setBusy(true);
-    void session.settle()
+    void session
+      .settle()
       .then(() => api.pages())
       .then((result) => {
         if (active) setPages(result.pages);
@@ -139,47 +150,74 @@ export default function PagesLibrary({
     </>
   );
   return (
-    <View style={{ flex: 1, gap: 12 }}>
-      <View style={s.row}>
-        <Text style={[s.title, { flex: 1 }]}>My pages</Text>
-        {button("+ New", () => run(onNew))}
-      </View>
+    <View
+      style={{ flex: 1, gap: 12 }}
+      onLayout={(event) => setGridWidth(event.nativeEvent.layout.width)}
+    >
       {status}
       {!!error && !selected && button("Reload pages", () => run(load))}
-      <ScrollView contentContainerStyle={{ gap: 12, paddingBottom: 24 }}>
+      <ScrollView
+        contentContainerStyle={{
+          gap: 12,
+          paddingBottom: 24,
+          flexDirection: "row",
+          flexWrap: "wrap",
+        }}
+      >
         {!busy && !pages.length && (
           <Text style={s.body}>No saved pages yet.</Text>
         )}
         {pages.map((page) => (
-          <View key={page.id} style={s.panel}>
+          <View
+            key={page.id}
+            style={{
+              width: Math.max(1, (gridWidth - (columns - 1) * 12) / columns),
+              marginBottom: 12,
+            }}
+          >
             <Pressable
               accessibilityRole="button"
               accessibilityLabel={`Open ${page.name}`}
               disabled={busy}
               onPress={() => run(() => onOpen(page))}
               style={{
-                flex: 1,
-                gap: 12,
-                paddingVertical: 8,
-                flexDirection: "row",
-                alignItems: "center",
+                width: "100%",
+                gap: 8,
               }}
             >
               <PageThumbnail api={api} page={page} />
               <View style={{ flex: 1, gap: 6 }}>
-                <Text style={s.heading}>{page.name}</Text>
-                <Text style={s.body}>
+                <Text numberOfLines={1} style={[s.label, { paddingRight: 28 }]}>
+                  {page.name}
+                </Text>
+                <Text style={{ ...t.caption, color: c.secondary }}>
                   {page.size} × {page.size} ·{" "}
                   {page.slots.filter((slot) => slot.cardId).length} cards
                 </Text>
               </View>
             </Pressable>
-            {button("Edit", () => {
-              setSelected(page);
-              setName(page.name);
-              setConfirmDelete(false);
-              setError("");
-            })}
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={`More for ${page.name}`}
+              disabled={busy}
+              onPress={() => {
+                setSelected(page);
+                setName(page.name);
+                setConfirmDelete(false);
+                setError("");
+              }}
+              style={{
+                position: "absolute",
+                right: 0,
+                bottom: 16,
+                width: 32,
+                height: 40,
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Icon name="more" />
+            </Pressable>
           </View>
         ))}
       </ScrollView>
