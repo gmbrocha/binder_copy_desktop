@@ -178,7 +178,7 @@ export default function Appearance({
       </View>
       <View
         accessibilityLabel="Page color"
-        style={{ flexDirection: "row", gap: 8 }}
+        style={{ flexDirection: "row", gap: 2 }}
       >
         {Object.entries(palettes).map(([id, palette]) => (
           <Pressable
@@ -210,6 +210,7 @@ export default function Appearance({
                 s.caption,
                 {
                   textAlign: "center",
+                  fontSize: 12,
                   color: (page.palette ?? "forge") === id ? c.text : c.muted,
                 },
               ]}

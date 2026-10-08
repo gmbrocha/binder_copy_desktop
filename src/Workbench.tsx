@@ -1341,6 +1341,7 @@ export default function Workbench({
                         <Icon name="undo" size={20} />
                       </Pressable>
                     )}
+                    {desktop && <View style={{ flex: 1 }} />}
                     {(desktop || !!filled) && (
                       <Pressable
                         accessibilityRole="button"
@@ -1503,6 +1504,7 @@ export default function Workbench({
       )}
       {!desktop && navigation}
       <Modal
+        compact={activeDialog === "name"}
         visible={!!activeDialog}
         animationType="slide"
         presentationStyle={
@@ -1511,7 +1513,7 @@ export default function Workbench({
         onRequestClose={closeDialog}
       >
         {activeDialog === "name" && (
-          <View style={s.modal}>
+          <View style={[s.modal, { flex: 0 }]}>
             <View
               style={[
                 s.row,

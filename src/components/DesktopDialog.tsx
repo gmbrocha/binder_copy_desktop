@@ -2,7 +2,7 @@ import React, { createContext, useContext, useId, useLayoutEffect, useMemo, useR
 import { StyleSheet, TextInput, View, type ModalProps, type ViewProps } from 'react-native';
 import { colors } from '../design/tokens';
 
-type Entry = { id: string; content: React.ReactNode; close?: ModalProps['onRequestClose'] };
+type Entry = { id: string; content: React.ReactNode; close?: ModalProps['onRequestClose']; compact?: boolean };
 type Registry = { update: (entry: Entry) => void; remove: (id: string) => void };
 const Dialogs = createContext<Registry | null>(null);
 type MacKeyEvent = { nativeEvent: { key: string }; stopPropagation: () => void };
@@ -16,7 +16,7 @@ export function DesktopDialogHost({ children }: { children: React.ReactNode }) {
     update: entry => setEntries(previous => {
       const index = previous.findIndex(item => item.id === entry.id);
       if (index < 0) return [...previous, entry];
-      if (previous[index].content === entry.content && previous[index].close === entry.close) return previous;
+      if (previous[index].content === entry.content && previous[index].close === entry.close && previous[index].compact === entry.compact) return previous;
       return previous.map(item => item.id === entry.id ? entry : item);
     }),
     remove: id => setEntries(previous => previous.some(item => item.id === id) ? previous.filter(item => item.id !== id) : previous),
@@ -28,13 +28,13 @@ export function DesktopDialogHost({ children }: { children: React.ReactNode }) {
     }}>
       <View style={styles.root} pointerEvents={top ? 'none' : 'auto'} accessibilityElementsHidden={!!top} importantForAccessibility={top ? 'no-hide-descendants' : 'auto'}>{children}</View>
       {entries.map((entry, index) => <View key={entry.id} style={[styles.overlay, index !== entries.length - 1 && styles.hidden]} pointerEvents={index === entries.length - 1 ? 'auto' : 'none'} accessibilityElementsHidden={index !== entries.length - 1} accessibilityViewIsModal>
-        <View style={styles.panel}>{entry.content}</View>
+        <View style={[styles.panel, entry.compact && styles.compact]}>{entry.content}</View>
       </View>)}
     </KeyboardView>
   </Dialogs.Provider>;
 }
 
-export default function DesktopDialog({ visible = true, children, onRequestClose, onShow }: ModalProps) {
+export default function DesktopDialog({ visible = true, children, onRequestClose, onShow, compact = false }: ModalProps & { compact?: boolean }) {
   const registry = useContext(Dialogs);
   if (!registry) throw new Error('Desktop dialogs require DesktopDialogHost.');
   const id = useId();
@@ -45,10 +45,10 @@ export default function DesktopDialog({ visible = true, children, onRequestClose
         TextInput.State.currentlyFocusedInput()?.blur();
         onShow?.({} as never);
       }
-      registry.update({ id, content: children, close: onRequestClose });
+      registry.update({ id, content: children, close: onRequestClose, compact });
     } else registry.remove(id);
     wasVisible.current = visible;
-  }, [registry, id, visible, children, onRequestClose, onShow]);
+  }, [registry, id, visible, children, onRequestClose, onShow, compact]);
   useLayoutEffect(() => () => registry.remove(id), [registry, id]);
   return null;
 }
@@ -57,5 +57,6 @@ const styles = StyleSheet.create({
   root: { flex: 1 },
   overlay: { ...StyleSheet.absoluteFillObject, backgroundColor: '#0009', padding: 24, alignItems: 'center', justifyContent: 'center', zIndex: 100 },
   panel: { width: '100%', maxWidth: 900, height: '100%', borderRadius: 12, borderWidth: 1, borderColor: colors.border, backgroundColor: colors.background, overflow: 'hidden' },
+  compact: { height: undefined, maxHeight: '100%', maxWidth: 640 },
   hidden: { display: 'none' },
 });

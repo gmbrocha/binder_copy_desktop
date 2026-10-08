@@ -9,6 +9,13 @@ final class NativeSmoke: XCTestCase {
     super.tearDown()
   }
 
+  private func capture(_ title: String, in app: XCUIApplication) {
+    let shot = XCTAttachment(screenshot: app.screenshot())
+    shot.name = title
+    shot.lifetime = .keepAlways
+    add(shot)
+  }
+
   private func tab(_ name: String, in app: XCUIApplication) -> XCUIElement {
     // React Native macOS exposes role=tab as an AX Other, not an NSButton.
     app.descendants(matching: .any).matching(NSPredicate(format: "label == %@", name)).firstMatch
@@ -29,7 +36,8 @@ final class NativeSmoke: XCTestCase {
     add(initial)
     app.buttons["Page name"].click()
     let name = app.textFields["Page name"]
-    XCTAssertTrue(name.exists)
+    XCTAssertTrue(name.waitForExistence(timeout: 10), app.debugDescription)
+    capture("Compact page name", in: app)
     name.click()
     name.typeKey("a", modifierFlags: .command)
     name.typeText("Desktop test")
@@ -38,9 +46,11 @@ final class NativeSmoke: XCTestCase {
     XCTAssertTrue(app.buttons["Fixture 1, Demo set"].waitForExistence(timeout: 30), app.debugDescription)
     app.buttons["Fixture 1, Demo set"].click()
     XCTAssertTrue(app.buttons["Add to collection"].waitForExistence(timeout: 10), app.debugDescription)
+    capture("Card details", in: app)
     app.buttons["Done"].click()
     app.buttons["Filters"].click()
     XCTAssertTrue(app.buttons["Reset"].waitForExistence(timeout: 10), app.debugDescription)
+    capture("Card filters", in: app)
     app.buttons["Done"].click()
     tab("Library", in: app).click()
     XCTAssertTrue(app.buttons["Open Desktop test"].waitForExistence(timeout: 15), app.debugDescription)
@@ -52,6 +62,7 @@ final class NativeSmoke: XCTestCase {
     app.buttons["Open Desktop test"].click()
     XCTAssertTrue(builder.waitForExistence(timeout: 15), app.debugDescription)
     app.buttons["Page name"].click()
+    XCTAssertTrue(app.textFields["Page name"].waitForExistence(timeout: 10), app.debugDescription)
     XCTAssertEqual(app.textFields["Page name"].value as? String, "Desktop test")
     app.buttons["Cancel"].click()
     XCTAssertFalse(app.buttons["Dismiss error"].exists, app.debugDescription)
@@ -63,6 +74,7 @@ final class NativeSmoke: XCTestCase {
     app.buttons["Open Desktop test"].click()
     XCTAssertTrue(builder.waitForExistence(timeout: 15), app.debugDescription)
     app.buttons["Page name"].click()
+    XCTAssertTrue(app.textFields["Page name"].waitForExistence(timeout: 10), app.debugDescription)
     XCTAssertEqual(app.textFields["Page name"].value as? String, "Desktop test")
     app.buttons["Cancel"].click()
     XCTAssertFalse(app.buttons["Dismiss error"].exists, app.debugDescription)
@@ -81,8 +93,10 @@ final class NativeSmoke: XCTestCase {
     app.typeKey(.return, modifierFlags: [])
     app.windows["open-panel"].buttons["OKButton"].click()
     XCTAssertTrue(app.buttons["Keep this page"].waitForExistence(timeout: 30), app.debugDescription)
+    capture("Photo proposal", in: app)
     app.buttons["Keep this page"].click()
     XCTAssertTrue(app.buttons["Export"].waitForExistence(timeout: 10))
+    capture("Kept desktop page", in: app)
     app.buttons["Export"].click()
     app.buttons["Download image"].click()
     XCTAssertTrue(app.windows.buttons["OKButton"].waitForExistence(timeout: 15), app.debugDescription)
