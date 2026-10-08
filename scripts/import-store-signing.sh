@@ -31,7 +31,7 @@ PY
 then
   security import "$RUNNER_TEMP/bindercopy-wwdr.cer" -k "$keychain"
 fi
-printf 'Configuring private-key access and provisioning profile\n' 
+printf 'Configuring private-key access and provisioning profile\n'
 security list-keychains -d user -s "$keychain" "$HOME/Library/Keychains/login.keychain-db"
 security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$SIGNING_PASSWORD" "$keychain" >/dev/null
 security cms -D -i "$RUNNER_TEMP/bindercopy-store.provisionprofile" > "$RUNNER_TEMP/bindercopy-profile.plist"
