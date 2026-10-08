@@ -143,8 +143,13 @@ export default function Workbench({
       ...existing,
       ...Object.fromEntries(items.map((card) => [card.id, card])),
     }));
-  const report = (e: unknown) =>
-    setError(e instanceof Error ? e.message : "Something went wrong.");
+  const report = (e: unknown) => {
+    const message = e instanceof Error ? e.message : "Something went wrong.";
+    if (/KeyChain|SecureStore|entitlement/i.test(message)) {
+      if (__DEV__) console.warn('Secure storage initialization failed:', message);
+      setError('Secure storage is unavailable. Restart the app and try again.');
+    } else setError(message);
+  };
   const run = async (fn: () => Promise<void>) => {
     if (busyRef.current) return;
     busyRef.current = true;

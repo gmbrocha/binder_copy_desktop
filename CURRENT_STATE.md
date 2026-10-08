@@ -54,3 +54,8 @@ Finish native runtime and visual checks, including photos, share/file panels, se
 
 2026-10-07 — added a manual native XCTest fixture workflow using the actual app, local API/Metro and retained screenshots in xcresult. Connected the existing sandbox/file/network entitlements file to both Mac build configurations; it was previously present without a build-setting reference. Local ad-hoc tests do not prove Apple distribution signing or data-protection Keychain access. iPhone's diagnostic screenshot confirms missing simulator Keychain entitlement, under repair separately. Mac runtime evidence is pending; public-repository runner has no new paid reservation.
 
+
+## Secure storage and environment boundary checkpoint
+
+2026-10-07 — expanded copied-key scans to include backend admin/service-role/access-token variants. Secure-storage errors use concise user copy while development logs retain the cause. macOS native XCTest run 37716056106 is active at a3109fb; runtime/Keychain proof is still pending. VPS 4d3aeae is active privately after 47 Linux tests, with production and auth setup unchanged.
+
