@@ -16,17 +16,17 @@ Stabilize the full native iPhone/macOS internal betas and shared VPS backend wit
 PWA fidelity pass authorized October 8. Frozen source audited in isolated WebKit at iPhone 13 Pro dimensions; walkthrough passes with zero paid calls. Native presentation changes restore the current PWA header/navigation, generation tiles/source/tray, proposals/replacement review, preview/swatches, Cards/picker and Library grid. See docs/UI_PARITY.md. Local typechecks and replacement/session tests pass; expanded native screenshots and release verification pending. Build 2 remains live.
 
 ## Blockers
-No audit/release blocker. Broader release acceptance still requires physical gestures/accessibility/larger text, native email recovery/account switching and real output delivery, founder identity linking, Zoho sender review, final shared-catalog reconciliation, privacy/support/asset rights and external distribution review. Native paid features/subscriptions remain off. Minor UI feedback is deferred until the owner returns.
+No audit/release blocker. Broader release acceptance still requires physical gestures/accessibility/larger text, native email recovery/account switching and real output delivery, founder identity linking, Zoho sender review, final shared-catalog reconciliation, privacy/support/asset rights and external distribution review. Native paid features/subscriptions remain off. The owner has now authorized the PWA-fidelity pass; native screenshot and release checks are active.
 
 ## Next actions
-1. Owner updates to build 2 and reports the small UI issues; physically install/accept the available Mac beta.
-2. Link verified founder app identities and finish wider-distribution acceptance gates before inviting additional testers or enabling paid calls.
-3. Keep CURRENT_STATE and release evidence synchronized with any later source/runtime/store change. Do not conflate the frozen PWA with the native beta database.
+1. Finish actual iPhone/Mac UI runs, inspect screenshots against frozen PWA, and correct regressions before release.
+2. Archive verified source, upload/assign the next internal beta builds, and record exact versions and evidence.
+3. Physical iPhone/PWA and Mac acceptance remains separate. Preserve existing account permissions and disabled paid dispatch.
 
 ## Verification
 This repo: 17 tests pass; cross-repo total 87 (16 iPhone, 17 Mac, 54 backend). All typechecks, complete bundles, private-credential checks, contract hashes, documentation UTF-8/nonempty checks and relative Markdown links pass. Source CI and native workflows against the audited application sources pass. Backend production dependency audit is clean; inherited native build-tool advisories are triaged, not falsely described as zero.
 
 ## Last checkpoint
-October 8, 2026: PWA-fidelity implementation checkpoint, not a release. iPhone 18 / Mac 19 tests pass; iPhone bundle and both client boundary scans pass. Simulator and signed Mac screenshot runs are next; the previous build-2 release remains available.
+October 8, 2026: iPhone run 37782494271 built successfully but stopped on the test's unsupported hideKeyboard command in the name dialog. Replaced that step with direct Save, added Done/Search keyboard actions and launch-splash accessibility gating. PWA review also restored compact naming sheet (iPhone), card details/actions, picker information buttons, proposal Change and short tray labels. Replacement cancel/reroll/Undo now has an expanded isolated native test. Local tests (18 iPhone / 19 Mac), typechecks and boundary scans pass; native rerun pending. Mac run 37782506707 is still compiling the previous checkpoint. Build 2 remains live; no new archive or upload.
 
-October 8, 2026: audit fixes are shipped as both platform build 2s and backend runtime 0234fd3. This checkpoint includes the final documentation and release evidence across all three repos. Shared counted/reserved $157.333235; $342.666765 unreserved. Backend docs/BUDGET.md is authoritative. No new paid AI usage.
+Shared counted/reserved $166.333235; $333.666765 unreserved. Backend docs/BUDGET.md is authoritative. No new paid AI usage.

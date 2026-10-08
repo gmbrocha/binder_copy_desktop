@@ -1,6 +1,7 @@
 import Modal from "../../components/DesktopDialog";
 import React, { useRef, useState } from "react";
 import {
+  Keyboard,
   ActivityIndicator,
   Pressable,
   ScrollView,
@@ -135,6 +136,8 @@ export default function SearchControls({
           placeholder="A Pokémon, an artist, a feeling…"
           placeholderTextColor={c.muted}
           value={query}
+          returnKeyType="search"
+          onSubmitEditing={() => {Keyboard.dismiss();onQuery(query);}}
           maxLength={300}
           onChangeText={onQuery}
           style={[s.input, { flex: 1, borderWidth: 0, paddingHorizontal: 0 }]}
@@ -142,7 +145,7 @@ export default function SearchControls({
         <Pressable
           accessibilityRole="button"
           accessibilityLabel="Search"
-          onPress={() => onQuery(query)}
+          onPress={() => {Keyboard.dismiss();onQuery(query);}}
           style={{ padding: 10 }}
         >
           <Icon name="submit" color={c.accent} />

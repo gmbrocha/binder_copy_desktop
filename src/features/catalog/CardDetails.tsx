@@ -8,11 +8,13 @@ import {
   Text,
   TextInput,
   View,
+  useWindowDimensions,
 } from "react-native";
 import { ApiClient, ApiError } from "../../api/client";
 import type { Card, CardPrices, Tag } from "../../shared/contracts";
 import CardImage from "../../components/CardImage";
 import Action from "../../components/Action";
+import Icon, { type IconName } from "../../components/Icon";
 import { colors as c, type as t } from "../../design/tokens";
 
 type History = {
@@ -31,6 +33,7 @@ export default function CardDetails({
   onUpdate,
   onClose,
   onBuild,
+  onPlace,
 }: {
   api: ApiClient;
   initial: Card;
@@ -38,8 +41,10 @@ export default function CardDetails({
   canCurate: boolean;
   onUpdate: (card: Card) => void;
   onClose: () => void;
+  onPlace?: (card: Card) => void;
   onBuild?: (kind: "favorite" | "card-colors", card: Card) => void;
 }) {
+  const wide = useWindowDimensions().width >= 768;
   const [card, setCard] = useState(initial);
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState<string[]>(initial.tags);
@@ -116,15 +121,21 @@ export default function CardDetails({
       setHistory(undefined);
     });
   const tagById = new Map(tags.map((tag) => [tag.id, tag]));
+  const rowAction = (label: string, icon: IconName, onPress: () => void) => (
+    <Pressable accessibilityRole="button" accessibilityLabel={label} disabled={busy || !ready} onPress={onPress} style={[s.actionRow, (busy || !ready) && {opacity: 0.4}]}>
+      <Icon name={icon} size={18}/><Text style={[s.body, {flex: 1, color: c.text}]}>{label}</Text><Icon name="arrow" size={18}/>
+    </Pressable>
+  );
   return (
     <ScrollView
       contentContainerStyle={s.content}
       keyboardShouldPersistTaps="handled"
     >
       <View style={s.row}>
-        <Text style={[s.heading, { flex: 1 }]}>
-          {editing ? "Edit tags" : "Card details"}
-        </Text>
+        <View style={{flex: 1, gap: 4}}>
+          <Text accessibilityLabel={editing ? "Edit tags" : "Card details"} style={s.heading}>{editing ? "Edit tags" : card.name}</Text>
+          <Text style={s.caption}>{card.setName} · {card.number}</Text>
+        </View>
         <Action label="Done" disabled={busy} onPress={onClose} />
       </View>
       {busy && <ActivityIndicator color={c.accent} />}
@@ -136,21 +147,19 @@ export default function CardDetails({
       {!!error && !ready && (
         <Action label="Reload card" disabled={busy} onPress={reload} />
       )}
+      <View style={{flexDirection: wide && !editing ? "row" : "column", gap: 20}}>
       <CardImage
         api={api}
         id={card.id}
         accessibilityLabel={card.name}
-        style={{ height: 340, width: "100%" }}
+        style={{ height: 252, width: 180, alignSelf: wide && !editing ? "flex-start" : "center" }}
       />
-      <Text style={s.title}>{card.name}</Text>
-      <Text style={s.body}>
-        {card.setName} · {card.number}
-      </Text>
+      <View style={{flex: wide && !editing ? 1 : undefined, gap: 16}}>
       <Text style={s.caption}>
         {[card.rarity, card.artist].filter(Boolean).join(" · ")}
       </Text>
-      <Action
-        label={card.owned ? "Remove from collection" : "Add to collection"}
+      <Pressable accessibilityRole="button" accessibilityLabel={card.owned ? "Remove from collection" : "Add to collection"} style={s.ownership}
+        accessibilityState={{selected: card.owned}}
         disabled={busy || !ready}
         onPress={() =>
           run(async () => {
@@ -158,57 +167,16 @@ export default function CardDetails({
             update({ ...card, owned: result.owned });
           })
         }
-      />
+      ><Text style={s.body}>{card.owned ? "✓ Owned" : "Mark owned"}</Text></Pressable>
       {!editing && (
         <>
-          {onBuild && (
-            <View style={s.row}>
-              <Action
-                label="Build around this card"
-                disabled={busy || !ready}
-                onPress={() => onBuild("favorite", card)}
-              />
-              <Action
-                label="Use card colors"
-                disabled={busy || !ready}
-                onPress={() => onBuild("card-colors", card)}
-              />
-            </View>
-          )}
-          <View style={s.row}>
-            <Text style={[s.heading, { flex: 1 }]}>Tags</Text>
-            {canCurate && (
-              <Action
-                label="Edit tags"
-                disabled={!ready || busy}
-                onPress={() => {
-                  setDraft(card.tags);
-                  setArt(card.art);
-                  setEditing(true);
-                }}
-              />
-            )}
-          </View>
-          <View style={s.chips}>
-            {card.tags.map((tag) => (
-              <Text key={tag} style={s.chip}>
-                {tagById.get(tag)?.label ?? tag}
-              </Text>
-            ))}
-          </View>
-          {!card.tags.length && <Text style={s.body}>No tags yet.</Text>}
-          {!!card.annotation?.description && (
-            <Text style={s.body}>{card.annotation.description}</Text>
-          )}
-          <Action
-            label={prices ? "Refresh prices" : "Check prices"}
-            disabled={busy}
-            onPress={() =>
-              run(async () =>
-                setPrices(await api.request<CardPrices>(path + "/prices")),
-              )
-            }
-          />
+          <Text style={s.body}>{card.tags.map(tag => tagById.get(tag)?.label ?? tag).join(" · ") || "No theme tags yet."}</Text>
+          {rowAction(prices ? "Refresh prices" : "Check prices", "tag", () => run(async () => setPrices(await api.request<CardPrices>(path + "/prices"))))}
+          {onBuild && <>
+            {rowAction("Build around this card", "favorite", () => onBuild("favorite", card))}
+            {rowAction("Use this card’s colors", "droplet", () => onBuild("card-colors", card))}
+          </>}
+          {canCurate && rowAction("Edit tags", "tag", () => {setDraft(card.tags);setArt(card.art);setEditing(true);})}
           {prices && (
             <View style={{ gap: 8 }}>
               <Text style={s.caption}>
@@ -255,6 +223,8 @@ export default function CardDetails({
           )}
         </>
       )}
+      </View></View>
+      {!editing && onPlace && <Action label="Place in page" primary disabled={busy || !ready} onPress={() => onPlace(card)} />}
       {editing && (
         <>
           <Text style={s.caption}>Shared catalog</Text>
@@ -385,13 +355,15 @@ export default function CardDetails({
 }
 const s = StyleSheet.create({
   content: {
-    padding: 20,
+    padding: 16,
     paddingBottom: 40,
     gap: 16,
     width: "100%",
     maxWidth: 760,
     alignSelf: "center",
   },
+  actionRow: {flexDirection: "row", alignItems: "center", gap: 12, borderTopWidth: 1, borderTopColor: c.line, paddingVertical: 12, minHeight: 44},
+  ownership: {alignSelf: "flex-start", borderWidth: 1, borderColor: c.lineStrong, borderRadius: 99, paddingHorizontal: 12, paddingVertical: 8},
   row: { flexDirection: "row", alignItems: "center", gap: 8 },
   title: { ...t.title, color: c.text },
   heading: { ...t.heading, color: c.text },

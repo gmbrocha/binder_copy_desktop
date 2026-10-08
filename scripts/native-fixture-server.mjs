@@ -16,6 +16,7 @@ const server = http.createServer(async (req, res) => {
     if (pathname === '/api/bootstrap') return send({ user: { id: 'native-ui-fixture', name: 'UI test', role: 'user' }, capabilities: { curateTags: false, manageCatalog: false, paidApi: false }, aiConfigured: false, backdropConfigured: false, tags: [{ id: 'blue', label: 'Blue', category: 'color', aliases: [] }], sets: [{ id: 'demo', name: 'Demo set' }], types: [{ name: 'Water' }], categories: [{ name: 'Pokemon' }], years: [{ year: '2026' }], catalog: { count: 12, sets: 1 }, visual: { indexed: 12 } });
     if (pathname.startsWith('/api/art/')) { res.writeHead(200, { 'Content-Type': 'image/png' }); return res.end(art); }
     if (pathname === '/api/cards/search') { const found = cards.filter(card => (!body.filters.q || card.name.toLowerCase().includes(body.filters.q.toLowerCase())) && (body.filters.ownership !== 'owned' || card.owned) && (body.filters.ownership !== 'needed' || !card.owned)); return send({ cards: found.slice(body.offset, body.offset + body.limit), ids: found.map(c => c.id), total: found.length }); }
+    if (pathname === '/api/cards/similar') return send({ cards: cards.filter(c => c.id !== body.seedCardId) });
     if (pathname === '/api/cards/batch') return send({ cards: cards.filter(c => body.ids.includes(c.id)) });
     if (/^\/api\/cards\/fixture-\d+$/.test(pathname)) return send(cards.find(c => c.id === pathname.split('/').pop()));
     if (pathname.startsWith('/api/ownership/')) { const card = cards.find(c => c.id === pathname.split('/').pop()); card.owned = body.owned; return send({ owned: card.owned }); }
@@ -28,6 +29,10 @@ const server = http.createServer(async (req, res) => {
     }
     if (pathname === '/api/generate' || pathname === '/api/colors/generate') {
       if (pathname === '/api/colors/generate' && (!Array.isArray(body.colors) || !body.colors.length || body.colors.some(color => !/^#[a-f0-9]{6}$/i.test(color)) || Object.keys(body).some(key => !['slots', 'filters', 'colors'].includes(key)))) return send({ error: 'Only extracted colors may be uploaded.' }, 400);
+      if (Number.isInteger(body.target)) {
+        const candidate = cards.find(card => !body.slots.some(slot => slot.cardId === card.id));
+        return send({ slots: body.slots.map((slot, i) => i === body.target && !slot.locked && candidate ? { cardId: candidate.id, locked: false } : slot), cards });
+      }
       return send({ slots: body.slots.map((slot, i) => slot.locked ? slot : { cardId: cards[i % cards.length].id, locked: false }), cards, palette: 'ocean' });
     }
     if (pathname === '/api/palette') return send({ palette: 'ocean' });

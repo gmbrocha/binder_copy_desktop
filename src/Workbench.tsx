@@ -5,6 +5,7 @@ import {
   AppState,
   FlatList,
   Image,
+  Keyboard,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -404,14 +405,14 @@ export default function Workbench({
     setPicker(null);
     setThemeOpen(false);
   };
-  const startReplacement = (card?: Card) => {
-    const next = beginReplacement(session.page, selected, card);
+  const startReplacement = (card?: Card, target = selected) => {
+    const next = beginReplacement(session.page, target, card);
     setReplacement(next);
     setSimilar([]);
     setQuery("");
     setPicker("manual");
     const seedCardId =
-      session.page.seedCardId ?? session.page.slots[selected]?.cardId;
+      session.page.seedCardId ?? session.page.slots[target]?.cardId;
     if (seedCardId)
       void api
         .request<{ cards: Card[] }>("/cards/similar", "POST", {
@@ -549,7 +550,7 @@ export default function Workbench({
         contentContainerStyle={{ gap: 12, paddingVertical: 16 }}
         columnWrapperStyle={{ gap: 12 }}
         renderItem={({ item }) => (
-          <Pressable
+          <View style={{ width: cardWidth }}><Pressable
             accessibilityRole="button"
             accessibilityLabel={item.name + ", " + item.setName}
             style={{ width: cardWidth }}
@@ -561,13 +562,15 @@ export default function Workbench({
               style={s.cardArt}
               resizeMode="contain"
             />
-            <Text numberOfLines={1} style={[s.buttonText, { marginTop: 8 }]}>
+            <Text numberOfLines={1} style={[s.buttonText, { marginTop: 8, paddingRight: picker ? 28 : 0 }]}>
               {item.name}
             </Text>
-            <Text numberOfLines={1} style={s.caption}>
+            <Text numberOfLines={1} style={[s.caption, {paddingRight: picker ? 28 : 0}]}>
               {item.setName} · {item.number}
             </Text>
           </Pressable>
+          {picker && <Pressable accessibilityRole="button" accessibilityLabel={`Details for ${item.name}`} onPress={() => setDetail(item)} style={{position: "absolute", right: 0, bottom: 0, width: 32, height: 40, alignItems: "center", justifyContent: "center"}}><Icon name="info" size={18} color={c.muted}/></Pressable>}
+          </View>
         )}
         ListEmptyComponent={
           searching ? null : <Text style={s.muted}>No cards found.</Text>
@@ -848,6 +851,7 @@ export default function Workbench({
     icon: IconName,
     action: () => void,
     disabled = false,
+    visibleLabel = label,
   ) => (
     <Pressable
       key={label}
@@ -868,7 +872,7 @@ export default function Workbench({
       ]}
     >
       <Icon name={icon} size={20} />
-      <Text style={s.caption}>{label}</Text>
+      <Text style={s.caption}>{visibleLabel}</Text>
     </Pressable>
   );
   const slotControls = selected >= 0 && selectedSlot && (
@@ -944,6 +948,8 @@ export default function Workbench({
                 i === selected ? { ...slot, locked: !slot.locked } : slot,
               ),
             })),
+          false,
+          selectedSlot.locked ? "Unlock" : "Lock",
         )}
         {slotAction(
           selectedSlot.cardId ? "Replace" : "Fill slot",
@@ -959,16 +965,16 @@ export default function Workbench({
           selectedSlot.locked,
         )}
         {slotAction(
+          "Reroll",
+          "shuffle",
+          reroll,
+          selectedSlot.locked || !selectedSlot.cardId,
+        )}
+        {slotAction(
           moveFrom === null ? "Move" : "Cancel move",
           "move",
           () =>
             setMoveFrom((previous) => (previous === null ? selected : null)),
-          selectedSlot.locked || !selectedSlot.cardId,
-        )}
-        {slotAction(
-          "Reroll",
-          "shuffle",
-          reroll,
           selectedSlot.locked || !selectedSlot.cardId,
         )}
         {slotAction(
@@ -982,6 +988,7 @@ export default function Workbench({
               ),
             })),
           selectedSlot.locked || !selectedSlot.cardId,
+          "Remove",
         )}
       </View>
       {moveFrom !== null && (
@@ -1518,6 +1525,8 @@ export default function Workbench({
               autoFocus
               value={nameDraft}
               maxLength={100}
+              returnKeyType="done"
+              onSubmitEditing={() => Keyboard.dismiss()}
               onChangeText={setNameDraft}
               placeholder="Page name"
               placeholderTextColor={c.muted}
@@ -1714,6 +1723,10 @@ export default function Workbench({
                         ? "Colors from your inspiration"
                         : proposal.page.themeSource}
                   </Text>
+                  <Button label="Change" plain disabled={busy} onPress={() => {
+                    setProposal(null);
+                    setSourceOptions(true);
+                  }} />
                 </View>
               )}
               {proposal && sheet(proposal.page, false)}
@@ -1901,6 +1914,16 @@ export default function Workbench({
                   setDetail(null);
                   setTab("Build");
                   void run(() => generate({ kind, card }));
+                }}
+                onPlace={(card) => {
+                  if (picker) {setDetail(null);void run(() => choose(card));return;}
+                  const slots = session.page.slots;
+                  let target = selected >= 0 && !slots[selected]?.locked ? selected : slots.findIndex(slot => !slot.cardId && !slot.locked);
+                  if (target < 0) target = slots.findIndex(slot => !slot.locked);
+                  if (target < 0) {setError("Unlock a slot first.");return;}
+                  setDetail(null);setTab("Build");setSelected(target);
+                  if (slots[target].cardId) startReplacement(card, target);
+                  else session.edit(p => ({...p, slots: p.slots.map((slot,i) => i === target ? {...slot,cardId: card.id} : slot)}));
                 }}
                 onClose={() => setDetail(null)}
                 onUpdate={(next) => {
