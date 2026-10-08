@@ -46,3 +46,7 @@ Owner requested substantially lighter presets and custom colors on the free tier
 ## 2026-10-08 — medium page colors and measured overlays
 
 Owner corrected the nearly-white presets to medium muted colors, and requested current dark/cream title and logo variants chosen by background contrast. Sample title and logo regions independently for generated/scenery pixels, resolve solid/custom colors immediately, reuse identical export logic, and keep free colors free. No recoloring of saved custom values or frozen PWA changes.
+
+## 2026-10-08 — approved loading animation
+
+Owner approved the separate cream-on-black Poké Ball mock for implementation in the next native build. Replace the visible Loading text with a 48-point silhouette turning clockwise every 1.4 seconds over the existing dimmed screen. Keep the 750ms reveal threshold and rendered-result completion timing. Native animation must stop offscreen/in the background and honor Reduce Motion; assistive technology retains Loading/busy semantics. This is deterministic UI animation, with no image generation, provider calls or model changes.

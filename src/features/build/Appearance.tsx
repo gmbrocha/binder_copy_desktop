@@ -1,8 +1,8 @@
+import { LoadingTask } from '../../components/Loading';
 import { useLoading } from '../../components/Loading';
 import Modal from "../../components/DesktopDialog";
 import React, { useRef, useState } from "react";
 import {
-  ActivityIndicator,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -275,7 +275,7 @@ export default function Appearance({
           )}
         </View>
       )}
-      {busy && <ActivityIndicator color={c.accent} />}
+      {busy && <LoadingTask />}
       {!!error && (
         <Text accessibilityRole="alert" style={s.error}>
           {error}

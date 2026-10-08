@@ -15,7 +15,7 @@ Deliver the accepted native 1.1.0 experience and monetization specification whil
 
 ## Active work
 
-Owner approved the cream Poké Ball mock for the next build. Build 9 replaces only the visible Loading text with a 48-point silhouette rotating clockwise every 1.4 seconds. Existing 750ms delay, dimmed scrim, media/render holds and top-modal layering are retained. Native animation stops on unmount/background and respects Reduce Motion; screen readers retain Loading/busy semantics. Both clients pass typecheck, boundaries and 25/26 tests. Signed archives and focused iPhone native visual verification are next; build 8 remains the released version. No backend runtime changes or paid provider calls.
+Owner approved the cream Poké Ball mock and then required removal of every old loading wheel. Build 9 replaces Loading text with a 48-point silhouette rotating clockwise every 1.4 seconds. All 13 ActivityIndicator instances per client now join one shared overlay through LoadingTask, including auth, picker/search, Library, settings/billing and card/tag actions. No legacy wheel references remain in application source. Existing 750ms delay, dimmed scrim, media/render holds and top-modal layering are retained. Native animation stops on unmount/background and respects Reduce Motion; screen readers retain Loading/busy semantics. Both clients again pass typecheck, boundaries and 25/26 tests. Initial archives 37857871793/37857867968 and iPhone UI 37857875314 were canceled before upload for this steering; replacements and signed Mac interaction regression are next. Build 8 remains released; no backend runtime change or paid provider call.
 
 Customer purchases/provider spending remain unavailable. Commercial plan: Plus $3.99/month or $29.99/year, 10 backgrounds and 50 uncached themes per anchored month; packs 10/$2.99 and 30/$6.99.
 
@@ -45,4 +45,4 @@ Historical pilot: 12 usable image calls cost $0.138840; six theme calls cost $0.
 
 ## Last checkpoint
 
-2026-10-08: approved spinner implemented; local typecheck/boundary/tests pass in both clients. Build-9 archive/parity workflows reserved before dispatch. Shared ledger **$350.975258 counted/reserved, $149.024742 unreserved**; backend docs/BUDGET.md is authoritative, $65 Actions stop limit separate. Preserve unrelated NATIVE_USER_GUIDE.md, UI_PARITY.md and MINOR_TODO_AND_IDEAS.txt edits. Benchmark remains backlog-only.
+2026-10-08: spinner-only steering implemented across both clients, all 26 old wheel instances removed and local checks pass. Replacement build-9 archive/parity workflows reserved before dispatch; Mac public standard verification remains included. Shared ledger **$359.975258 counted/reserved, $140.024742 unreserved**; backend docs/BUDGET.md authoritative, $65 Actions stop limit separate. Preserve unrelated NATIVE_USER_GUIDE.md, UI_PARITY.md and MINOR_TODO_AND_IDEAS.txt edits. Benchmark remains backlog-only.

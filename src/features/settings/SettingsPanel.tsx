@@ -1,6 +1,6 @@
+import { LoadingTask } from '../../components/Loading';
 import React, { useEffect, useRef, useState } from "react";
 import {
-  ActivityIndicator,
   ScrollView,
   StyleSheet,
   Text,
@@ -71,7 +71,7 @@ export default function SettingsPanel({
         <Text style={[s.title, { flex: 1 }]}>Settings</Text>
         <Action label="Done" disabled={busy || blocked} onPress={onClose} />
       </View>
-      {(busy || blocked) && <ActivityIndicator color={c.accent} />}
+      {(busy || blocked) && <LoadingTask />}
       {!!error && (
         <Text accessibilityRole="alert" style={s.error}>
           {error}

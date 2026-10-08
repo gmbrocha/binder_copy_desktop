@@ -1,6 +1,6 @@
+import { LoadingTask } from '../../components/Loading';
 import React, { useEffect, useState } from "react";
 import {
-  ActivityIndicator,
   FlatList,
   Pressable,
   Text,
@@ -78,7 +78,7 @@ export default function MissingCards({
         {button("Done", onClose)}
       </View>
       {loading ? (
-        <ActivityIndicator color={c.accent} />
+        <LoadingTask />
       ) : error ? (
         <>
           <Text

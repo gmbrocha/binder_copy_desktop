@@ -1,5 +1,6 @@
+import { LoadingTask } from '../components/Loading';
 import React, { useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, AppState, Image, KeyboardAvoidingView, Platform, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { AppState, Image, KeyboardAvoidingView, Platform, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import type { NativeAuth } from './nativeAuth';
 import { colors as c, type as t } from '../design/tokens';
 
@@ -36,7 +37,7 @@ export default function AuthGate({ auth, children }: { auth: NativeAuth; childre
     if (Date.now() < retryAt) { setError('Please wait a minute before requesting another code.'); return; }
     await auth.sendCode(normalized); setSentTo(normalized); setCode(''); setRetryAt(Date.now() + 60_000);
   });
-  if (identity === undefined) return <View style={s.center}><ActivityIndicator color={c.accent} /></View>;
+  if (identity === undefined) return <View style={s.center}><LoadingTask /></View>;
   if (identity) return <React.Fragment key={identity}>{children(identity)}</React.Fragment>;
   return <KeyboardAvoidingView style={s.center} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
     <View style={s.form}>

@@ -1,5 +1,6 @@
+import { LoadingTask } from '../../components/Loading';
 import React, { useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, Linking, StyleSheet, Text, View } from 'react-native';
+import { Linking, StyleSheet, Text, View } from 'react-native';
 import type { ApiClient } from '../../api/client';
 import type { BillingOffer, BillingState } from '../../shared/contracts/index';
 import Action from '../../components/Action';
@@ -47,7 +48,7 @@ export default function SubscriptionPanel({ api, accountId, blocked, onChanged }
   return <View style={s.panel}>
     <Text style={s.heading}>Plan</Text>
     {offer && <Text style={s.body}>{offer.state.tier === 'complimentary' ? 'Complimentary' : offer.state.tier === 'paid' ? 'Plus' : 'Free'}</Text>}
-    {busy && <ActivityIndicator color={c.accent} />}
+    {busy && <LoadingTask />}
     {!!error && <Text accessibilityRole="alert" style={s.error}>{error}</Text>}
     {!!message && <Text accessibilityRole="alert" style={s.body}>{message}</Text>}
     {offer?.state.credits && <View style={s.product}>

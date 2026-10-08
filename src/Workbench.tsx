@@ -1,8 +1,8 @@
+import { LoadingTask } from './components/Loading';
 import { useLoading } from './components/Loading';
 import Modal from "./components/DesktopDialog";
 import React, { useEffect, useRef, useState } from "react";
 import {
-  ActivityIndicator,
   AppState,
   FlatList,
   Image,
@@ -547,7 +547,7 @@ export default function Workbench({
         showInterpretIcon={!!picker}
       />
       {searching ? (
-        <ActivityIndicator color={c.accent} />
+        <LoadingTask />
       ) : !picker ? (
         <Text style={s.caption}>{total.toLocaleString()} cards</Text>
       ) : null}
@@ -651,7 +651,7 @@ export default function Workbench({
   );
   const modalStatus = (
     <>
-      {busy && <ActivityIndicator color={c.accent} />}
+      {busy && <LoadingTask />}
       {!!error && (
         <Pressable
           accessibilityRole="button"
@@ -1128,7 +1128,7 @@ export default function Workbench({
           </>
         ) : (
           <>
-            {!error && <ActivityIndicator color={c.accent} />}
+            {!error && <LoadingTask />}
             {!!error && (
               <>
                 <Button
@@ -1201,7 +1201,7 @@ export default function Workbench({
           <Text style={{ color: c.danger }}>{error}</Text>
         </Pressable>
       )}
-      {busy && <ActivityIndicator color={c.accent} />}
+      {busy && <LoadingTask />}
       <View style={[s.body, desktop && { paddingHorizontal: 24 }]}>
         {tab === "Build" && (
           <ScrollView

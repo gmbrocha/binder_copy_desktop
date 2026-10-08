@@ -1,6 +1,6 @@
+import { LoadingTask } from '../../components/Loading';
 import React, { useEffect, useRef, useState } from "react";
 import {
-  ActivityIndicator,
   Linking,
   Pressable,
   ScrollView,
@@ -138,7 +138,7 @@ export default function CardDetails({
         </View>
         <Action label="Done" disabled={busy} onPress={onClose} />
       </View>
-      {busy && <ActivityIndicator color={c.accent} />}
+      {busy && <LoadingTask />}
       {!!error && (
         <Text accessibilityRole="alert" style={s.error}>
           {error}

@@ -27,6 +27,16 @@ export function useLoadingLayer(id: string, visible: boolean) {
   const register = useContext(Loading)?.layer;
   useEffect(() => { register?.(id, visible); return () => register?.(id, false); }, [register, id, visible]);
 }
+// Existing busy states join the shared overlay instead of drawing another spinner.
+// Retain the hold through the next paint so newly mounted result images can join it.
+export function LoadingTask() {
+  const clock = useContext(Loading)?.clock;
+  useEffect(() => {
+    const finish = clock?.begin('action');
+    return () => { void paint().then(() => finish?.()); };
+  }, [clock]);
+  return null;
+}
 export function useLoading() {
   const clock = useContext(Loading)?.clock;
   return React.useCallback(async <T,>(operation: string, fn: () => Promise<T>): Promise<T> => {
