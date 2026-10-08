@@ -18,6 +18,8 @@ final class NativeSmoke: XCTestCase {
     continueAfterFailure = false
     let app = XCUIApplication(bundleIdentifier: "com.clearpathsystems.bindercopy")
     app.launch()
+    XCTAssertTrue(app.buttons["New"].waitForExistence(timeout: 90), app.debugDescription)
+    app.buttons["New"].click()
     let builder = app.buttons["A favorite card"]
     XCTAssertTrue(builder.waitForExistence(timeout: 90), app.debugDescription)
     XCTAssertTrue(tab("Build a page", in: app).exists, "Builder heading must be exposed to accessibility")
@@ -49,7 +51,9 @@ final class NativeSmoke: XCTestCase {
     XCTAssertFalse(app.buttons["Dismiss error"].exists, "Native persistence must not report a secure-storage or save error: \(app.debugDescription)")
     app.buttons["Open Desktop test"].click()
     XCTAssertTrue(builder.waitForExistence(timeout: 15), app.debugDescription)
-    XCTAssertTrue(app.staticTexts["Desktop test"].exists, app.debugDescription)
+    app.buttons["Page name"].click()
+    XCTAssertEqual(app.textFields["Page name"].value as? String, "Desktop test")
+    app.buttons["Cancel"].click()
     XCTAssertFalse(app.buttons["Dismiss error"].exists, app.debugDescription)
     app.terminate()
     app.launch()
@@ -58,7 +62,9 @@ final class NativeSmoke: XCTestCase {
     XCTAssertTrue(app.buttons["Open Desktop test"].waitForExistence(timeout: 15), app.debugDescription)
     app.buttons["Open Desktop test"].click()
     XCTAssertTrue(builder.waitForExistence(timeout: 15), app.debugDescription)
-    XCTAssertTrue(app.staticTexts["Desktop test"].exists, app.debugDescription)
+    app.buttons["Page name"].click()
+    XCTAssertEqual(app.textFields["Page name"].value as? String, "Desktop test")
+    app.buttons["Cancel"].click()
     XCTAssertFalse(app.buttons["Dismiss error"].exists, app.debugDescription)
   }
 
