@@ -14,7 +14,7 @@ Deliver the owner-approved 1.1.0 native experience and paid-launch specification
 
 ## Active work
 
-The requested light presets/free custom colors are implemented, deployed and available in build 5 on both platforms. Final release records are being reconciled while Mac native UI verification finishes. The final iPhone UI retry requires GitHub billing to be restored. No new paid AI usage. See docs/CUSTOM_COLORS.md for controls and data behavior.
+The requested light presets/free custom colors are implemented, deployed and available in build 5 on both platforms. Final release records are being reconciled while Mac native UI verification finishes. After the owner added PayPal and a $65 Actions stop limit, corrected iPhone UI run 37832199099 attempt 2 started successfully; final interaction results are pending. No new paid AI usage. See docs/CUSTOM_COLORS.md for controls and data behavior.
 
 Native StoreKit 2 bridges support subscriptions/consumables, account tokens, localized offers, restore/manage and verify-before-finish. Recovery retains unfinished evidence, handles account switches and never initiates a purchase on launch. Settings history resets by account. Both client release archives passed tests/typecheck, native compilation, signature/entitlement and credential/contract checks.
 
@@ -24,13 +24,13 @@ Approved policy: Plus $3.99/month or $29.99/year with 10 backgrounds and 50 unca
 
 ## Blockers
 
-GitHub refused to start private iPhone UI run 37832199099 because of failed account payments or a spending limit. Owner has been notified; do not blindly retry or change recurring billing. The signed build uploaded before this block and is available. Public Mac native verification still runs.
+GitHub billing initially blocked iPhone UI run 37832199099 before execution. Owner added PayPal and confirmed a $65 Actions stop limit; attempt 2 is now running. Final native interaction/physical acceptance is still pending, but billing no longer blocks this job.
 
 Apple commercial/tax readiness and real purchase acceptance remain incomplete. Reviewed public disclosures and an explicit operating budget are required before activation.
 
 ## Next actions
 1. Owner resolves Apple W-9/Finance and processing bank details. No tax certification by the agent. Email monitoring belongs elsewhere.
-2. Complete product review metadata/US pack availability and reviewed public privacy/terms/retention disclosures.
+2. Complete product review metadata and reviewed public privacy/terms/retention disclosures. Both credit packs now have verified USA-only availability.
 3. Run actual Apple purchase/renewal/restore/refund/account-switch/cross-platform wallet scenarios from backend docs/STOREKIT_ACCEPTANCE.md on both devices. Commercial prerequisites and actual Apple-authenticated purchase session remain required.
 4. Obtain explicit finite operating/Sandbox/staff budget and finish free-user cost/alert delivery gates before paid activation. Founder identities remain separately verified.
 5. Preserve source-fidelity UI and validate build 5 on physical devices. Do not rerun paid CI merely for documentation updates.
@@ -39,10 +39,14 @@ Apple commercial/tax readiness and real purchase acceptance remain incomplete. R
 
 Backend: 92 tests/typecheck, staged and live Linux checks, anonymous denial, live disposable free-account save/reopen/PNG/CSV/privacy/paid-denial/deletion probes passed. Final custom export was visually inspected. Client archives: 23 iPhone / 24 Mac tests, typechecks, contract/hash and credential checks, signed native compilation and artifact inspection passed.
 
-iPhone native run 37830130469 passed baseline and photo/share flows. Added custom-color script stopped because it did not scroll to Apply; corrected run 37832199099 never started due GitHub billing. Full final iPhone custom-color interaction is not yet verified. Mac initial run 37830138184 passed workspace/persistence; its added color test used a phone-only selector. Corrected desktop inline-picker run 37832987903 is in progress.
+iPhone native run 37830130469 passed baseline and photo/share flows. Added custom-color script stopped because it did not scroll to Apply; corrected run 37832199099 attempt 1 never started due GitHub billing; attempt 2 is now running after the payment-method update. Full final iPhone custom-color interaction is not yet verified. Mac initial run 37830138184 passed workspace/persistence; its added color test used a phone-only selector. Corrected desktop inline-picker run 37832987903 is in progress.
 
-Build 5 is available internally, but availability/compilation is not physical installation or real Apple purchase acceptance. Exact package hashes are in the release record. Shared delivery budget: $291.975258 counted/reserved, $208.024742 remaining; backend docs/BUDGET.md is authoritative. The never-started UI retry hold was released; canceled archive reservations remain conservative.
+Build 5 is available internally, but availability/compilation is not physical installation or real Apple purchase acceptance. Exact package hashes are in the release record. Shared delivery budget: $296.475258 counted/reserved, $203.524742 remaining; backend docs/BUDGET.md is authoritative. The never-started UI retry hold was released; canceled archive reservations remain conservative.
 
 ## Last checkpoint
 
-October 8, 2026: Owner reports $85 gross GitHub macOS runner usage today; recorded conservatively pending reconciliation with existing reservations. Shared total $291.975258, remainder $208.024742. At 19:38 UTC, Apple confirmed both build-5 betas IN_BETA_TESTING. Backend/custom-color production probe passed. Corrected Mac UI run is active; corrected iPhone UI run cannot start until GitHub billing is resolved. Preserve unrelated docs/UI_PARITY.md.
+Owner added PayPal and confirmed a $65 Actions stop limit. Corrected iPhone UI run 37832199099 attempt 2 started successfully with a $4.50 reservation; final result pending. The provider monthly reset does not reset the $500 project cap.
+
+October 8, 19:48 UTC: both existing credit-pack drafts now have exactly USA availability, automatic new-territory expansion off, and remain unsubmitted/MISSING_METADATA. Purchase offers and provider dispatch remain off.
+
+October 8, 2026: Owner reports $85 gross GitHub macOS runner usage today; recorded conservatively pending reconciliation with existing reservations. Shared total $296.475258, remainder $203.524742. At 19:38 UTC, Apple confirmed both build-5 betas IN_BETA_TESTING. Backend/custom-color production probe passed. Corrected Mac UI run is active; corrected iPhone UI attempt 2 is now running after the owner payment-method update. Preserve unrelated docs/UI_PARITY.md.
