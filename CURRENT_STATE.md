@@ -5,16 +5,15 @@ Deliver the owner-approved 1.1.0 native experience and paid-launch specification
 
 ## Verified state
 
-- Both iPhone and Mac **1.1.0 (5)** are VALID / IN_BETA_TESTING in existing private internal group ba56be7f-b9ef-4031-b191-a677f79a0edd. One tester is present; Sagar invitation acceptance is unverified. Build 4 remains available; no public link/external distribution. Build-5 physical acceptance is pending.
-- iPhone runtime source 8bd8201, archive 37830778717, Apple 14278cbe-4ccc-491e-a52d-e96e7e370ddb. Mac runtime source b8c7e13, universal archive 37830531204, Apple c6b387ca-76f6-4f54-a996-ced13f1cbb14. Both archives passed native compile, signing/entitlements and package inspection.
-- OVH API runtime **b6b1ed588459a7b5e6fc67525bd4535e49d6ef8f** is live at https://bindercopy-api.clearpathsystems.tools after staging, backup and promotion. All 95 tests/typecheck passed on Windows, staging and production Linux. Backup, atomic promotion, health/auth and live free-account contrast/save/export probes passed. No data was replaced.
-- Shared contract **0.2.3**, exported from backend b6b1ed588459a7b5e6fc67525bd4535e49d6ef8f, is pinned in both client sources. Medium presets and arbitrary validated #RRGGBB custom solid colors are available on Free, with no provider calls/credits. Preview, Library thumbnails and PNG export agree; contrast-aware title and existing dark wordmark keep light pages readable.
-- Supabase/Zoho auth, private account separation, deletion and backup/restore remain verified. Catalog has 21,256 cards. Public free-account custom save/reopen/exact PNG-pixel probes passed; disposable identities were removed. Frozen PWA remains untouched.
-- Owner gmbrocha@gmail.com is a verified admin. Sagar native identity and curator assignments remain unknown. Purchases never grant staff powers.
+- Both iPhone and Mac **1.1.0 (7)** are VALID / IN_BETA_TESTING in the existing private internal group ba56be7f-b9ef-4031-b191-a677f79a0edd. Prior builds remain available. No public/external distribution. Physical build-7 acceptance remains pending.
+- iPhone source 0fa871e, archive 37842805874, Apple 0faaad54-bb0e-4974-a25a-1e285bc8a1ea. Mac source 811052e, universal archive 37842827853, Apple 86e150f6-656e-47fc-a61e-44c52a7acddf. Final packages passed native build/signature/entitlement/credential inspection.
+- OVH API runtime **b6b1ed588459a7b5e6fc67525bd4535e49d6ef8f** is live at https://bindercopy-api.clearpathsystems.tools. 95 tests/typecheck passed on Windows/staging/production; backup, promotion and live auth/privacy/color/export checks passed.
+- Shared snapshot **0.2.3** is pinned from that backend revision. Medium preset colors and free custom #RRGGBB colors are implemented. Dark/cream title and logo independently use measured background contrast, including saved generated artwork. Preview, Library and PNG composition agree; cache does not outlive the mounted account page tree.
+- Catalog 21,256 cards; Supabase/Zoho auth, private pages/collections, deletion and backup/restore remain verified. Owner gmbrocha@gmail.com is a verified admin; Sagar native identity and curator assignments remain unknown. Purchases never grant staff powers. Frozen PWA remains untouched.
 
 ## Active work
 
-Medium presets and independent dark/cream title/logo selection are implemented. Backend runtime b6b1ed5 is live. Title and footer sampling use actual generated/scenery pixels; solid/custom colors use the same deterministic contrast function locally. Preview, Library and exports share composition and ink choices. Build-6 native source: iPhone c7107b6, Mac 4815a77. Archives 37840867495 (iPhone) and 37840878929 (Mac), UI runs 37840871818 (iPhone) and 37841100347 (signed Mac) are in progress. The accidentally dispatched unsigned Mac smoke 37840882449 was canceled before interaction; signed Mac smoke is authoritative. No new image calls.
+Medium presets and adaptive overlays are complete, deployed and available in build 7. Remaining work is the commercial launch gates below; no unrequested paid dispatch or public release. See docs/CUSTOM_COLORS.md.
 
 Native StoreKit 2 bridges support subscriptions/consumables, account tokens, localized offers, restore/manage and verify-before-finish. Recovery retains unfinished evidence, handles account switches and never initiates a purchase on launch. Settings history resets by account. Both client release archives passed tests/typecheck, native compilation, signature/entitlement and credential/contract checks.
 
@@ -24,25 +23,27 @@ Approved policy: Plus $3.99/month or $29.99/year with 10 backgrounds and 50 unca
 
 ## Blockers
 
-No remaining automated color-release blocker. Physical build-5 acceptance remains with the owner. GitHub billing is restored; owner confirmed a $65 Actions stop limit.
+No remaining automated color/overlay release blocker. Physical build-7 acceptance remains with the owner. GitHub billing is restored; owner confirmed the $65 Actions stop limit.
 
-Apple commercial/tax readiness and real purchase acceptance remain incomplete. Reviewed public disclosures and an explicit operating budget are required before activation.
+Apple commercial/tax readiness, real StoreKit purchase acceptance, reviewed public legal/disclosure URLs and finite operational budgets remain unresolved. Owner is contacting Apple Finance; do not change tax certification/bank details. Email monitoring belongs to another agent.
 
 ## Next actions
 1. Owner resolves Apple W-9/Finance and processing bank details. No tax certification by the agent. Email monitoring belongs elsewhere.
 2. Complete product review metadata and reviewed public privacy/terms/retention disclosures. Both credit packs now have verified USA-only availability.
 3. Run actual Apple purchase/renewal/restore/refund/account-switch/cross-platform wallet scenarios from backend docs/STOREKIT_ACCEPTANCE.md on both devices. Commercial prerequisites and actual Apple-authenticated purchase session remain required.
 4. Obtain explicit finite operating/Sandbox/staff budget and finish free-user cost/alert delivery gates before paid activation. Founder identities remain separately verified.
-5. Preserve source-fidelity UI and validate build 5 on physical devices. Do not rerun paid CI merely for documentation updates.
+5. Preserve source-fidelity UI and validate build 7 on physical devices. Do not rerun paid CI merely for documentation updates.
 
 ## Verification
 
-All 92 backend tests/typecheck passed on Windows and Linux; staging and production promotion, backup/health and public disposable free-account save/reopen/custom PNG pixels, real card PNG/CSV, privacy, paid denial and cleanup passed. Signed archives passed 23 iPhone / 24 Mac tests, typechecks, contract/credential boundaries and native signature/entitlement/package checks.
+Backend 95 tests/typecheck passed on Windows, staging and production Linux. Backup, atomic deployment and health/auth checks passed. Public disposable free-account contrast/light-dark selection, custom-color save/reopen, exact PNG pixels, CSV, private ownership, paid denial and deletion passed; both identities removed. Added direct ownership test proves existing artwork remains measurable on Free while another account cannot sample it.
 
-Native interaction: iPhone baseline and photo/share flows passed in 37832199099 attempt 2; focused custom-color/parity flow passed in 37838150971 at 60208bc. Mac workspace/persistence and photo/custom-color/export flows passed in 37832987903 at 362176d. These later client commits change tests/documentation only; runtime matches archived build-5 sources. Earlier iPhone script errors involved footer occlusion and a grouped accessibility label; centered controls and reopening the hex field verify the applied values. Fixture tests do not prove real Apple purchases or final delivery on a physical device.
+iPhone native parity/custom-color/generated-contrast run 37840871818 passed on iPhone 13 Pro simulator at c7107b6. Signed Mac UI run 37841100347 passed workspace/persistence, photo/custom/export and generated contrast at 4815a77. Screenshots verified cream title on black and dark logo on white within the same page. Final source adds only per-mounted-page cache lifetime isolation after these native interaction runs; final archives independently passed 23 iPhone / 24 Mac tests, typechecks, boundaries, native compilation, signing/entitlements and decoded-bundle/package inspection. No claim of new physical-device or real purchase acceptance.
 
-Pale/custom page previews, readable title/wordmark contrast and Mac Library thumbnails were visually reviewed. Evidence: iPhone .local/custom-ui-37832199099-attempt2 and .local/custom-ui-37838150971; Mac .local/custom-ui-37832987903; backend .local/public-api-color-logo.json and -export.png. Build-5 package hashes and Apple IDs are in the release record. Shared budget $314.475258 counted/reserved, $185.524742 remaining; backend docs/BUDGET.md includes the owner-reported $85 gross runner usage pending reconciliation. No new paid AI calls.
+Reviewed medium preset/custom exports and three existing generated scenes with cached card images, without provider calls. Evidence: backend .local/midtone-review.png, .local/generated-overlay-review.png, .local/public-api-midtone.json; iPhone .local/overlay-ui-37840871818; Mac .local/overlay-ui-37841100347. Native build-6 iPhone was processed but withheld from beta assignment; Mac build-6 archive was canceled. Build 7 is the released correction.
+
+Final package hashes/Apple IDs are in the release record. Budget $314.475258 counted/reserved, $185.524742 remaining; backend docs/BUDGET.md is authoritative.
 
 ## Last checkpoint
 
-October 8: iPhone contrast/custom-color parity run 37840871818 passed. Build 6 iPhone package passed inspection and Apple processing but is withheld from the internal group after final review found the contrast cache was scoped to the long-lived API client, not account lifetime. Cache now belongs to each mounted page tree; AuthGate remounts on identity change. This changes cache lifetime only. Mac archive 37840878929 canceled before upload; signed UI run 37841100347 continues. Packaging corrected build 7 on both platforms; one additional iPhone archive reserved. Total $314.475258, remainder $185.524742. Live backend remains b6b1ed5. Preserve unrelated docs and ideas edits.
+2026-10-08 21:18 UTC: both build-7 betas available internally after native/package checks. Backend live and live free-account probe passed. Changes committed/pushed; preserve unrelated user-guide/UI_PARITY/ideas edits. Purchases/provider dispatch remain disabled; no new image calls.

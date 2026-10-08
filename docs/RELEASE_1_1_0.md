@@ -33,3 +33,21 @@ Both signed workflows passed client tests/typecheck, contract and credential bou
 Release notes explain account/credit foundations and private Settings usage history. New purchase offers and paid generation remain off. The live shared API is 91d35e9382c19b4be208733fbcc3b1f4346871ad; both staging and production passed 90 tests/typecheck with backup, atomic promotion and health checks. Sandbox signed TEST notification delivered successfully; actual purchase lifecycle remains pending.
 
 For actual purchase acceptance and financial gates, use backend docs/STOREKIT_ACCEPTANCE.md and docs/PAID_LAUNCH_READINESS.md.
+
+## 1.1.0 (7) — medium presets and adaptive overlays
+
+Verified 2026-10-08 21:18 UTC: both platforms VALID / IN_BETA_TESTING in the existing private internal group ba56be7f-b9ef-4031-b191-a677f79a0edd. No public or external group was created. Owner installation of build 7 remains unverified.
+
+- iPhone source 0fa871e7135e131b693957a9ff64b3cebb2d75cd; archive 37842805874; Apple 0faaad54-bb0e-4974-a25a-1e285bc8a1ea; SHA-256 4a5d971b29ab3e00416910017b2caed0d7ec2354b36510d218a04670510ce7b8.
+- Mac source 811052e7e8b59c87c0063c0b0c4364c5bf675b7d; universal archive 37842827853; Apple 86e150f6-656e-47fc-a61e-44c52a7acddf; SHA-256 d09818a479e93663a5c81fefb4b278b5945252f1eef5a86710055c10ec964d23.
+- Backend live b6b1ed588459a7b5e6fc67525bd4535e49d6ef8f; shared snapshot 0.2.3 from that revision. Subsequent backend commits are verification/docs only.
+
+Five muted medium presets replace near-white tints. Title and logo independently select dark/cream from their actual background regions; custom solids resolve locally and generated/scenery sampling is deterministic and free. Library thumbnails use the same composition as preview/export. Cache lifetime is confined to the mounted page/account tree. Saved custom colors, generated image bytes, permissions and paid gates are preserved.
+
+Backend 95 tests/typecheck passed on Windows, staging and production Linux. Backup, atomic deployment and health/auth checks passed. Public disposable free-account contrast/light-dark selection, custom-color save/reopen, exact PNG pixels, CSV, private ownership, paid denial and deletion passed; both identities removed. Added direct ownership test proves existing artwork remains measurable on Free while another account cannot sample it.
+
+iPhone native parity/custom-color/generated-contrast run 37840871818 passed on iPhone 13 Pro simulator at c7107b6. Signed Mac UI run 37841100347 passed workspace/persistence, photo/custom/export and generated contrast at 4815a77. Screenshots verified cream title on black and dark logo on white within the same page. Final source adds only per-mounted-page cache lifetime isolation after these native interaction runs; final archives independently passed 23 iPhone / 24 Mac tests, typechecks, boundaries, native compilation, signing/entitlements and decoded-bundle/package inspection. No claim of new physical-device or real purchase acceptance.
+
+Reviewed medium preset/custom exports and three existing generated scenes with cached card images, without provider calls. Evidence: backend .local/midtone-review.png, .local/generated-overlay-review.png, .local/public-api-midtone.json; iPhone .local/overlay-ui-37840871818; Mac .local/overlay-ui-37841100347. Native build-6 iPhone was processed but withheld from beta assignment; Mac build-6 archive was canceled. Build 7 is the released correction.
+
+Shared delivery total $314.475258 counted/reserved, $185.524742 remaining. Includes the owner-reported $85 gross Actions figure pending net/hold reconciliation; $65 provider monthly stop limit is separate from the $500 project cap. No new paid image calls.
