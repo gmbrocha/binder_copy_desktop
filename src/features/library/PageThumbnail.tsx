@@ -2,7 +2,7 @@ import React from "react";
 import { View, Text, Image } from "react-native";
 import type { ApiClient } from "../../api/client";
 import type { Page } from "../../shared/contracts";
-import { pagePalette } from "../../shared/domain/palettes";
+import { pagePalette, colorText } from "../../shared/domain/palettes";
 import CardImage from "../../components/CardImage";
 import BackgroundImage from "../../components/BackgroundImage";
 import CraftedBackground from "../../components/CraftedBackground";
@@ -66,7 +66,7 @@ export default function PageThumbnail({
         ))}
       </View>
       <Image
-        source={require("../../../assets/brand/wordmark.png")}
+        source={palette.text !== "#FFFFFF" && colorText(palette.bg) === "#000000" ? require("../../../assets/brand/wordmark-dark.png") : require("../../../assets/brand/wordmark.png")}
         resizeMode="contain"
         style={{ width: "40%", height: 16, marginTop: 6 }}
       />

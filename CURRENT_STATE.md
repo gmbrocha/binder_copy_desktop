@@ -33,4 +33,6 @@ Apple commercial/tax readiness and real purchase acceptance remain incomplete. R
 23 local client tests, typecheck and boundary/hash checks passed again in the signed archive. StoreKit native regressions passed in iPhone 37811589729 and Mac 37811601080 before small retry/history updates; the final archives compiled those updates. Local package version, bundle/public URLs and decoded credential inspection passed. Exact hashes are in docs/RELEASE_1_1_0.md. Full actual Apple sandbox transaction acceptance remains pending.
 
 ## Last checkpoint
+Visual PNG review caught poor cream-logo contrast on pale backgrounds. Preview/thumbnail/export now select the existing dark wordmark for light solid colors. Initial build-5 archives were canceled before upload; replacement archives follow. Native interaction checks continue on the custom-color implementation.
+
 October 8, 2026 after 18:30 UTC: build 4 available internally, updated beta notes and release evidence. Shared delivery total $188.975258 counted/reserved, $311.024742 remaining; backend docs/BUDGET.md is authoritative. Preserve unrelated docs/UI_PARITY.md. No live client changes after archive source 08bd960; this checkpoint updates release documentation.

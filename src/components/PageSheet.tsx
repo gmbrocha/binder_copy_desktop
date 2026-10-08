@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import type { ApiClient } from "../api/client";
 import type { Card, Page } from "../shared/contracts";
-import { pagePalette } from "../shared/domain/palettes";
+import { pagePalette, colorText } from "../shared/domain/palettes";
 import { getPageLayout } from "../shared/domain/backdrops";
 import { swapTarget, type Rect } from "../features/build/dragGeometry";
 import { colors } from "../design/tokens";
@@ -187,7 +187,7 @@ export default function PageSheet({
         {page.name}
       </Text>
       <Image
-        source={require("../../assets/brand/wordmark.png")}
+        source={palette.text !== "#FFFFFF" && colorText(palette.bg) === "#000000" ? require("../../assets/brand/wordmark-dark.png") : require("../../assets/brand/wordmark.png")}
         resizeMode="contain"
         style={{
           position: "absolute",
