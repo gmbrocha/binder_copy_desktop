@@ -1,8 +1,8 @@
 # macOS signing and native secure-storage gate
 
-App: BinderCopy, com.clearpathsystems.bindercopy, team L349AVQ22W. App Store Connect record 6820310010. Dedicated distribution credentials/profiles exist; no archive or upload yet.
+App: BinderCopy, com.clearpathsystems.bindercopy, team L349AVQ22W. App Store Connect record 6820310010. Dedicated credentials/profiles produced a universal archive and accepted upload; build 1 is IN_BETA_TESTING.
 
-## Observed blocker
+## Historical blocker (resolved by signed verification)
 
 Native run 37720140611 passed the selected controls but its Library screenshot shows `Stored session could not be removed.` The screenshot is evidence that the run was not a complete persistence pass. Local ad-hoc signing does not establish working Data Protection Keychain access. Keep the Data Protection Keychain and WhenUnlockedThisDeviceOnly semantics; do not fall back to plaintext or suppress this failure.
 
@@ -10,7 +10,7 @@ The app now declares its own `$(AppIdentifierPrefix)$(PRODUCT_BUNDLE_IDENTIFIER)
 
 The usable App Manager key is 7QPC2737Q6, issuer 17312427-fdd0-4294-8c67-90655e47bd58. The owner downloaded it through external Chrome; Apple API authentication passed. Failed-download keys G5BZLPY265/XRGYNN2AZG are revoked and unrelated Expo resources are unchanged. Backend docs/APPLE_RELEASE.md records the new dedicated distribution/development/installer certificates and profiles. Secrets remain in ACL-restricted ignored local storage and the main-only GitHub apple-signing environment.
 
-The manual macos-signed-smoke workflow uses GitHub's fixed Intel UDID and a dedicated development profile, without uploading the Apple API key to CI. It pins official actions, guards repository/main, checks runner identity, imports into a temporary Keychain, and cleans credentials even after failure. Tests now reopen a saved page and repeat after app restart, with error-banner assertions. First signed run 37729719954 stopped on an intermediate-certificate URL returning 404 before compilation; the corrected official Apple PKI download was locally verified against all three issued signing certificates. Retry remains pending. Unsigned native compile 37722303026 is still the latest verified compile.
+The manual macos-signed-smoke workflow uses GitHub's fixed Intel UDID and a dedicated development profile, without uploading the Apple API key to CI. It pins official actions, guards repository/main, checks runner identity, imports into a temporary Keychain, and cleans credentials even after failure. Tests now reopen a saved page and repeat after app restart, with error-banner assertions. First signed run 37729719954 stopped on an intermediate-certificate URL returning 404 before compilation; the corrected official Apple PKI download was locally verified against all three issued signing certificates. Signed runtime 37735539033 now passes persistence, cold restart, photo selection and native PNG save. Universal store archive 37732288421 passed and Apple accepted the package. See CURRENT_STATE.md for current release versions.
 
 ## Release sequence
 
@@ -28,3 +28,7 @@ Sources: [Apple Keychain entitlement troubleshooting](https://developer.apple.co
 
 ## October 8 signed runner diagnosis
 Signed interaction run 37730901723 failed before the first control query. The saved spindump identifies AppKit Apple-menu inspection blocked in IconServices, matching https://github.com/actions/runner-images/issues/14751. Signed smoke now uses macos-15-intel with Xcode 26.3 (official installed image inventory), retaining the fixed provisioned UDID and every persistence/media assertion. Store archives remain on macOS 26 Apple Silicon. This is a CI platform workaround, not a verified app-runtime fix.
+
+## Actual release evidence
+
+Version 1.0 build 1: archive 37732288421 at f6f04d0, Apple 0891ef7d-af56-4616-a493-8b36eedef540 VALID / IN_BETA_TESTING. Actual application sandbox/Keychain/network/user-selected-file entitlements, both architectures, package signature and public release settings were verified. Operator key never entered CI.

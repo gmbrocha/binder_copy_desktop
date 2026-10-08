@@ -1,3 +1,3 @@
-# assets/brand
+# Branding assets
 
-Reserved for native macOS client using React Native macOS, with a required compatibility spike. Implementation pending. Keep responsibilities aligned with docs/ARCHITECTURE.md; update this file with actual contents as code lands.
+Accepted BinderCopy assets come from the frozen source recorded in `docs/SOURCE_BASELINE.json`. Transparent wordmarks serve headers/output; opaque square icons serve installation. Update all native sizes deliberately and inspect actual archives after branding changes.

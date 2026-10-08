@@ -1,3 +1,3 @@
-# src/design
+# Design system
 
-Reserved for native macOS client using React Native macOS, with a required compatibility spike. Implementation pending. Keep responsibilities aligned with docs/ARCHITECTURE.md; update this file with actual contents as code lands.
+`tokens.ts` defines color and typography roles. Reuse body, label, caption, heading and title; Audiowide is reserved for page artwork. Keep labels concise and disabled/pressed/selected states consistent. Build / Cards / Library is the accepted navigation.

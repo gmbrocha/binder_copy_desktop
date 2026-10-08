@@ -1,3 +1,3 @@
-# native
+# macOS native implementation
 
-Reserved for native macOS client using React Native macOS, with a required compatibility spike. Implementation pending. Keep responsibilities aligned with docs/ARCHITECTURE.md; update this file with actual contents as code lands.
+macos/ contains the Xcode project, entitlements, icons, font, AppDelegate and BinderCopySystem.mm. The bridge provides Data Protection Keychain storage, UUIDs, local image sampling and native export dialogs. BinderCopyUITests exercises signed persistence/cold restart and file panels. CI signing secrets are main-only; the Apple API key stays on the operator machine.

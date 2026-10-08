@@ -2,7 +2,7 @@
 
 ## 2026-10-07 — three repositories
 
-Owner chose to stay in the existing Codex project with separate local repos: binder_copy (iPhone), binder_copy_desktop (macOS), binder_copy_backend (shared service). This supersedes the handoff's illustrative monorepo structure. Keep one backend/API source of truth and compatible contracts. Backend remote will be set up by owner; no remote URL is assumed.
+Owner chose to stay in the existing Codex project with separate local repos: binder_copy (iPhone), binder_copy_desktop (macOS), binder_copy_backend (shared service). This supersedes the handoff's illustrative monorepo structure. Keep one backend/API source of truth and compatible contracts. The owner subsequently configured all three remotes; see each README/current Git remote.
 
 ## 2026-10-07 — frozen reference and ongoing state
 
@@ -15,3 +15,7 @@ Retain the detailed handoff and freeze the PWA source as reference. Each repo us
 Use the existing public repository's standard GitHub macos-26 runner for unsigned build proof before renting a Mac. Official cost and available runner labels: https://docs.github.com/en/actions/reference/runners/github-hosted-runners . Build artifacts/logs contain no provider keys or user data. A CI compile does not replace interactive/device QA.
 
 Append dated context, decision, consequences and verification for consequential choices. Do not use this section as an undifferentiated transcript.
+
+## 2026-10-08 - stabilization after first installation
+
+Owner confirmed iPhone installation/use, deferred small UI refinements, and authorized a full code/documentation audit with fixes, commits and pushes in all three repos. Preserve the shipped design; fix correctness, recovery and maintenance defects. Distinguish code checkpoints from installed store builds.

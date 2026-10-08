@@ -1,3 +1,3 @@
-# src/features/library
+# Private Library
 
-Reserved for native macOS client using React Native macOS, with a required compatibility spike. Implementation pending. Keep responsibilities aligned with docs/ARCHITECTURE.md; update this file with actual contents as code lands.
+`PagesLibrary` loads the account's pages after settling meaningful local edits. Open, rename, duplicate and delete preserve revisions and surface conflicts. `PageThumbnail` renders saved layouts. Collection browsing uses the Workbench grid with owned filtering.

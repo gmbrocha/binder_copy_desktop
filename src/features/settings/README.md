@@ -1,3 +1,3 @@
-# src/features/settings
+# Settings
 
-Reserved for native macOS client using React Native macOS, with a required compatibility spike. Implementation pending. Keep responsibilities aligned with docs/ARCHITECTURE.md; update this file with actual contents as code lands.
+`SettingsPanel` shows identity, catalog/index status, sign-out and confirmed account deletion. Catalog refresh is capability-gated and independently authorized by the server. Do not add client role selectors or expose provider credentials.

@@ -294,14 +294,8 @@ export default function Workbench({
     setTab("Build");
     setError("");
   };
-  const openPage = async (next: Page) => {
-    if (
-      session.dirty &&
-      (page.revision ||
-        page.name !== "Untitled page" ||
-        page.slots.some((x) => x.cardId))
-    )
-      await session.save();
+  const openPage = async (shown: Page) => {
+    const next = await session.prepareOpen(shown);
     await journal.current?.clear();
     journalHasDraft.current = false;
     const loaded = await api.cards(

@@ -1,5 +1,5 @@
 import Modal from '../../components/DesktopDialog';
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
   Pressable,
@@ -35,16 +35,18 @@ export default function PagesLibrary({
   const [name, setName] = useState("");
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [busy, setBusy] = useState(false);
+  const pending = useRef(false);
   const [error, setError] = useState("");
   const load = async () => {
+    await session.settle();
     const result = await api.pages();
     setPages(result.pages);
   };
   useEffect(() => {
     let active = true;
     setBusy(true);
-    void api
-      .pages()
+    void session.settle()
+      .then(() => api.pages())
       .then((result) => {
         if (active) setPages(result.pages);
       })
@@ -57,9 +59,10 @@ export default function PagesLibrary({
     return () => {
       active = false;
     };
-  }, [api]);
+  }, [api, session]);
   const run = async (fn: () => Promise<void>) => {
-    if (busy) return;
+    if (pending.current || busy) return;
+    pending.current = true;
     setBusy(true);
     setError("");
     try {
@@ -67,6 +70,7 @@ export default function PagesLibrary({
     } catch (e) {
       setError(e instanceof Error ? e.message : "Could not update pages.");
     } finally {
+      pending.current = false;
       setBusy(false);
     }
   };
@@ -141,6 +145,7 @@ export default function PagesLibrary({
         {button("+ New", () => run(onNew))}
       </View>
       {status}
+      {!!error && !selected && button("Reload pages", () => run(load))}
       <ScrollView contentContainerStyle={{ gap: 12, paddingBottom: 24 }}>
         {!busy && !pages.length && (
           <Text style={s.body}>No saved pages yet.</Text>

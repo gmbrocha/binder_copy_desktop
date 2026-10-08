@@ -1,11 +1,9 @@
 # Native authentication
 
-Email-code UI and the official Supabase session client are synchronized with the iPhone implementation. Configure the Xcode build settings BINDERCOPY_API_URL, BINDERCOPY_AUTH_URL and BINDERCOPY_PUBLISHABLE_KEY. Info.plist exposes only these public configuration values. Provider/admin keys are rejected; copied PWA .env.local remains ignored and is never loaded by Metro.
+The official Supabase client uses only an HTTPS project URL and publishable key. Release configuration comes from validated native Info.plist settings. Debug-only loopback may use the isolated fixture service; release has no preview fallback.
 
-BinderCopySystem stores sessions using the macOS data-protection Keychain, with WhenUnlockedThisDeviceOnly accessibility and a fixed application service. Tokens are not saved in UserDefaults or files. Storage failures reject the operation. This adapter still requires signed native runtime verification; an unsigned build is not proof of Keychain behavior.
+BinderCopySystem stores sessions in the Data Protection Keychain with WhenUnlockedThisDeviceOnly and the app's own signed access group. There is no plaintext fallback. Signed run 37733468982 passed storage, saved reopening and cold restart without Keychain errors.
 
-Release builds fail closed without HTTPS API/auth configuration. Only debug loopback builds may use private staging preview identity. All API and artwork requests obtain a current bearer token. Sign out revokes the backend session before provider local-device logout; the workspace remounts on account changes to clear private in-memory state.
+Foreground enables refresh; concurrent requests share rotation. Artwork uses bearer headers. Backend logout revokes the session before provider local logout; account changes remount private workspace state. Account deletion purges private server data and local drafts and queues provider deletion durably.
 
-Pending live gates: Supabase project access, email OTP template/sender, backend issuer, actual signed Keychain/login/refresh/logout verification, Apple sign-in, account deletion and founder linking. The identical TypeScript suite covers configuration rejection, concurrent token refresh and local logout in both repositories.
-
-References: [Supabase email OTP](https://supabase.com/docs/guides/auth/auth-email-passwordless), [sessions](https://supabase.com/docs/guides/auth/sessions).
+Supabase/Zoho/public VPS configuration and actual delivered email codes pass. Full native email/recovery/account switching remains an acceptance gate. Founder identities are not yet granted roles. Email codes are the only sign-in method; Apple sign-in is not offered.

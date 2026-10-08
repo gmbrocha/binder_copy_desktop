@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
   Linking,
@@ -46,6 +46,7 @@ export default function CardDetails({
   const [art, setArt] = useState(initial.art);
   const [query, setQuery] = useState("");
   const [busy, setBusy] = useState(false);
+  const pending = useRef(false);
   const [error, setError] = useState("");
   const [conflict, setConflict] = useState(false);
   const [prices, setPrices] = useState<CardPrices>();
@@ -76,7 +77,8 @@ export default function CardDetails({
     };
   }, [api, path]);
   const run = async (action: () => Promise<void>) => {
-    if (busy) return;
+    if (pending.current || busy) return;
+    pending.current = true;
     setBusy(true);
     setError("");
     try {
@@ -87,6 +89,7 @@ export default function CardDetails({
       );
       if (e instanceof ApiError && e.status === 409) setConflict(true);
     } finally {
+      pending.current = false;
       setBusy(false);
     }
   };

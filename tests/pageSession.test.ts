@@ -28,3 +28,34 @@ test('keeping a generated proposal preserves named draft identity and conflicts 
   assert.equal(session.page.slots[0].cardId, 'card-1');
   assert.equal(session.dirty, true);
 });
+
+
+test('Library reopening waits for autosave and uses the latest local revision', async () => {
+  const shown = { ...newPage('saved'), name: 'Before', revision: 1 };
+  let complete!: (page: Page) => void;
+  const session = new PageSession(shown, page => new Promise(resolve => { complete = resolve; }), () => {});
+  session.edit(p => ({ ...p, name: 'After', slots: p.slots.map((slot, i) => i ? slot : { cardId: 'new-card', locked: true }) }));
+  const saving = session.save();
+  let opened = false;
+  const opening = session.prepareOpen(shown).then(page => { opened = true; return page; });
+  await new Promise(resolve => setImmediate(resolve));
+  assert.equal(opened, false);
+  complete({ ...session.page, revision: 2 });
+  await saving;
+  const result = await opening;
+  assert.equal(result.name, 'After');
+  assert.equal(result.slots[0].cardId, 'new-card');
+  assert.equal(result.revision, 2);
+  result.name = 'Independent snapshot';
+  assert.equal(session.page.name, 'After');
+});
+
+test('Library keeps newer remote snapshots and refuses navigation after a failed save', async () => {
+  const shown = { ...newPage('saved'), revision: 2, name: 'Remote edit' };
+  const session = new PageSession({ ...shown, revision: 1 }, async () => { throw new Error('Offline'); }, () => {});
+  assert.equal((await session.prepareOpen(shown)).revision, 2);
+  session.edit(p => ({ ...p, name: 'Unsaved edit' }));
+  await assert.rejects(session.prepareOpen(newPage('different')), /Offline/);
+  assert.equal(session.page.name, 'Unsaved edit');
+  assert.equal(session.dirty, true);
+});

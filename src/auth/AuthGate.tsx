@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, AppState, Image, KeyboardAvoidingView, Platform, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import type { NativeAuth } from './nativeAuth';
 import { colors as c, type as t } from '../design/tokens';
@@ -9,6 +9,7 @@ export default function AuthGate({ auth, children }: { auth: NativeAuth; childre
   const [sentTo, setSentTo] = useState('');
   const [code, setCode] = useState('');
   const [busy, setBusy] = useState(false);
+  const pending = useRef(false);
   const [error, setError] = useState('');
   const [retryAt, setRetryAt] = useState(0);
   useEffect(() => {
@@ -23,10 +24,11 @@ export default function AuthGate({ auth, children }: { auth: NativeAuth; childre
     return () => { subscription.unsubscribe(); lifecycle.remove(); auth.client.auth.stopAutoRefresh(); };
   }, [auth]);
   const run = async (action: () => Promise<void>) => {
-    if (busy) return;
+    if (pending.current || busy) return;
+    pending.current = true;
     setBusy(true); setError('');
     try { await action(); } catch { setError(sentTo ? 'That code could not be verified. Check it or request another.' : 'Could not send a code. Check your email and try again.'); }
-    finally { setBusy(false); }
+    finally { pending.current = false; setBusy(false); }
   };
   const send = () => run(async () => {
     const normalized = email.trim().toLowerCase();

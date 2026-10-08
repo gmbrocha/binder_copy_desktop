@@ -1,3 +1,3 @@
-# tests
+# Client verification
 
-Reserved for native macOS client using React Native macOS, with a required compatibility spike. Implementation pending. Keep responsibilities aligned with docs/ARCHITECTURE.md; update this file with actual contents as code lands.
+Run `npm test`, `npm run typecheck`, `npm run verify:boundary` and `npm run verify:docs`. Tests cover save/Undo/navigation races, stale proposals, lock/drag geometry, backdrop idempotency, account-isolated drafts and auth rotation. Mac also tests release configuration. Native fixtures exercise platform controls, not every physical interaction. See docs/VERIFICATION.md and docs/AUDIT_2026-10-08.md.

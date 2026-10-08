@@ -1,4 +1,5 @@
 import fs from 'node:fs';
+import { createHash } from 'node:crypto';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 const tracked = execFileSync('git', ['ls-files'], { encoding: 'utf8' }).split(/\r?\n/).filter(Boolean);
@@ -16,3 +17,10 @@ for (const file of files) {
 }
 console.log(`Client boundary checked: ${files.length} files; no copied provider key present.`);
 
+
+const manifest = JSON.parse(fs.readFileSync('src/shared/manifest.json', 'utf8'));
+for (const [file, expected] of Object.entries(manifest.files)) {
+  const bytes = fs.readFileSync(path.join('src/shared', file));
+  if (createHash('sha256').update(bytes).digest('hex') !== expected) throw new Error('Shared contract hash mismatch: ' + file);
+}
+console.log('Pinned contract/domain hashes verified.');

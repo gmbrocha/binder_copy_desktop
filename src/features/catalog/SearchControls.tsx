@@ -10,10 +10,12 @@ export default function SearchControls({ api, bootstrap, query, onQuery, filters
   const [open, setOpen] = useState(false); const [tagQuery, setTagQuery] = useState('');
   const [interpretation, setInterpretation] = useState<ParseResult | null>(null);
   const [selected, setSelected] = useState<string[]>([]);
-  const [busy, setBusy] = useState(false); const [error, setError] = useState('');
+  const [busy, setBusy] = useState(false);
+  const pending = useRef(false); const [error, setError] = useState('');
   const currentQuery = useRef(query); currentQuery.current = query;
   const set = <K extends keyof Filters>(key: K, value: Filters[K]) => onFilters({ ...filters, [key]: value });
-  const run = async (action: () => Promise<void>) => { if (busy) return; setBusy(true); setError(''); try { await action(); } catch (e) { setError(e instanceof Error ? e.message : 'Search could not be interpreted.'); } finally { setBusy(false); } };
+  const run = async (action: () => Promise<void>) => { if (pending.current || busy) return;
+    pending.current = true; setBusy(true); setError(''); try { await action(); } catch (e) { setError(e instanceof Error ? e.message : 'Search could not be interpreted.'); } finally { pending.current = false; setBusy(false); } };
   const interpret = () => run(async () => {
     const input = query;
     const parsed = await api.request<ParseResult>('/interpret', 'POST', { query: input });

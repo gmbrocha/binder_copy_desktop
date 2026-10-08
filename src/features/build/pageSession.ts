@@ -17,6 +17,15 @@ export class PageSession {
     this.acknowledged = page.revision && !recovered ? content(page) : '';
   }
   get dirty() { return content(this.page) !== this.acknowledged; }
+  get meaningful() { return !!(this.page.revision || this.page.name !== 'Untitled page' || this.page.slots.some(slot => slot.cardId)); }
+  async settle() {
+    if (this.dirty && this.meaningful) await this.save();
+  }
+  /** A Library row can predate an in-flight autosave. Never reopen its older snapshot. */
+  async prepareOpen(shown: Page): Promise<Page> {
+    await this.settle();
+    return clone(shown.id === this.page.id && this.page.revision >= shown.revision ? this.page : shown);
+  }
   edit(update: (page: Page) => Page) {
     const next = update(clone(this.page));
     if (next.id !== this.page.id) throw new Error('Edit must preserve page identity.');

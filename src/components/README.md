@@ -1,3 +1,3 @@
-# src/components
+# Native components
 
-Reserved for native macOS client using React Native macOS, with a required compatibility spike. Implementation pending. Keep responsibilities aligned with docs/ARCHITECTURE.md; update this file with actual contents as code lands.
+`PageSheet` renders layouts, lock controls and hold-to-swap targets. `CardImage` and `BackgroundImage` fetch protected artwork. `CraftedBackground` renders deterministic artwork; `Icon`, `Action` and `SelectField` provide common controls. Dialog adapters stay platform-specific.

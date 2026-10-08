@@ -10,7 +10,7 @@ PWA baseline f35163d346de9b5b005ece9033d6675a91350d70: 39 tests passed, TypeScri
 
 ## Implementation and release
 
-Add actual test/build/device/staging/TestFlight evidence here as completed. Never include credentials, private query text or signing material.
+The entries below are chronological historical checkpoints. CURRENT_STATE.md and the latest checkpoint supersede pending/failed statuses in older entries. Never include credentials or signing material.
 
 ## 2026-10-07 native parity checkpoint
 
@@ -36,7 +36,13 @@ Visual review of run 37720140611 shows a Keychain deletion error in Library desp
 
 Expanded Mac run 37721275072 at 940dcaa failed at the first builder assertion after opening the saved Library page. Its final screenshot shows the Keychain deletion error and Library still active; photo import/export did not run. Evidence retained under .local/native-smoke-37721275072. Mac 14065ca's unsigned compatibility compile is queued as run 37722303026. Further storage UI validation needs authorized signing; no success is inferred from source entitlement changes.
 
-## Signed Mac persistence — October 8
+## Signed Mac persistence â€” October 8
 Signed run 37733468982 at 517953f on macOS 15 Intel/Xcode 26.3 passes the complete workspace test: name, cards/details, filters, Library entry, reopening, termination/relaunch/reopening, and explicit no-error assertions. Library screenshot reviewed: no Keychain banner. This is actual development-signed persistence evidence.
 
 The media test reached the real NSOpenPanel and selected the fixture PNG, but global Open matched both its OKButton and Touch Bar. The test now scopes that control to observed window identifier open-panel/button OKButton, and Save to the native OKButton within windows, excluding the Touch Bar copy and background builder Save button. Actual photo extraction/generation/export completion remains pending until the retry passes. Evidence .local/signed-ui-37733468982.
+
+## October 8 stabilization and beta checkpoint
+
+Signed Mac run 37735539033 at de1753e passed both workspace/cold restart and photo/local-colors/native-save workflows. The PNG byte comparison passed; fixture output is separate from actual server-rendered export. Screenshots were reviewed. Both build 1 binaries are IN_BETA_TESTING in the owner-only group; Apple shows iPhone 13 Pro / iOS 26.6.1 Installed, matching the owner's confirmation.
+
+Audit source checks pass: iPhone 16, Mac 17, backend 54 tests; all typechecks, full native JS bundles, client artifact credential scans and canonical contract hashes. Documentation was reconciled and UTF-8/nonempty validation strengthened. See AUDIT_2026-10-08.md. Build 2 verification follows the source commit; build 1 does not contain these audit fixes.

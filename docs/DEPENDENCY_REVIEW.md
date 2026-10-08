@@ -19,3 +19,11 @@ Pinned react-native-macos 0.83.0 includes an unconditional isAccessibilityElemen
 The initial paragraph native patch also required the JS Text platform default: RN macOS fell through to undefined accessible. The guarded installer now adds macOS accessible !== false to both Text render paths, preserving explicit opt-out. Native tests explicitly require the Build a page heading in AX. Fabric Modal creation also failed on the actual runner; the app uses its own AppKit-backed RN view dialog host rather than depending on that unsupported path.
 
 Native run 37720140611 at 4c35716 passed the explicit AX heading and native details/filter dialogs. The superclass getter was unsuitable because it delegates to the inaccessible drawing subview; the final patch reads the paragraph prop directly.
+
+## October 8 audit
+
+Registry and GitHub advisory checks confirm no patched release for braces 3.0.3, node-forge 1.4.0 or sprintf-js 1.1.3 as of this pass. These paths are build/test tooling, not the application's catalog-query parser; do not process untrusted build patterns, certificates or format strings. A blanket forced framework downgrade is not an acceptable repair. uuid via Xcode uses v4 without an output buffer; the affected v3/v5/v6 caller-buffer path is not used here.
+
+Mac CLI and platform-iOS tooling now both pin 20.2.0, resolving fast-xml-parser 5.11.2 instead of affected 4.5.7. Typecheck/tests and the next native build verify compatibility. This is not a zero-advisory claim: final production-dependency reports contain 27 inherited findings on iPhone and 32 on Mac, with no critical finding. Backend production dependencies report zero.
+
+Additional sources: https://github.com/advisories/GHSA-gh4j-gqv2-49f6 and https://github.com/advisories/GHSA-hp3w-g68c-fv3c. Local evidence: .local/audit-dependencies.json; Mac post-update .local/audit-dependencies-after.json. Keep Metro loopback-only and signing workflows restricted to main.
