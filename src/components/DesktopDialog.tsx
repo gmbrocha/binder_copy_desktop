@@ -1,3 +1,4 @@
+import { useLoadingVisible } from './Loading';
 import React, { createContext, useContext, useId, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { StyleSheet, TextInput, View, type ModalProps, type ViewProps } from 'react-native';
 import { colors } from '../design/tokens';
@@ -11,6 +12,7 @@ const KeyboardView = View as React.ComponentType<ViewProps & { onKeyDown?: (even
 
 /** AppKit-backed RN views; avoids the unsupported Fabric Modal host on macOS. */
 export function DesktopDialogHost({ children }: { children: React.ReactNode }) {
+  const loading = useLoadingVisible();
   const [entries, setEntries] = useState<Entry[]>([]);
   const registry = useMemo<Registry>(() => ({
     update: entry => setEntries(previous => {
@@ -24,7 +26,7 @@ export function DesktopDialogHost({ children }: { children: React.ReactNode }) {
   const top = entries.at(-1);
   return <Dialogs.Provider value={registry}>
     <KeyboardView style={styles.root} keyDownEvents={top ? [{ key: 'Escape' }] : []} onKeyDown={event => {
-      if (top && event.nativeEvent.key === 'Escape') { event.stopPropagation(); top.close?.(event as never); }
+      if (top && !loading && event.nativeEvent.key === 'Escape') { event.stopPropagation(); top.close?.(event as never); }
     }}>
       <View style={styles.root} pointerEvents={top ? 'none' : 'auto'} accessibilityElementsHidden={!!top} importantForAccessibility={top ? 'no-hide-descendants' : 'auto'}>{children}</View>
       {entries.map((entry, index) => <View key={entry.id} style={[styles.overlay, index !== entries.length - 1 && styles.hidden]} pointerEvents={index === entries.length - 1 ? 'auto' : 'none'} accessibilityElementsHidden={index !== entries.length - 1} accessibilityViewIsModal>

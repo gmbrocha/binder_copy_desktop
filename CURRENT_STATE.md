@@ -13,6 +13,8 @@ Deliver the owner-approved 1.1.0 native experience and paid-launch specification
 
 ## Active work
 
+Release 8 also includes owner-requested delayed Loading: 750ms threshold, centered cream Audiowide label over a dim scrim, native sheet/desktop dialog coverage, request-to-render timing including image decode, and cleanup on failure/unmount. Saved art remains available when selecting solid colors; Reapply restores the same asset without a generation call and hides when active. Local 25 iPhone / 26 Mac tests and typechecks pass. Native visual/delay/reapply verification and archives are pending.
+
 Owner screenshot regressions: color generation repeated the only cached match; server now hydrates a bounded shortlist and never auto-repeats cards in color proposals, keeping locks and remaining slots on shortfall. Native empty slots now use full cream plus/numbers and four cream corner brackets. Backend 99 tests/typecheck and native 23/24 tests/typechecks/boundary checks passed locally. Deployment, iPhone visual verification and build-8 archives are next. $9 additionally reserved for two iPhone workflows; shared budget $328.475258 counted/reserved, $171.524742 remaining. No image-provider call needed for these changes.
 
 Medium presets and adaptive overlays are complete, deployed and available in build 7. Remaining work is the commercial launch gates below; no unrequested paid dispatch or public release. See docs/CUSTOM_COLORS.md.

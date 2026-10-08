@@ -1,3 +1,4 @@
+import { useLoading } from '../../components/Loading';
 import Modal from "../../components/DesktopDialog";
 import React, { useRef, useState } from "react";
 import {
@@ -51,6 +52,7 @@ export default function Appearance({
   const page = session.page;
   const hasCards = page.slots.some((slot) => slot.cardId);
   const mode = page.backdropMode ?? (page.backdrop ? "art" : "color");
+  const withLoading = useLoading();
   const run = async (fn: () => Promise<void>) => {
     if (pending.current || blocked) return;
     pending.current = true;
@@ -58,7 +60,7 @@ export default function Appearance({
     onBusy(true);
     setError("");
     try {
-      await fn();
+      await withLoading("action", fn);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Request failed.");
     } finally {
@@ -189,7 +191,7 @@ export default function Appearance({
             accessibilityState={{ checked: !page.customColor && (page.palette ?? "forge") === id }}
             disabled={busy || blocked}
             onPress={() =>
-              session.edit((p) => ({ ...p, palette: id as Page["palette"], customColor: undefined }))
+              session.edit((p) => ({ ...p, palette: id as Page["palette"], customColor: undefined, backdropMode: "color" }))
             }
             style={{
               flex: 1,
@@ -223,14 +225,17 @@ export default function Appearance({
       </View>
       {mode === "color" && <CustomColor key={page.id} value={page.customColor} disabled={busy || blocked}
         onApply={customColor => session.edit(p => ({ ...p, customColor, backdropMode: "color" }))} />}
-      {mode === "art" && page.backdrop && (
+      {page.backdrop && (
         <View style={s.artPanel}>
           <View style={s.row}>
             <Icon name="star" color={c.accent} />
             <View style={{ flex: 1 }}>
               <Text style={s.label}>Art backdrop</Text>
-              <Text style={[s.caption, { color: c.accent }]}>Applied</Text>
+              <Text style={[s.caption, { color: c.accent }]}>{mode === "art" ? "Applied" : "Saved"}</Text>
             </View>
+            {mode !== "art" && button("Reapply", () => { void run(async () => {
+              session.edit(p => ({ ...p, backdropMode: "art" }));
+            }); })}
             <Pressable
               accessibilityRole="button"
               accessibilityLabel="Remove art backdrop"
@@ -247,7 +252,7 @@ export default function Appearance({
               <Icon name="trash" />
             </Pressable>
           </View>
-          {canGenerate &&
+          {mode === "art" && canGenerate &&
             button(
               attempt ? "Check background" : "New version",
               generate,

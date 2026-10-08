@@ -58,6 +58,7 @@ export class ApiClient {
     body?: unknown,
     signal?: AbortSignal,
   ): Promise<T> {
+    const started = Date.now();
     const token = await this.token();
     const controller = new AbortController();
     const abort = () => controller.abort();
@@ -92,6 +93,8 @@ export class ApiClient {
         );
       return result as T;
     } finally {
+      if (__DEV__ && ['/generate', '/colors/from-card', '/colors/generate', '/backdrops/generate', '/interpret', '/palette'].includes(path))
+        console.info('[BinderCopy request timing]', JSON.stringify({ route: path, durationMs: Math.round(Date.now() - started) }));
       clearTimeout(timeout);
       signal?.removeEventListener("abort", abort);
     }

@@ -1,3 +1,4 @@
+import { useLoadingMedia } from './Loading';
 import { useEffect, useRef, useState } from 'react';
 import type { ApiClient } from '../api/client';
 import { hasImageBackground, solidOverlays, type OverlayPage, type PageOverlays } from '../shared/domain/overlays';
@@ -10,11 +11,12 @@ export default function usePageOverlays(api: ApiClient, page: OverlayPage) {
     customColor: page.customColor, backdrop: page.backdrop, backdropMode: page.backdropMode };
   const key = JSON.stringify(input);
   const image = hasImageBackground(page);
+  const rendered = useLoadingMedia(key);
   const [result, setResult] = useState<{ key: string; value: PageOverlays }>();
   const [loaded, setLoaded] = useState<string>();
   const [failed, setFailed] = useState<string>();
   useEffect(() => {
-    if (!image) return;
+    if (!image) { rendered(); return; }
     let active = true;
     if (cache.current.api !== api) cache.current = { api, entries: new Map() };
     const entries = cache.current.entries;
@@ -28,8 +30,8 @@ export default function usePageOverlays(api: ApiClient, page: OverlayPage) {
     }
     void request.then(value => {
       if (!['dark', 'cream'].includes(value.title) || !['dark', 'cream'].includes(value.logo)) throw Error('Invalid overlay colors');
-      if (active) setResult({ key, value });
-    }).catch(() => { if (active) setFailed(key); });
+      if (active) { setResult({ key, value }); rendered(); }
+    }).catch(() => { if (active) { setFailed(key); rendered(); } });
     return () => { active = false; };
   }, [api, key, image]);
   const ready = image && result?.key === key && failed !== key;

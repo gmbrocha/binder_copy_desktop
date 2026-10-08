@@ -1,3 +1,4 @@
+import { LoadingProvider, LoadingOverlay } from './src/components/Loading';
 import 'react-native-url-polyfill/auto';
 import React from 'react';
 import { NativeModules, Text, View } from 'react-native';
@@ -21,5 +22,5 @@ export default function App() {
     try { await api.request('/session/logout', 'POST', {}); } catch (e) { if (!(e instanceof ApiError && e.status === 401)) throw e; }
     await auth.signOut();
   }} />}</AuthGate> : api && __DEV__ && /^http:\/\/(localhost|127\.0\.0\.1)/.test(server) ? <Workbench api={api} createId={createId} desktop /> : <Text style={{ color: colors.text, padding: 24 }}>Server configuration required.</Text>;
-  return <View style={{ flex: 1, backgroundColor: colors.background }}><DesktopDialogHost>{content}</DesktopDialogHost></View>;
+  return <LoadingProvider><View style={{ flex: 1, backgroundColor: colors.background }}><DesktopDialogHost>{content}</DesktopDialogHost><LoadingOverlay /></View></LoadingProvider>;
 }

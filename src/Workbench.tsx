@@ -1,3 +1,4 @@
+import { useLoading } from './components/Loading';
 import Modal from "./components/DesktopDialog";
 import React, { useEffect, useRef, useState } from "react";
 import {
@@ -176,13 +177,14 @@ export default function Workbench({
       setError("Secure storage is unavailable. Restart the app and try again.");
     } else setError(message);
   };
+  const withLoading = useLoading();
   const run = async (fn: () => Promise<void>) => {
     if (busyRef.current) return;
     busyRef.current = true;
     setBusy(true);
     setError("");
     try {
-      await fn();
+      await withLoading("action", fn);
     } catch (e) {
       report(e);
     } finally {
