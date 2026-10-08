@@ -37,6 +37,8 @@ jobs:
           cp assets/brand/icon.png /tmp/bindercopy-native-photo.png
           node scripts/native-fixture-server.mjs > fixture.log 2>&1 &
           npx react-native start --host 127.0.0.1 --port 8081 > metro.log 2>&1 &
+      - name: Compile development bundle before UI deadlines
+        run: node scripts/prepare-native-fixtures.mjs
       - name: Exercise signed macOS controls and Keychain
         shell: bash
         run: |

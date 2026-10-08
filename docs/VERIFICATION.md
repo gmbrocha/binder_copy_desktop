@@ -1,5 +1,6 @@
 # Verification evidence
 
+Historical checkpoints below preserve failures and their later resolutions. Use CURRENT_STATE.md and the latest dated checkpoint for the current release; an earlier pending/blocked statement is not the present status.
 ## Scaffold
 
 `npm run verify:docs` passed on Windows/Node; `npm run setup:hooks` enabled the pre-commit state guard. Documentation checks are not native build checks.
@@ -46,3 +47,7 @@ The media test reached the real NSOpenPanel and selected the fixture PNG, but gl
 Signed Mac run 37735539033 at de1753e passed both workspace/cold restart and photo/local-colors/native-save workflows. The PNG byte comparison passed; fixture output is separate from actual server-rendered export. Screenshots were reviewed. Both build 1 binaries are IN_BETA_TESTING in the owner-only group; Apple shows iPhone 13 Pro / iOS 26.6.1 Installed, matching the owner's confirmation.
 
 Audit source checks pass: iPhone 16, Mac 17, backend 54 tests; all typechecks, full native JS bundles, client artifact credential scans and canonical contract hashes. Documentation was reconciled and UTF-8/nonempty validation strengthened. See AUDIT_2026-10-08.md. Build 2 verification follows the source commit; build 1 does not contain these audit fixes.
+
+## Mac build 2 runtime setup correction
+
+Run 37738728360 at 9a13fe9 passed testNativeWorkspace (44.295 seconds), including save/reopen/cold restart. testNativePhotoAndExport timed out on its initial builder assertion while the development window showed Bundling 96%; no photo action had run. Metro log confirms first transformation completed only later, before the passing workspace test. Both smoke workflows now verify local fixture/Metro readiness and precompile the exact macOS entry bundle before starting UI deadlines. Release packages embed their bundle and do not use Metro. All UI assertions remain intact; rerun evidence must pass before build 2 is assigned to the owner group.
