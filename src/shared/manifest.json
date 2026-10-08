@@ -1,9 +1,9 @@
 {
-  "version": "0.2.1",
-  "backendRevision": "bf5109914fd39d4d44c69ce3853dcff6694ca18b",
+  "version": "0.2.2",
+  "backendRevision": "4cdf8e84aed28d4c10d06a20a30394c4065e8ced",
   "files": {
-    "contracts/index.ts": "06df76df66172c416be8a18028ceea599c7db039cf0b0f3094624d33159cf0cc",
-    "domain/palettes.ts": "b950212040aac4a0d1a5c85fd890e4c1734de8a87e17804e7512256e32715816",
+    "contracts/index.ts": "d96f1cdb0bd99a23d20f786b64df01b576f773633b0759d4a463c8862051fe21",
+    "domain/palettes.ts": "b119c1b0a43e6e0028e86ef41360237665aa7d0bd765a2e2c359b87352dda295",
     "domain/colors.ts": "e4d137bbb055b62bc330bae30551456b5d43c7fb8dec470fd7b9d020399f4edb",
     "domain/backdrops.ts": "04a9bb601620effeba5b71aa98349455bbb57b30e0ccac1235e6ea44c33e8b92"
   }

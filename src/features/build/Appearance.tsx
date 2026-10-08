@@ -13,6 +13,7 @@ import type { Card, Page } from "../../shared/contracts";
 import { paletteSchema } from "../../shared/contracts";
 import { palettes } from "../../shared/domain/palettes";
 import { colors as c, type as typography } from "../../design/tokens";
+import CustomColor from "./CustomColor";
 import PageSheet from "../../components/PageSheet";
 import Icon from "../../components/Icon";
 import type { PageSession } from "./pageSession";
@@ -113,7 +114,7 @@ export default function Appearance({
       if (source !== backgroundSource(session.page))
         throw new Error("Your page changed. Suggest colors again.");
       const palette = paletteSchema.parse(result.palette);
-      session.edit((p) => ({ ...p, palette }));
+      session.edit((p) => ({ ...p, palette, customColor: undefined }));
     });
   const preview =
     proposal && proposal.source === backgroundSource(page)
@@ -185,10 +186,10 @@ export default function Appearance({
             key={id}
             accessibilityRole="radio"
             accessibilityLabel={palette.label}
-            accessibilityState={{ checked: (page.palette ?? "forge") === id }}
+            accessibilityState={{ checked: !page.customColor && (page.palette ?? "forge") === id }}
             disabled={busy || blocked}
             onPress={() =>
-              session.edit((p) => ({ ...p, palette: id as Page["palette"] }))
+              session.edit((p) => ({ ...p, palette: id as Page["palette"], customColor: undefined }))
             }
             style={{
               flex: 1,
@@ -200,7 +201,7 @@ export default function Appearance({
             <View
               style={[
                 s.swatchRing,
-                (page.palette ?? "forge") === id && { borderColor: c.accent },
+                !page.customColor && (page.palette ?? "forge") === id && { borderColor: c.accent },
               ]}
             >
               <View style={[s.swatch, { backgroundColor: palette.bg }]} />
@@ -211,7 +212,7 @@ export default function Appearance({
                 {
                   textAlign: "center",
                   fontSize: 12,
-                  color: (page.palette ?? "forge") === id ? c.text : c.muted,
+                  color: !page.customColor && (page.palette ?? "forge") === id ? c.text : c.muted,
                 },
               ]}
             >
@@ -220,6 +221,8 @@ export default function Appearance({
           </Pressable>
         ))}
       </View>
+      {mode === "color" && <CustomColor key={page.id} value={page.customColor} disabled={busy || blocked}
+        onApply={customColor => session.edit(p => ({ ...p, customColor, backdropMode: "color" }))} />}
       {mode === "art" && page.backdrop && (
         <View style={s.artPanel}>
           <View style={s.row}>

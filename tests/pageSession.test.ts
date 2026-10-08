@@ -59,3 +59,17 @@ test('Library keeps newer remote snapshots and refuses navigation after a failed
   assert.equal(session.page.name, 'Unsaved edit');
   assert.equal(session.dirty, true);
 });
+
+
+test('custom color survives saving and reopening; preset selection and Undo restore it', async () => {
+  let saved: Page | undefined;
+  const session = new PageSession(newPage('colors'), async page => { saved = {...page,revision:page.revision+1}; return saved; }, () => {});
+  session.edit(p => ({...p,customColor:'#345678',backdropMode:'color'}));
+  await session.save();
+  assert.equal(saved?.customColor,'#345678');
+  session.edit(p => ({...p,palette:'ocean',customColor:undefined}));
+  session.undo();
+  assert.equal(session.page.customColor,'#345678');
+  await session.save();
+  assert.equal((await session.prepareOpen(saved!)).customColor,'#345678');
+});

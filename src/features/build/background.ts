@@ -1,7 +1,7 @@
 import type { ApiClient } from '../../api/client';
 import { pageSchema, type Page } from '../../shared/contracts';
 
-export const backgroundSource = (page: Page) => JSON.stringify([page.id, page.size, page.palette ?? 'forge', page.slots.map(slot => slot.cardId)]);
+export const backgroundSource = (page: Page) => JSON.stringify([page.id, page.size, page.palette ?? 'forge', page.customColor ?? null, page.slots.map(slot => slot.cardId)]);
 export type BackgroundAttempt = { requestId: string; source: string; page: Page };
 export type BackgroundProposal = { source: string; backdrop: NonNullable<Page['backdrop']> };
 export function beginBackground(page: Page, requestId: string): BackgroundAttempt {

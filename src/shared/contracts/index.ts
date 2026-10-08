@@ -28,6 +28,7 @@ export const paletteSchema = z.enum([
   "plum",
 ]);
 export type PaletteId = z.infer<typeof paletteSchema>;
+export const customColorSchema = z.string().regex(/^#[0-9a-fA-F]{6}$/).transform(value => value.toUpperCase());
 export const colorsSchema = z
   .array(z.string().regex(/^#[0-9a-fA-F]{6}$/))
   .min(1)
@@ -47,6 +48,7 @@ export const pageSchema = z
     filters: filtersSchema,
     revision: z.number().int().min(0),
     palette: paletteSchema.optional(),
+    customColor: customColorSchema.optional(),
     seedCardId: z.string().max(80).optional(),
     themeSource: z.string().max(300).optional(),
     backdropMode: z.enum(["color", "art"]).optional(),

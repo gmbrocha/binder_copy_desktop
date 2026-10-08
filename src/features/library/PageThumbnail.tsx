@@ -2,7 +2,7 @@ import React from "react";
 import { View, Text, Image } from "react-native";
 import type { ApiClient } from "../../api/client";
 import type { Page } from "../../shared/contracts";
-import { palettes } from "../../shared/domain/palettes";
+import { pagePalette } from "../../shared/domain/palettes";
 import CardImage from "../../components/CardImage";
 import BackgroundImage from "../../components/BackgroundImage";
 import CraftedBackground from "../../components/CraftedBackground";
@@ -14,7 +14,7 @@ export default function PageThumbnail({
   api: ApiClient;
   page: Page;
 }) {
-  const palette = palettes[page.palette ?? "forge"];
+  const palette = pagePalette(page);
   return (
     <View
       accessible={false}
@@ -31,7 +31,7 @@ export default function PageThumbnail({
       {page.backdrop?.assetId && page.backdropMode !== "color" && (
         <BackgroundImage api={api} id={page.backdrop.assetId} />
       )}
-      {page.backdropMode === undefined && !page.backdrop && (
+      {page.backdropMode === undefined && !page.backdrop && !page.customColor && (
         <CraftedBackground palette={page.palette} />
       )}
       <Text

@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import type { ApiClient } from "../api/client";
 import type { Card, Page } from "../shared/contracts";
-import { palettes } from "../shared/domain/palettes";
+import { pagePalette } from "../shared/domain/palettes";
 import { getPageLayout } from "../shared/domain/backdrops";
 import { swapTarget, type Rect } from "../features/build/dragGeometry";
 import { colors } from "../design/tokens";
@@ -146,7 +146,7 @@ export default function PageSheet({
     },
     [],
   );
-  const palette = palettes[page.palette ?? "forge"];
+  const palette = pagePalette(page);
   return (
     <View
       onLayout={(event) => setWidth(event.nativeEvent.layout.width)}
@@ -163,7 +163,7 @@ export default function PageSheet({
       {page.backdropMode !== "color" && page.backdrop && (
         <BackgroundImage api={api} id={page.backdrop.assetId} />
       )}
-      {page.backdropMode === undefined && !page.backdrop && (
+      {page.backdropMode === undefined && !page.backdrop && !page.customColor && (
         <CraftedBackground palette={page.palette} />
       )}
       <Text

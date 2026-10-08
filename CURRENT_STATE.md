@@ -11,6 +11,8 @@ Deliver the owner-approved 1.1.0 native experience and paid-launch specification
 - Owner app admin binding is live for gmbrocha@gmail.com. Sagar identity and curator assignments remain unverified. Commercial purchases do not grant staff powers.
 
 ## Active work
+Owner requested much lighter preset page backgrounds and arbitrary custom colors on Free. Contract 0.2.2 adds validated customColor; native picker/hex input, preview, thumbnail, Undo/save and PNG export are implemented locally. This supersedes earlier dark preset values. Backend 92 tests, client 24 tests, typecheck and boundary checks pass. Contract 0.2.2 snapshot is pinned to backend 4cdf8e8. Native custom-color UI checks and build 5 follow; installed build 4 is unchanged.
+
 Native StoreKit 2 bridges support subscriptions/consumables, account tokens, localized offers, restore/manage and verify-before-finish. Recovery retains unfinished evidence, handles account switches and never initiates a purchase on launch. Settings history resets by account. Both client release archives passed tests/typecheck, native compilation, signature/entitlement and credential/contract checks.
 
 Apple Sandbox-only receipt verification and server notifications are live; signed TEST delivery succeeded October 8 at 18:26 UTC. New purchase offers are hidden and provider dispatch is off; all operational allowances remain zero. Neither native compile nor a TEST notification proves real purchase acceptance.

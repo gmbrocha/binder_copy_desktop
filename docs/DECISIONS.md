@@ -38,3 +38,7 @@ Owner authorized full account privileges and Apple subscriptions for the next 1.
 ## 2026-10-08 - image model selection
 
 Owner explicitly selected gpt-image-1-mini for generated backgrounds in 1.1.0. Preserve medium portrait quality, low input fidelity, one image and conservative reservations; do not silently substitute another model. Official rates were checked: text input $2/M, image input $2.50/M, image output $8/M. Round fractional micro-USD upward when settling. The new price policy expires November 8 for review; Apple's subscription work and the existing immutable global image ledger are unaffected. OpenAI currently schedules this model's shutdown for December 1, 2026. No paid call or live model deployment is implied by this source change.
+
+## 2026-10-08 - light presets and free custom backgrounds
+
+Owner requested substantially lighter presets and custom colors on the free tier. Keep existing palette IDs for saved-page compatibility, rename visible shades Mist/Ocean/Peach/Sage/Lilac and use pale tones. Add optional validated six-digit hex customColor to pages, with contrast-aware title text and identical preview/export resolution. Custom solid colors require no AI, credits or subscription. Selecting a preset clears the custom override; Undo restores it. Frozen PWA source remains unchanged.
