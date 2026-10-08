@@ -6,6 +6,7 @@
 	<key>BinderCopyAuthURL</key><string>$(BINDERCOPY_AUTH_URL)</string>
 	<key>BinderCopyPublishableKey</key><string>$(BINDERCOPY_PUBLISHABLE_KEY)</string>
 	<key>CFBundleDisplayName</key><string>BinderCopy</string>
+	<key>LSApplicationCategoryType</key><string>public.app-category.lifestyle</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>

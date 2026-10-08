@@ -50,3 +50,5 @@ The passing Mac test uses actual native controls and local disposable fixtures. 
 ### Archive verification checkpoint — October 8
 
 The actual iPhone distribution archive in run 37730894697 at 228b930 compiled and signed successfully, then its generic byte scan rejected the Supabase SDK's bare sb_secret_ prefix. Local Hermes disassembly proves this is a literal SDK prefix, not a credential; adjacent binary strings were the false positive. A shared operator scanner now reads the complete Hermes string table with the build's compiler, accepts that harmless prefix, and rejects full credential/private-key values. Compiled positive/negative fixtures and the existing iPhone bundle pass. Archives will be retained for inspection even if export checks fail. Signed Mac workspace 37730901723 and universal archive 37730904368 at 26488bf are still running. No package upload or beta availability yet.
+
+The Mac store archive will be rerun with the corrected credential scanner and the required Lifestyle application-category metadata. The older archive job uses the known false-positive scanner and will be canceled; the separate signed runtime tests continue.
