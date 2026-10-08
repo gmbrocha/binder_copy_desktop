@@ -1,10 +1,10 @@
+import Modal from './components/DesktopDialog';
 import React, { useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
   AppState,
   FlatList,
   Image,
-  Modal,
   Pressable,
   ScrollView,
   StyleSheet,

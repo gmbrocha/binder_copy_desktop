@@ -33,3 +33,16 @@ else {
   fs.writeFileSync(file, source.replace(original, replacement));
   console.log('Applied the macOS-only paragraph accessibility correction.');
 }
+
+// The JS Text default also omits macOS, leaving `accessible` undefined. Match
+// iOS's opt-out default while preserving explicit accessible={false}.
+const textFile = path.join(root, 'Libraries/Text/Text.js');
+const textSource = fs.readFileSync(textFile, 'utf8');
+const textOriginal = 'ios: accessible !== false,\n      android:';
+const textReplacement = 'ios: accessible !== false,\n      macos: accessible !== false,\n      android:';
+if (textSource.includes(textReplacement)) console.log('macOS Text accessibility default already applied.');
+else {
+  if (textSource.split(textOriginal).length !== 3) throw new Error('macOS Text default source changed; review the patch.');
+  fs.writeFileSync(textFile, textSource.replaceAll(textOriginal, textReplacement));
+  console.log('Applied the macOS Text accessibility default.');
+}

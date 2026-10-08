@@ -15,3 +15,5 @@ References: https://github.com/advisories/GHSA-vfj7-8cjw-p6xm, https://github.co
 ## React Native macOS paragraph accessibility
 
 Pinned react-native-macos 0.83.0 includes an unconditional isAccessibilityElement=NO in RCTParagraphComponentView while excluding the iOS paragraph accessibilityElements provider on macOS. Run 37717058682 showed all plain text absent from the native AX tree. scripts/patch-macos-accessibility.mjs applies a macOS-only superclass check on install, fails on a version/source mismatch and is idempotent. iOS behavior is unchanged. Review/remove this correction when upgrading; native screenshot/AX validation remains required.
+
+The initial paragraph native patch also required the JS Text platform default: RN macOS fell through to undefined accessible. The guarded installer now adds macOS accessible !== false to both Text render paths, preserving explicit opt-out. Native tests explicitly require the Build a page heading in AX. Fabric Modal creation also failed on the actual runner; the app uses its own AppKit-backed RN view dialog host rather than depending on that unsupported path.

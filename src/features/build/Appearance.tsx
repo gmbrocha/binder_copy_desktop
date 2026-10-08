@@ -1,5 +1,6 @@
+import Modal from '../../components/DesktopDialog';
 import React, { useRef, useState } from 'react';
-import { ActivityIndicator, Modal, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import type { ApiClient } from '../../api/client';
 import type { Card, Page } from '../../shared/contracts';
 import { paletteSchema } from '../../shared/contracts';

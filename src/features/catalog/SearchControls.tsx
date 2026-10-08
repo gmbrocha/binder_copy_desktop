@@ -1,5 +1,6 @@
+import Modal from '../../components/DesktopDialog';
 import React, { useRef, useState } from 'react';
-import { ActivityIndicator, Modal, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import type { ApiClient, Bootstrap } from '../../api/client';
 import { emptyFilters, type Filters, type ParseResult } from '../../shared/contracts';
 import SelectField from '../../components/SelectField';

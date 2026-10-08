@@ -19,3 +19,7 @@ Actual Mac unsigned Xcode build 37710882761 passed at 44556cd, including native 
 ## Native Mac UI selector correction
 
 37717058682 at a7fe2ef built and launched the native app; its accessibility tree contained the actual builder, page-name field and generation controls. The XCTest failed because plain React Native heading text was not exposed as StaticText on macOS. Test selectors now use observed button labels and AX tab elements. Final screen attachments and extracted screenshot artifacts are retained for the next run. No complete interaction pass is claimed.
+
+## Native modal failure and repair
+
+Runs 37718404669 / 37718688423 launched the app, entered a name and browsed fixture cards, but opening card details threw in Fabric Modal creation. The failure is an app/runtime compatibility issue, not a passed flow. All Mac dialogs now use DesktopDialogHost instead of the unsupported native Modal host, including nested filters/color selections and confirmations. Typecheck, 14 tests, full JS bundle and credential boundary scan pass. Native dialog/AX verification remains pending. Evidence screenshots were exported from the Xcode result bundles.

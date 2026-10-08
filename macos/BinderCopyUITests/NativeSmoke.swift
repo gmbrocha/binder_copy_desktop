@@ -20,6 +20,7 @@ final class NativeSmoke: XCTestCase {
     app.launch()
     let builder = app.buttons["A favorite card"]
     XCTAssertTrue(builder.waitForExistence(timeout: 90), app.debugDescription)
+    XCTAssertTrue(app.staticTexts["Build a page"].exists, "Builder heading must be exposed to accessibility")
     let initial = XCTAttachment(screenshot: app.screenshot())
     initial.name = "Native desktop builder"
     initial.lifetime = .keepAlways
@@ -33,6 +34,9 @@ final class NativeSmoke: XCTestCase {
     XCTAssertTrue(app.buttons["Fixture 1, Demo set"].waitForExistence(timeout: 30), app.debugDescription)
     app.buttons["Fixture 1, Demo set"].click()
     XCTAssertTrue(app.buttons["Add to collection"].waitForExistence(timeout: 10), app.debugDescription)
+    app.buttons["Done"].click()
+    app.buttons["Filters"].click()
+    XCTAssertTrue(app.buttons["Reset"].waitForExistence(timeout: 10), app.debugDescription)
     app.buttons["Done"].click()
     tab("Library", in: app).click()
     XCTAssertTrue(app.buttons["Open Desktop test"].waitForExistence(timeout: 15), app.debugDescription)

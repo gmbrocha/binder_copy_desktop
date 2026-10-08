@@ -1,5 +1,6 @@
+import Modal from './DesktopDialog';
 import React, { useState } from 'react';
-import { FlatList, Modal, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { FlatList, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import Action from './Action';
 import { colors as c, type as t } from '../design/tokens';
 export default function SelectField({ label, value, options, onChange }: { label: string; value: string; options: { value: string; label: string }[]; onChange: (value: string) => void }) {

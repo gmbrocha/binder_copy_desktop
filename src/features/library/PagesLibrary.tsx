@@ -1,7 +1,7 @@
+import Modal from '../../components/DesktopDialog';
 import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
-  Modal,
   Pressable,
   ScrollView,
   StyleSheet,

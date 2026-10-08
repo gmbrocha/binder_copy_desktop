@@ -42,7 +42,7 @@ Unit coverage includes save races, stale proposals, locking, local photo payload
 
 ## Last checkpoint
 
-2026-10-07 local — shared counted/reserved budget $130.333235, unreserved $369.666765. Copied keys remain server-only. No physical device, production login or TestFlight proof yet.
+2026-10-07 local — shared counted/reserved budget $134.833235, unreserved $365.166765. Copied keys remain server-only. No physical device, production login or TestFlight proof yet.
 
 ## Expanded native media checkpoint
 
@@ -51,3 +51,7 @@ Reserved one additional private iPhone simulator run (maximum 45 minutes) before
 ## Mac text accessibility repair
 
 Native AX evidence led to an upstream RN macOS 0.83.0 issue: RCTParagraphComponentView always returns NO from isAccessibilityElement, but the iOS accessibilityElements provider is excluded on macOS. A version- and exact-source-guarded postinstall correction now uses the inherited AppKit accessible state on macOS only. Local application/idempotence and typecheck pass; native verification is pending. This preserves native secure storage and does not bypass any access failure.
+
+## Native dialog runtime repair
+
+Runs 37718404669 and 37718688423 progressed through native name entry and catalog browsing, then exposed a real React Native Fabric Modal host render exception when opening details. Screenshots/logs are retained in the corresponding .local/native-smoke directories. Replaced every Mac Modal use with a shared root dialog host using native AppKit-backed RN views, stacked dialogs, background interaction exclusion and Escape handling. Also corrected the RN macOS Text JS default so the paragraph accessibility patch receives accessible=true unless explicitly disabled. Fourteen tests, typecheck, full bundle and boundary scan pass; actual native dialog/heading/filter/Library rerun is pending. iPhone remains independent and unchanged by the Mac fixes. Private backend is 15c4c8f with 51 Linux tests.
