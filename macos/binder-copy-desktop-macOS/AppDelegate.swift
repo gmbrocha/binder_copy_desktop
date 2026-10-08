@@ -2,6 +2,7 @@ import SwiftUI
 import React
 import React_RCTAppDelegate
 import ReactAppDependencyProvider
+import CoreText
 
 @main
 struct BinderCopyApp: App {
@@ -22,6 +23,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
   let reactNativeFactory: RCTReactNativeFactory
 
   override init() {
+    if let font = Bundle.main.url(forResource: "Audiowide-Regular", withExtension: "ttf") {
+      CTFontManagerRegisterFontsForURL(font as CFURL, .process, nil)
+    }
     let delegate = ReactNativeDelegate()
     let factory = RCTReactNativeFactory(delegate: delegate)
     delegate.dependencyProvider = RCTAppDependencyProvider()

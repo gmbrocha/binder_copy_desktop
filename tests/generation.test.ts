@@ -1,0 +1,41 @@
+import { test } from 'node:test';
+import assert from 'node:assert/strict';
+import { newPage } from '../src/features/build/pageSession';
+import { keepProposal, propose } from '../src/features/build/generation';
+import type { ApiClient } from '../src/api/client';
+import type { Card, Page } from '../src/shared/contracts';
+const id = 'fe9d30c4-5e36-44d6-9a33-f8c9dd53530c';
+const favorite = { id: 'sv8-1' } as Card;
+const api = (response: (path: string, body: any) => any): Pick<ApiClient, 'request'> => ({ request: async <T>(path: string, _method?: string, body?: unknown) => response(path, body) as T });
+const generated = (_path: string, body: any) => ({ slots: body.slots.map((slot: Page['slots'][number], index: number) => slot.locked ? slot : { cardId: `card-${index}`, locked: false }), cards: [], palette: 'ocean' });
+test('favorite proposal preserves existing locks, named page identity and save acknowledgements', async () => {
+  const page = { ...newPage(id), name: 'Night sky', revision: 2 };
+  page.slots[4] = { cardId: 'kept-card', locked: true };
+  const proposal = await propose(api(generated), page, { kind: 'favorite', card: favorite });
+  assert.equal(proposal.page.slots[4].cardId, 'kept-card');
+  assert.equal(proposal.page.slots[0].cardId, favorite.id);
+  assert.equal(page.slots[0].cardId, null);
+  const kept = keepProposal({ ...page, revision: 3 }, proposal);
+  assert.equal(kept.id, id); assert.equal(kept.name, 'Night sky'); assert.equal(kept.revision, 3);
+});
+test('stale proposals and malformed responses cannot replace newer work or locked cards', async () => {
+  const page = newPage(id);
+  const proposal = await propose(api(generated), page, { kind: 'theme', query: 'moonlit forest' });
+  assert.throws(() => keepProposal({ ...page, name: 'Changed while generating' }, proposal), /changed/);
+  await assert.rejects(propose(api(() => ({ slots: [], cards: [] })), page, { kind: 'repeat' }));
+  page.slots[2] = { cardId: 'locked', locked: true };
+  await assert.rejects(propose(api((_path, body) => ({ ...generated(_path, body), slots: body.slots.map(() => ({ cardId: 'wrong', locked: false })) })), page, { kind: 'repeat' }), /locked card/);
+});
+test('photo requests carry only colors; card palette provenance survives shuffle and keep', async () => {
+  const page = newPage(id);
+  const requests: unknown[] = [];
+  const photo = await propose(api((path, body) => { requests.push({ path, body }); return generated(path, body); }), page, { kind: 'photo', colors: ['#102030', '#f0d0a0'] });
+  assert.equal((requests[0] as any).path, '/colors/generate');
+  assert.deepEqual(Object.keys((requests[0] as any).body).sort(), ['colors', 'filters', 'slots']);
+  assert.deepEqual(photo.page.colorInspiration, { source: 'photo', colors: ['#102030', '#f0d0a0'] });
+  const card = await propose(api((path, body) => path === '/colors/from-card' ? { colors: ['#eeccaa'] } : generated(path, body)), page, { kind: 'card-colors', card: favorite });
+  assert.equal(card.page.colorInspiration?.cardId, favorite.id);
+  assert.equal(card.page.slots[4].locked, true);
+  const shuffled = await propose(api(generated), card.input, { kind: 'repeat' });
+  assert.deepEqual(shuffled.page.colorInspiration, card.page.colorInspiration);
+});

@@ -9,7 +9,7 @@ const local = fs.existsSync('.env.local') ? fs.readFileSync('.env.local', 'utf8'
 const secrets = local.split(/\r?\n/).filter(line => /^(OPENAI_API_KEY|.*SECRET.*|.*PRIVATE_KEY.*)=/.test(line)).map(line => line.slice(line.indexOf('=') + 1).trim().replace(/^['"]|['"]$/g, '')).filter(value => value.length > 10);
 const files = [...tracked.filter(file => fs.existsSync(file))];
 function walk(directory) { for (const entry of fs.readdirSync(directory, { withFileTypes: true })) { const file = path.join(directory, entry.name); if (entry.isDirectory()) walk(file); else files.push(file); } }
-for (const directory of process.argv.slice(2)) walk(directory);
+for (const artifact of process.argv.slice(2)) { if (fs.statSync(artifact).isDirectory()) walk(artifact); else files.push(artifact); }
 for (const file of files) {
   const bytes = fs.readFileSync(file);
   if (secrets.some(secret => bytes.includes(Buffer.from(secret)))) throw new Error('Provider credential detected in client source or artifact.');

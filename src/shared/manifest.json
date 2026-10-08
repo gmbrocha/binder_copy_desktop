@@ -1,8 +1,10 @@
 {
   "version": "0.1.0",
-  "backendRevision": "384684fe875697501bca431684c1ce86aeb9f29f",
+  "backendRevision": "b04e673a4dccdbc22f2fe2cb257a681116f36f88",
   "files": {
     "contracts/index.ts": "8600d2f23df80ef3a218d3477c16e21120ffd13a5b4a59e47a019994eaa678d1",
-    "domain/palettes.ts": "b950212040aac4a0d1a5c85fd890e4c1734de8a87e17804e7512256e32715816"
+    "domain/palettes.ts": "b950212040aac4a0d1a5c85fd890e4c1734de8a87e17804e7512256e32715816",
+    "domain/colors.ts": "e4d137bbb055b62bc330bae30551456b5d43c7fb8dec470fd7b9d020399f4edb",
+    "domain/backdrops.ts": "bdd1d432141a51bd68d491b2169f24c76415f8b43832f319515fb700c6273daa"
   }
 }

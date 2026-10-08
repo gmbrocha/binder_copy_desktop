@@ -49,5 +49,20 @@ export class ApiClient {
     const token = await this.token();
     return { uri: this.image(id), headers: token ? { Authorization: 'Bearer ' + token } : undefined };
   }
+  async export(page: Page, format: 'png' | 'csv'): Promise<Uint8Array> {
+    const token = await this.token();
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 120000);
+    try {
+      const response = await fetch(this.baseUrl + '/api/export/' + format, {
+        method: 'POST', signal: controller.signal,
+        headers: { 'Content-Type': 'application/json', ...(token ? { Authorization: 'Bearer ' + token } : {}), ...(this.localPreview ? { Origin: this.baseUrl } : {}) },
+        body: JSON.stringify(page),
+      });
+      if (!response.ok) throw new ApiError(response.status, 'Export failed. Please try again.');
+      if (!response.headers.get('content-type')?.includes(format === 'png' ? 'image/png' : 'text/csv')) throw new Error('Unexpected export format.');
+      return new Uint8Array(await response.arrayBuffer());
+    } finally { clearTimeout(timeout); }
+  }
   ownership(id: string, owned: boolean) { return this.request<{ owned: boolean }>('/ownership/' + encodeURIComponent(id), 'PUT', { owned }); }
 }

@@ -18,7 +18,7 @@ Ship the native macOS client using React Native macOS, with a required compatibi
 
 ## Active work
 
-The first Xcode run (37706764519) failed in the template Swift initializer; stored properties now initialize before super.init(), with rerun 37708503052 underway. Native email-code UI and Supabase session refresh now match iPhone, with a macOS Keychain adapter and authenticated artwork. Release no longer connects to unauthenticated loopback; missing production config blocks entry. Live auth and signed Keychain behavior remain unverified. This foundation is not feature-complete or ready for release.
+Mac foundation c9bbd6d passed actual unsigned Xcode build 37708503052 after the Swift initializer correction. Auth/Keychain checkpoint 7bdac4f has a separate build running. Current additions: four generation sources, proposal guards, local photo extraction through NSOpenPanel/ImageIO, PNG/CSV through NSSavePanel, shared card curation/prices and long-hold swapping. Original title font and app icons bundled. Ten tests/types pass; full native interaction and signed Keychain verification still pending. See docs/PARITY_STATUS.md.
 
 ## Blockers
 
@@ -34,8 +34,8 @@ The first Xcode run (37706764519) failed in the template Swift initializer; stor
 
 ## Verification
 
-`npm run typecheck`, `npm test` (5/5), updated Metro macOS bundle passed. New tests cover secret config rejection, concurrent refresh and device-local logout. Xcode compile/device execution and actual Keychain access remain pending. Docs and key-boundary checks required at commit.
+`npm run typecheck`, `npm test` (10/10), complete updated Metro bundle (31 image assets) passed. Xcode foundation build passed; new native media bridge, font resources and Keychain changes require their own Xcode/runtime proof. Docs and key-boundary checks required at commit.
 
 ## Last checkpoint
 
-2026-10-07 — native auth, Keychain adapter, protected artwork and release configuration gates implemented. Shared auth/UI sources synchronized with iPhone in this checkpoint. Backend 0408b1a privately staged; 44 Linux tests. Apple universal record 6820310010 / com.clearpathsystems.bindercopy exists. iPhone simulator foundation build passed; Mac compile rerunning. Public-repo CI adds no spend. No App Store availability claimed.
+2026-10-07 — generation/media/curation/drag checkpoint; shared UI synchronized with iPhone, native adapters independent. Public helpers pinned to backend b04e673; private staging 0408b1a / 44 tests. Both foundation Xcode builds now passed. Apple universal record 6820310010 exists but no builds uploaded. Public-repo CI adds no spend. Supabase login awaits owner.
