@@ -1,54 +1,34 @@
-# Current state — BinderCopy macOS
+# Current state � BinderCopy macOS
 
 ## Objective
-
-Ship the full native macOS client through TestFlight alongside iPhone, using the shared OVH backend within the owner's $500 combined budget. Frozen PWA f35163d remains production; no production cutover yet.
+Ship the full native macOS client through TestFlight alongside iPhone using the shared OVH API, within the owner's $500 combined budget. Frozen PWA f35163d remains untouched production.
 
 ## Verified state
-
-- React Native macOS 0.83.0 / RN 0.83.10. Actual native interaction run 37720140611 at 4c35716 passed accessible builder heading, name entry, card browsing/details, filters, and named saved page in Library.
-- Earlier native evidence exposed Fabric Modal host creation failure and inaccessible paragraph text. All Mac dialogs now use a root AppKit-backed RN view host. A pinned, exact-source-guarded install patch sets the macOS Text accessible default and reads paragraph props directly. Explicit accessibility opt-out remains supported; iPhone is unchanged.
-- Four generation sources, named preview/Keep, serialized save/Undo, locks/hold-drag, local photo colors, PNG/CSV export, appearance/backdrops, encrypted draft recovery, Library management, card filters/ownership/prices/shared curation and Settings are implemented. Full native parity is not yet proven.
-- 15 local tests and typecheck pass, including a release configuration guard. The prior full JS bundle and secret-boundary scans pass. Contract/domain snapshot 0.1.0 is pinned to backend b04e673; no runtime sibling imports.
-- Private VPS staging runs fa603e1 after backup, 52 Linux tests/typecheck and paid-disabled health verification. Original production remains untouched. Offline recovery rehearsal preserved deletion tombstones, other-account data and financial records on isolated copies of the 21,256-card catalog.
-- iPhone run 37719211595 at 431b60f passed page building/locking/Library, photo selection/local colors and actual PNG share-sheet opening with fixture bytes.
-- Apple universal app 6820310010, bundle com.clearpathsystems.bindercopy, team L349AVQ22W exists. No distribution signing, upload or TestFlight availability.
-
-- Screenshot review of the passing Mac interaction run revealed a Keychain deletion error. It is not a full persistence pass. The app now declares its own Keychain group, retains OSStatus diagnostics and the test rejects any error banner. Valid signed runtime verification is still required; no weaker storage fallback is used.
+- React Native macOS 0.83.0 / RN 0.83.10; 15 unit tests, typecheck and client-secret boundary checks pass. Contract/domain snapshot 0.1.0 pins backend b04e673; no runtime sibling imports.
+- Build / Cards / Library / Settings implement four generation sources, named Keep, serialized saving/Undo, card locking/hold-drag, local photo colors, appearance, backdrops, PNG/CSV export, encrypted draft recovery, filters/ownership/prices/shared curation. Implementation is not full native parity proof.
+- Actual unsigned compile 37722303026 at 14065ca passed. Earlier interaction 37720140611 at 4c35716 passed heading/name/cards/details/filter/Library entry, but screenshot review exposed Keychain errors; it is not a persistence pass. Extended 37721275072 failed saved reopening.
+- Fabric dialogs use a root AppKit-backed RN host; exact-version patch fixes paragraph accessibility. App declares its own Keychain group and retains OSStatus diagnostics without weaker storage fallbacks.
+- Public API https://bindercopy-api.clearpathsystems.tools runs fa603e1 with 21,256 cards. Real Supabase JWT, account isolation, paid denial, deletion and backup recovery pass. Zoho new/returning code delivery passes; actual native email UI remains unverified. All native paid dispatch remains disabled.
+- Apple app 6820310010, bundle com.clearpathsystems.bindercopy, team L349AVQ22W. Dedicated development/distribution/installer credentials and profiles are installed in main-only apple-signing environment. Signing preflight 37730781409 passed both development/distribution. Operator API key remains local.
+- iPhone store archive/export 37731984784 at 1f51b4c passed. Apple build 57e68772-507d-4023-bef4-6f65ccca9c08 (1.0.0 build 1) is VALID / READY_FOR_BETA_TESTING. No owner beta access confirmed yet.
 
 ## Active work
-
-Extend Mac native XCTest through NSOpenPanel photo selection, colors-only generation, Keep and NSSavePanel export, checking the actual saved PNG bytes. This checks adapters with a fixture; production render fidelity remains a separate gate. Run 37720140611's evidence is retained under .local/native-smoke-37720140611. Media run 37721275072 at 940dcaa failed reopening the saved page: the Keychain deletion failure kept Library active, so no photo/export steps ran. Screenshot/log evidence is retained under .local/native-smoke-37721275072. Native compatibility run 37722303026 at 14065ca passed; do not claim the entitlement change fixes runtime storage yet. See docs/SIGNING.md.
-
-## Signing checkpoint
-
-Apple key 7QPC2737Q6 now authenticates successfully; dedicated development/distribution/installer certificates and BinderCopy profiles exist. Development and distribution app/installer material is installed as encrypted GitHub secrets in the main-only apple-signing environment. A manual workflow uses pinned official actions and GitHub's fixed Intel Mac identity, imports into a temporary Keychain, verifies saved-page reopen/cold restart plus photo/export, and deletes signing material afterwards. Run 37729719954 at d6125c5 passed dependency/local checks and credential import, then stopped because the Apple intermediate certificate HTTPS URL returned 404. The official Apple PKI URL now replaces it; its certificate locally verifies all three issued leaf certificates. Retry 37730354311 and store archive 37730357126 stopped at signing setup with an existing-Keychain-item error. An isolated five-minute free signing preflight now separates credential setup from compilation and checks the intermediate by exact DER before import. Signing preflight 37730781409 at 7c60e9b now passes for both development and distribution and lists valid app-signing identities. Runtime/archive retry is next; no runtime result yet. The App Store API key remains local to the protected backend operator directory. A separate manual universal arm64/x86_64 archive workflow is prepared with actual entitlement/settings verification, removal of Debug networking allowances, and App Store package export. It has not run yet.
-
-Public API https://bindercopy-api.clearpathsystems.tools now passes real Supabase JWT, two-account privacy, paid denial and deletion checks. Supabase project jmxlvjjuiykugraaqrib is active; Zoho email delivery and both new/returning delivered codes pass with 900-second sessions. Native UI login remains unverified. Native runtime on VPS remains fa603e1.
+- Signed Intel interaction run 37730901723 at 26488bf failed both first queries before controls could be exercised. Screenshots show a blank window; spindumps locate the main thread in XCTest's Apple-menu accessibility inspection, waiting for com.apple.iconservices. This matches actions/runner-images issue 14751 (macOS 26 Intel IconServices crash loop). Evidence: .local/signed-ui-37730901723. It does not prove an app Keychain regression or successful persistence.
+- Move only the signed interaction runner to macos-15-intel with explicit Xcode 26.3. GitHub documents the same fixed Intel UDID; profile import still verifies it. Keep all original persistence, cold-launch and real open/save panel assertions. No product behavior or test assertion is weakened.
+- Universal arm64/x86_64 store archive 37732288421 at f6f04d0 is compiling on macos-26 Apple Silicon. Prior run 37730904368 was canceled to apply the complete Hermes-string credential scan and required Lifestyle category before export. No Mac package uploaded yet.
+- Complete Hermes string-table scanning accepts SDK prefix constants and rejects full credentials/PEM payloads; compiled positive/negative fixtures pass. Signed archives are retained for recovery if subsequent checks fail.
 
 ## Blockers
-
-- Signed Mac persistence/media runtime proof and real native email-login checks remain release gates, not credential-download blockers.
-- Founder linking/catalog one-writer migration, complete visual/gesture evidence, privacy/support and rights/dependency review remain unfinished. Native paid dispatch stays disabled for every role.
-- Zoho customer review is pending; initial email delivery works within its 100/day trial limit.
-
-## Next actions
-
-1. Dispatch and inspect the signed Intel Mac native workspace/media tests; repair verified failures.
-2. Build distribution archives using public production settings, verify native auth and scoped parity.
-3. Finish beta gates, upload both platforms and verify actual TestFlight availability.
+Signed native persistence/media and real email UI remain unverified. Public beta privacy/support/rights gates remain open.
 
 ## Verification
+15 unit tests, typecheck and boundary scans pass. Native evidence is scoped above; do not claim full parity.
 
-The passing Mac test uses actual native controls and local disposable fixtures. Ad-hoc signing is not App Store signing. Backend now passes 52 tests on Windows/Linux; iPhone passes 14 unit tests and Mac passes 15. See docs/VERIFICATION.md and docs/PARITY_STATUS.md for scoped evidence.
+## Next actions
+1. Inspect the corrected signed interaction run and universal archive; fix evidence-backed failures.
+2. Verify exported package signature, universal architectures, entitlements, endpoint configuration and actual-secret absence; upload through local Apple REST operator script.
+3. Configure owner-only internal beta and verify availability on both platforms. No outside invitations/public links authorized or sent.
+4. Verify real native email login, media/render fidelity, gesture/accessibility parity and account deletion UI. Founder identity linking, final catalog reconciliation/one-writer migration, privacy/support and rights review remain explicit gates. Zoho customer review is pending, initial 100/day trial delivery works.
 
 ## Last checkpoint
-
-2026-10-08 local — counted/reserved $148.333235, unreserved $351.666765 across all repos. Public Mac CI is free; private iOS reservations remain conservative pending billing reconciliation. No new paid AI calls or paid CI reservation for this public-repository Mac workflow.
-
-
-### Archive verification checkpoint — October 8
-
-The actual iPhone distribution archive in run 37730894697 at 228b930 compiled and signed successfully, then its generic byte scan rejected the Supabase SDK's bare sb_secret_ prefix. Local Hermes disassembly proves this is a literal SDK prefix, not a credential; adjacent binary strings were the false positive. A shared operator scanner now reads the complete Hermes string table with the build's compiler, accepts that harmless prefix, and rejects full credential/private-key values. Compiled positive/negative fixtures and the existing iPhone bundle pass. Archives will be retained for inspection even if export checks fail. Signed Mac workspace 37730901723 and universal archive 37730904368 at 26488bf are still running. No package upload or beta availability yet.
-
-The Mac store archive will be rerun with the corrected credential scanner and the required Lifestyle application-category metadata. The older archive job uses the known false-positive scanner and will be canceled; the separate signed runtime tests continue.
+2026-10-08: shared counted/reserved $148.333235; remaining $351.666765. Public Mac CI is free; private iPhone reservations remain conservative pending billing reconciliation. No new AI spend or recurring service.

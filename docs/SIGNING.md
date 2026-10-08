@@ -25,3 +25,6 @@ The manual macos-signed-smoke workflow uses GitHub's fixed Intel UDID and a dedi
 Native media tests use disposable local fixtures and save only to /tmp/bindercopy-media-results. They verify platform adapters separately from live auth and production render fidelity. The full beta gate is in the backend's docs/BETA_TEST_PLAN.md.
 
 Sources: [Apple Keychain entitlement troubleshooting](https://developer.apple.com/forums/thread/114456), [Mac distribution signing](https://developer.apple.com/documentation/xcode/creating-distribution-signed-code-for-the-mac/), [manual distribution identities](https://help.apple.com/xcode/mac/current/en.lproj/devcac6ab5b3.html), [uploading builds](https://developer.apple.com/help/app-store-connect/manage-builds/upload-builds). Checked October 7, 2026.
+
+## October 8 signed runner diagnosis
+Signed interaction run 37730901723 failed before the first control query. The saved spindump identifies AppKit Apple-menu inspection blocked in IconServices, matching https://github.com/actions/runner-images/issues/14751. Signed smoke now uses macos-15-intel with Xcode 26.3 (official installed image inventory), retaining the fixed provisioned UDID and every persistence/media assertion. Store archives remain on macOS 26 Apple Silicon. This is a CI platform workaround, not a verified app-runtime fix.
