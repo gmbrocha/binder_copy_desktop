@@ -1,3 +1,4 @@
+import { useLoading } from '../../components/Loading';
 import Modal from "../../components/DesktopDialog";
 import React, { useEffect, useRef, useState } from "react";
 import {
@@ -71,13 +72,14 @@ export default function PagesLibrary({
       active = false;
     };
   }, [api, session]);
+  const withLoading = useLoading();
   const run = async (fn: () => Promise<void>) => {
     if (pending.current || busy) return;
     pending.current = true;
     setBusy(true);
     setError("");
     try {
-      await fn();
+      await withLoading("library", fn);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Could not update pages.");
     } finally {

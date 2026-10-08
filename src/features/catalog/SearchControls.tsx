@@ -1,3 +1,4 @@
+import { useLoading } from '../../components/Loading';
 import Modal from "../../components/DesktopDialog";
 import React, { useRef, useState } from "react";
 import {
@@ -58,13 +59,14 @@ export default function SearchControls({
   currentQuery.current = query;
   const set = <K extends keyof Filters>(key: K, value: Filters[K]) =>
     onFilters({ ...filters, [key]: value });
+  const withLoading = useLoading();
   const run = async (action: () => Promise<void>) => {
     if (pending.current || busy) return;
     pending.current = true;
     setBusy(true);
     setError("");
     try {
-      await action();
+      await withLoading("interpret", action);
     } catch (e) {
       setError(
         e instanceof Error ? e.message : "Search could not be interpreted.",
