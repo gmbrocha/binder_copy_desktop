@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { colors, type as typography } from '../design/tokens';
+import { StyleSheet, View } from 'react-native';
+import LoadingSpinner from './LoadingSpinner';
 import { LoadingClock } from './loadingClock';
 const paint = () => new Promise<void>(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
 type State = { clock: LoadingClock; visible: boolean; layers: string[]; layer: (id: string, visible: boolean) => void };
@@ -20,7 +20,7 @@ export function LoadingOverlay({ layer }: { layer?: string }) {
   if (!state?.visible) return null;
   const top = state.layers.at(-1) === layer;
   return <View testID="loading-overlay" style={s.scrim} accessibilityViewIsModal={top}>
-    {top && <Text accessibilityRole="text" accessibilityLiveRegion="polite" style={s.label}>Loading</Text>}
+    {top && <LoadingSpinner />}
   </View>;
 }
 export function useLoadingLayer(id: string, visible: boolean) {
@@ -52,5 +52,4 @@ export function useLoadingMedia(key: string) {
 }
 const s = StyleSheet.create({
   scrim: { position: 'absolute', top: 0, bottom: 0, left: 0, right: 0, backgroundColor: '#0006', alignItems: 'center', justifyContent: 'center', zIndex: 10000, elevation: 10000 },
-  label: { ...typography.title, fontFamily: 'Audiowide', fontWeight: '400', color: colors.cream },
 });

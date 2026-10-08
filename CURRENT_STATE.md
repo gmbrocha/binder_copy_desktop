@@ -15,7 +15,9 @@ Deliver the accepted native 1.1.0 experience and monetization specification whil
 
 ## Active work
 
-Release 8 implementation and internal delivery are complete. Await owner device feedback; do not spend on another native build for docs-only changes. Customer purchases/provider spending remain unavailable. Commercial plan: Plus $3.99/month or $29.99/year, 10 backgrounds and 50 uncached themes per anchored month; packs 10/$2.99 and 30/$6.99.
+Owner approved the cream Poké Ball mock for the next build. Build 9 replaces only the visible Loading text with a 48-point silhouette rotating clockwise every 1.4 seconds. Existing 750ms delay, dimmed scrim, media/render holds and top-modal layering are retained. Native animation stops on unmount/background and respects Reduce Motion; screen readers retain Loading/busy semantics. Both clients pass typecheck, boundaries and 25/26 tests. Signed archives and focused iPhone native visual verification are next; build 8 remains the released version. No backend runtime changes or paid provider calls.
+
+Customer purchases/provider spending remain unavailable. Commercial plan: Plus $3.99/month or $29.99/year, 10 backgrounds and 50 uncached themes per anchored month; packs 10/$2.99 and 30/$6.99.
 
 The owner requested a supported replacement image-model benchmark as **backlog only**, independent of this build. Backend docs/ROADMAP.md defines a local runner, finite sample budget, reproducible cases, quality/latency, average and tail costs, charged failure/retry economics and full-redemption offer margins. No new paid benchmark or live model switch was performed.
 
@@ -25,7 +27,7 @@ No implementation or internal-release blocker. Commercial activation still requi
 
 ## Next actions
 
-1. Review physical iPhone/Mac build-8 feedback before new UI iteration.
+1. Build/verify both signed build-9 packages, verify the rotating spinner in iPhone simulator, then upload and assign to the existing private internal TestFlight group. Preserve unrelated local changes.
 2. Complete Apple commercial/product metadata and reviewed public privacy/support/terms, retention and asset-rights disclosures. Credit packs have USA-only availability.
 3. Run actual Apple purchase/renewal/restore/refund/account-switch/cross-platform scenarios from backend docs/STOREKIT_ACCEPTANCE.md when commercial access permits; fixture tests are not transaction acceptance.
 4. Confirm Sagar's native account identity before a founder grant. Keep staff permissions separate from subscriptions.
@@ -43,4 +45,4 @@ Historical pilot: 12 usable image calls cost $0.138840; six theme calls cost $0.
 
 ## Last checkpoint
 
-2026-10-08 22:27 UTC: both build-8 packages verified available in the existing internal group. Release/runtime/test evidence reconciled; benchmark backlog retained. Shared ledger **$341.975258 counted/reserved, $158.024742 unreserved**; backend docs/BUDGET.md is authoritative, $65 provider Actions stop limit separate. Preserve unrelated NATIVE_USER_GUIDE.md, UI_PARITY.md and MINOR_TODO_AND_IDEAS.txt edits.
+2026-10-08: approved spinner implemented; local typecheck/boundary/tests pass in both clients. Build-9 archive/parity workflows reserved before dispatch. Shared ledger **$350.975258 counted/reserved, $149.024742 unreserved**; backend docs/BUDGET.md is authoritative, $65 Actions stop limit separate. Preserve unrelated NATIVE_USER_GUIDE.md, UI_PARITY.md and MINOR_TODO_AND_IDEAS.txt edits. Benchmark remains backlog-only.
