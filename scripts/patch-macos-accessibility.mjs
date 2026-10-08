@@ -19,14 +19,17 @@ const replacement = `- (BOOL)isAccessibilityElement
 {
 #if TARGET_OS_OSX
   // BinderCopy: AppKit has no iOS paragraph accessibilityElements provider.
-  // Honor the inherited accessible/hidden state instead of hiding all text.
-  return [super isAccessibilityElement];
+  // RCTView's superclass getter delegates to the inaccessible drawing view.
+  // Honor Text's explicit accessible prop on the paragraph itself.
+  return static_cast<const ParagraphProps &>(*_props).accessible;
 #else
   // iOS exposes paragraph children through accessibilityElements below.
   return NO;
 #endif
 }`;
-const source = fs.readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
+let source = fs.readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
+const previousReplacement = replacement.replace("  // RCTView's superclass getter delegates to the inaccessible drawing view.\n  // Honor Text's explicit accessible prop on the paragraph itself.\n  return static_cast<const ParagraphProps &>(*_props).accessible;", '  // Honor the inherited accessible/hidden state instead of hiding all text.\n  return [super isAccessibilityElement];');
+if (source.includes(previousReplacement)) { source = source.replace(previousReplacement, replacement); fs.writeFileSync(file, source); }
 if (source.includes(replacement)) console.log('macOS paragraph accessibility patch already applied.');
 else {
   if (source.split(original).length !== 2) throw new Error('macOS paragraph source changed; review instead of applying an unverified patch.');
