@@ -17,7 +17,7 @@ Ship the full macOS client through TestFlight, sharing the VPS backend with the 
 
 ## Active work
 
-Finish native runtime and visual checks, including photos, share/file panels, secure storage, keyboard, long-hold drag and background display. iPhone local-fixture simulator smoke workflow prepared; budget reserved before dispatch. This is real native UI testing against fixture data, not proof of production auth or artwork parity. See docs/PARITY_STATUS.md for remaining gates.
+Finish native runtime and visual checks, including photos, share/file panels, secure storage, keyboard, long-hold drag and background display. First iPhone fixture smoke 37713222655 compiled and launched but failed initial builder visibility before exercising controls. A second diagnostic run is reserved; screenshots and runtime logs will be retained. This is real native UI testing against fixture data, not proof of production auth or artwork parity. See docs/PARITY_STATUS.md for remaining gates.
 
 ## Blockers
 
@@ -28,8 +28,8 @@ Finish native runtime and visual checks, including photos, share/file panels, se
 
 ## Next actions
 
-1. Commit verified parity checkpoint, run iPhone simulator smoke, inspect evidence and repair actual interaction failures.
-2. Complete native visual parity, settings/admin refresh, zoom/source controls and account lifecycle. Exercise real photo, export, drag, Keychain and draft recovery.
+1. Dispatch improved iPhone simulator diagnostics, inspect the actual screenshot and repair the startup/interaction failure.
+2. Complete native visual parity, missing-card list, Library thumbnails and account lifecycle. Exercise real photo, export, drag, Keychain and draft recovery.
 3. Configure authenticated public VPS access when owner signs into Supabase; sign and upload both platform betas, then verify TestFlight availability.
 
 ## Verification
@@ -38,4 +38,9 @@ Finish native runtime and visual checks, including photos, share/file panels, se
 
 ## Last checkpoint
 
-2026-10-07 — background, Library, search/curation and recovery checkpoint. Backend 59a75a3 deployed privately after backup, typecheck and 45 tests. iPhone 778687d / Xcode 37710937557 and Mac 44556cd / Xcode 37710882761 passed. Shared counted/reserved delivery budget $116.833235 (includes upcoming simulator job), remaining $383.166765. All owner data and old production remain preserved.
+2026-10-07 — background, Library, search/curation and recovery checkpoint. Backend 59a75a3 deployed privately after backup, typecheck and 45 tests. iPhone 778687d / Xcode 37710937557 and Mac 44556cd / Xcode 37710882761 passed. Shared counted/reserved delivery budget $121.333235 (includes second simulator diagnostic job), remaining $378.666765. All owner data and old production remain preserved.
+
+## Latest implementation checkpoint
+
+2026-10-07 — aligned the builder with the frozen reference: compact mobile sources above the sheet, appearance in Preview, desktop sidebar, source shortcuts, zoom, selected-slot controls and Settings catalog refresh/status. Root dialogs share a single modal route. Both typechecks, 14 tests per client and full bundles pass. Mac c4e8848 Xcode run 37713222138 passed. Actual UI parity remains unverified; the first iPhone smoke failed before controls were exercised.
+

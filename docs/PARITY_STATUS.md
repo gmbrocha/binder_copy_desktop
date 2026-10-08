@@ -15,8 +15,9 @@ Frozen reference: f35163d. Full ports remain the objective. Implementation is di
 | Cards | Filters, search interpretation, optional shared mappings, ownership, prices, tags/history/Undo, stale edit recovery | Native all-filter checks; real image loading/performance |
 | Shared tags | Create/edit/aliases/category/delete; expected snapshot for conflict safety | Native UI verification, backend 59a75a3 or newer required for guard |
 | Library | Private pages and collection; rename/duplicate/delete, counts/empty state | Native workflows; richer page thumbnails |
-| Settings | Identity/catalog summary, sign out | Catalog refresh/status, privacy/support URLs, account lifecycle |
+| Settings | Identity/catalog summary, admin refresh/status, sign out | Native refresh interaction, privacy/support URLs, account lifecycle |
 | Branding | Original assets, Audiowide, clear lock icons, cream iPhone splash, full Mac icon set | Actual launch/resize/status-bar checks |
 | Release | Actual unsigned Xcode builds on both platforms | Signing, production cutover, privacy disclosures, beta review, TestFlight availability |
 
-14 unit tests per client pass. Tests cover save races, stale proposals, locking, local photo payloads, drag hit regions, auth rotation/logout, account-isolated atomic draft storage and safe backdrop retries. Simulator fixture tests are pending; they do not substitute for real backend/auth and physical-device checks.
+14 unit tests per client pass. Tests cover save races, stale proposals, locking, local photo payloads, drag hit regions, auth rotation/logout, account-isolated atomic draft storage and safe backdrop retries. First simulator fixture test failed before builder visibility; improved diagnostics are pending; they do not substitute for real backend/auth and physical-device checks.
+
