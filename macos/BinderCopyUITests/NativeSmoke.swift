@@ -27,6 +27,21 @@ final class NativeSmoke: XCTestCase {
     app.descendants(matching: .any).matching(NSPredicate(format: "label == %@", name)).firstMatch
   }
 
+  func testNativeOverlayContrast() throws {
+    continueAfterFailure = false
+    let app = XCUIApplication(bundleIdentifier: "com.clearpathsystems.bindercopy")
+    app.launch()
+    XCTAssertTrue(app.buttons["New"].waitForExistence(timeout: 90), app.debugDescription)
+    tab("Library", in: app).click()
+    XCTAssertTrue(app.buttons["Open Contrast test"].waitForExistence(timeout: 20), app.debugDescription)
+    app.buttons["Open Contrast test"].click()
+    XCTAssertTrue(app.descendants(matching: .any)["page-title-cream"].waitForExistence(timeout: 30), app.debugDescription)
+    XCTAssertTrue(app.descendants(matching: .any)["page-logo-dark"].exists, app.debugDescription)
+    XCTAssertFalse(app.staticTexts["Background unavailable"].exists, app.debugDescription)
+    capture("Generated background independent overlay contrast", in: app)
+    app.buttons["New"].click()
+  }
+
   func testNativeWorkspace() throws {
     continueAfterFailure = false
     let app = XCUIApplication(bundleIdentifier: "com.clearpathsystems.bindercopy")

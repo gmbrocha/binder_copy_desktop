@@ -14,7 +14,9 @@ Deliver the owner-approved 1.1.0 native experience and paid-launch specification
 
 ## Active work
 
-The requested light presets/free custom colors are implemented, deployed and available in build 5 on both platforms. Final release records are being reconciled after Mac native UI verification passed. After the owner added PayPal and a $65 Actions stop limit, corrected iPhone UI run 37832199099 attempt 2 started successfully; final interaction results are pending. No new paid AI usage. See docs/CUSTOM_COLORS.md for controls and data behavior.
+
+Owner requested medium presets (build 5 was too pale) and automatic dark/cream title and logo selection from actual background pixels, including generated art. Implementing shared region contrast and preview/export parity for build 6. Existing free custom-color native flows passed on both platforms.
+
 
 Native StoreKit 2 bridges support subscriptions/consumables, account tokens, localized offers, restore/manage and verify-before-finish. Recovery retains unfinished evidence, handles account switches and never initiates a purchase on launch. Settings history resets by account. Both client release archives passed tests/typecheck, native compilation, signature/entitlement and credential/contract checks.
 
@@ -24,7 +26,7 @@ Approved policy: Plus $3.99/month or $29.99/year with 10 backgrounds and 50 unca
 
 ## Blockers
 
-GitHub billing initially blocked iPhone UI run 37832199099 before execution. Owner added PayPal and confirmed a $65 Actions stop limit; attempt 2 is now running. Final native interaction/physical acceptance is still pending, but billing no longer blocks this job.
+No remaining automated color-release blocker. Physical build-5 acceptance remains with the owner. GitHub billing is restored; owner confirmed a $65 Actions stop limit.
 
 Apple commercial/tax readiness and real purchase acceptance remain incomplete. Reviewed public disclosures and an explicit operating budget are required before activation.
 
@@ -37,20 +39,12 @@ Apple commercial/tax readiness and real purchase acceptance remain incomplete. R
 
 ## Verification
 
-Backend: 92 tests/typecheck, staged and live Linux checks, anonymous denial, live disposable free-account save/reopen/PNG/CSV/privacy/paid-denial/deletion probes passed. Final custom export was visually inspected. Client archives: 23 iPhone / 24 Mac tests, typechecks, contract/hash and credential checks, signed native compilation and artifact inspection passed.
+All 92 backend tests/typecheck passed on Windows and Linux; staging and production promotion, backup/health and public disposable free-account save/reopen/custom PNG pixels, real card PNG/CSV, privacy, paid denial and cleanup passed. Signed archives passed 23 iPhone / 24 Mac tests, typechecks, contract/credential boundaries and native signature/entitlement/package checks.
 
-iPhone native run 37830130469 passed baseline and photo/share flows. Added custom-color script stopped because it did not scroll to Apply; corrected run 37832199099 attempt 1 never started due GitHub billing; attempt 2 is now running after the payment-method update. Full final iPhone custom-color interaction is not yet verified. Mac initial run 37830138184 passed workspace/persistence; its added color test used a phone-only selector. Corrected desktop inline-picker run 37832987903 passed both native flows; pale presets, custom #D7C2F0, dark logo and persisted Library thumbnail screenshots were visually reviewed.
+Native interaction: iPhone baseline and photo/share flows passed in 37832199099 attempt 2; focused custom-color/parity flow passed in 37838150971 at 60208bc. Mac workspace/persistence and photo/custom-color/export flows passed in 37832987903 at 362176d. These later client commits change tests/documentation only; runtime matches archived build-5 sources. Earlier iPhone script errors involved footer occlusion and a grouped accessibility label; centered controls and reopening the hex field verify the applied values. Fixture tests do not prove real Apple purchases or final delivery on a physical device.
 
-Build 5 is available internally, but availability/compilation is not physical installation or real Apple purchase acceptance. Exact package hashes are in the release record. Shared delivery budget: $300.975258 counted/reserved, $199.024742 remaining; backend docs/BUDGET.md is authoritative. The never-started UI retry hold was released; canceled archive reservations remain conservative.
+Pale/custom page previews, readable title/wordmark contrast and Mac Library thumbnails were visually reviewed. Evidence: iPhone .local/custom-ui-37832199099-attempt2 and .local/custom-ui-37838150971; Mac .local/custom-ui-37832987903; backend .local/public-api-color-logo.json and -export.png. Build-5 package hashes and Apple IDs are in the release record. Shared budget $309.975258 counted/reserved, $190.024742 remaining; backend docs/BUDGET.md includes the owner-reported $85 gross runner usage pending reconciliation. No new paid AI calls.
 
 ## Last checkpoint
 
-October 8, 20:12 UTC: iPhone attempt 2 passed baseline and photo/share. Color flow saved white because the scripted swatch tap was at the fixed footer, and its final assertion also queried a value hidden by the Custom button accessibility label. Added centered picker scrolling, intermediate screenshots and reopen-field assertions; one parity-only retry reserved at $4.50. Runtime code is unchanged; final native custom-color acceptance remains pending.
-
-October 8, 20:06 UTC: Mac native run 37832987903 passed both flows. Reviewed pale Ocean, custom-color application and Library thumbnail/title/wordmark contrast. Evidence: desktop .local/custom-ui-37832987903/. iPhone attempt 2 continues.
-
-Owner added PayPal and confirmed a $65 Actions stop limit. Corrected iPhone UI run 37832199099 attempt 2 started successfully with a $4.50 reservation; final result pending. The provider monthly reset does not reset the $500 project cap.
-
-October 8, 19:48 UTC: both existing credit-pack drafts now have exactly USA availability, automatic new-territory expansion off, and remain unsubmitted/MISSING_METADATA. Purchase offers and provider dispatch remain off.
-
-October 8, 2026: Owner reports $85 gross GitHub macOS runner usage today; recorded conservatively pending reconciliation with existing reservations. Shared total $300.975258, remainder $199.024742. At 19:38 UTC, Apple confirmed both build-5 betas IN_BETA_TESTING. Backend/custom-color production probe passed. Corrected Mac UI run passed both flows; corrected iPhone UI attempt 2 is now running after the owner payment-method update. Preserve unrelated docs/UI_PARITY.md.
+October 8: build 5 native color interactions verified on iPhone (37838150971) and Mac (37832987903). Owner requested mid-tone presets and dark/cream title/logo variants selected independently from actual background pixels. Shared implementation and 95 backend tests/typecheck pass locally; updated native tests, packaging and deployment pending. Reserved $9 for one iPhone archive and focused UI run, total $309.975258, remainder $190.024742. No new provider calls. Unrelated user guide/UI_PARITY/ideas edits preserved.

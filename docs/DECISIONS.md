@@ -42,3 +42,7 @@ Owner explicitly selected gpt-image-1-mini for generated backgrounds in 1.1.0. P
 ## 2026-10-08 - light presets and free custom backgrounds
 
 Owner requested substantially lighter presets and custom colors on the free tier. Keep existing palette IDs for saved-page compatibility, rename visible shades Mist/Ocean/Peach/Sage/Lilac and use pale tones. Add optional validated six-digit hex customColor to pages, with contrast-aware title text and identical preview/export resolution. Custom solid colors require no AI, credits or subscription. Selecting a preset clears the custom override; Undo restores it. Frozen PWA source remains unchanged.
+
+## 2026-10-08 — medium page colors and measured overlays
+
+Owner corrected the nearly-white presets to medium muted colors, and requested current dark/cream title and logo variants chosen by background contrast. Sample title and logo regions independently for generated/scenery pixels, resolve solid/custom colors immediately, reuse identical export logic, and keep free colors free. No recoloring of saved custom values or frozen PWA changes.

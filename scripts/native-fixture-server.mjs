@@ -3,7 +3,9 @@ import fs from 'node:fs';
 // Isolated UI-test data only. Never imported by the application or deployed backend.
 const art = fs.readFileSync(new URL('../assets/brand/icon.png', import.meta.url));
 const cards = Array.from({ length: 12 }, (_, i) => ({ id: `fixture-${i + 1}`, name: `Fixture ${i + 1}`, setId: 'demo', setName: 'Demo set', number: String(i + 1), image: '', releaseDate: '2026-01-01', category: 'Pokemon', rarity: 'Demo', artist: 'Fixture', types: ['Water'], dexIds: [], art: 'full', tags: ['blue'], owned: false, curated: false, curationRevision: 0 }));
-const pages = new Map();
+const contrastImage = fs.readFileSync(new URL('./fixtures/contrast.png', import.meta.url));
+const contrastPage = { id: '11111111-1111-4111-8111-111111111111', name: 'Contrast test', size: 2, revision: 1, palette: 'ocean', backdropMode: 'art', filters: { q: '', tags: [], themeTags: [], art: 'all', ownership: 'all' }, slots: cards.slice(0,4).map(c => ({cardId:c.id,locked:false})), backdrop: { kind:'generated',assetId:'22222222-2222-4222-8222-222222222222',sourceHash:'a'.repeat(64),layoutVersion:1 } };
+const pages = new Map([[contrastPage.id,contrastPage]]);
 const server = http.createServer(async (req, res) => {
   const pathname = new URL(req.url, 'http://127.0.0.1').pathname;
   process.stdout.write(`${req.method} ${pathname}\n`);
@@ -11,6 +13,8 @@ const server = http.createServer(async (req, res) => {
   try {
     let raw = ''; for await (const chunk of req) { raw += chunk; if (raw.length > 100000) throw new Error('Oversized fixture request'); }
     const body = raw ? JSON.parse(raw) : {};
+    if (pathname === '/api/page-overlays') return send({title:'cream',logo:'dark'});
+    if (pathname.startsWith('/api/backdrops/')) { res.writeHead(200, { 'Content-Type': 'image/png' }); return res.end(contrastImage); }
     if (pathname === '/api/health') return send({ ok: true });
     if (pathname === '/api/billing') return send({ state: { tier: 'free', environment: null, expiresAt: null, needsRefresh: false, period: '2026-10', allowanceMicroUsd: 0, committedMicroUsd: 0, remainingMicroUsd: 0, halted: false, paidApi: false }, productIds: [], purchasingAvailable: false });
     if (pathname === '/api/export/png') { res.writeHead(200, { 'Content-Type': 'image/png' }); return res.end(art); }

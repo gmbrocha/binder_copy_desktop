@@ -8,6 +8,6 @@ const images = {
   forest: require('../../assets/backgrounds/forest.png'),
   plum: require('../../assets/backgrounds/plum.png'),
 };
-export default function CraftedBackground({ palette = 'forge' }: { palette?: PaletteId }) {
-  return <View pointerEvents="none" style={StyleSheet.absoluteFill}><Image accessible={false} source={images[palette]} style={StyleSheet.absoluteFill} resizeMode="stretch" /></View>;
+export default function CraftedBackground({ palette = 'forge', visible = true, onLoad, onError }: { palette?: PaletteId; visible?: boolean; onLoad?: () => void; onError?: () => void }) {
+  return <View pointerEvents="none" style={StyleSheet.absoluteFill}><Image accessible={false} source={images[palette]} style={[StyleSheet.absoluteFill, { opacity: visible ? 1 : 0 }]} resizeMode="stretch" onLoad={onLoad} onError={onError} /></View>;
 }

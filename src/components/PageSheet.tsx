@@ -1,3 +1,5 @@
+import { overlayInk } from '../shared/domain/overlays';
+import usePageOverlays from './usePageOverlays';
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
   Animated,
@@ -10,7 +12,7 @@ import {
 } from "react-native";
 import type { ApiClient } from "../api/client";
 import type { Card, Page } from "../shared/contracts";
-import { pagePalette, colorText } from "../shared/domain/palettes";
+import { pagePalette } from "../shared/domain/palettes";
 import { getPageLayout } from "../shared/domain/backdrops";
 import { swapTarget, type Rect } from "../features/build/dragGeometry";
 import { colors } from "../design/tokens";
@@ -147,6 +149,7 @@ export default function PageSheet({
     [],
   );
   const palette = pagePalette(page);
+  const contrast = usePageOverlays(api, page);
   return (
     <View
       onLayout={(event) => setWidth(event.nativeEvent.layout.width)}
@@ -160,13 +163,15 @@ export default function PageSheet({
       ]}
       {...responder.panHandlers}
     >
-      {page.backdropMode !== "color" && page.backdrop && (
-        <BackgroundImage api={api} id={page.backdrop.assetId} />
+      {contrast.ready && page.backdropMode !== "color" && page.backdrop && (
+        <BackgroundImage key={contrast.key} api={api} id={page.backdrop.assetId} visible={contrast.visible} onLoad={contrast.onLoad} onError={contrast.onError} />
       )}
-      {page.backdropMode === undefined && !page.backdrop && !page.customColor && (
-        <CraftedBackground palette={page.palette} />
+      {contrast.ready && page.backdropMode === undefined && !page.backdrop && !page.customColor && (
+        <CraftedBackground key={contrast.key} palette={page.palette} visible={contrast.visible} onLoad={contrast.onLoad} onError={contrast.onError} />
       )}
+      {contrast.failed && <Text style={{ position: "absolute", bottom: 4, right: 8, color: "#fff", backgroundColor: "#000b", fontSize: 11 }}>Background unavailable</Text>}
       <Text
+        testID={`page-title-${contrast.overlays.title}`}
         numberOfLines={1}
         style={{
           position: "absolute",
@@ -180,14 +185,15 @@ export default function PageSheet({
               (layout.width - layout.pad * 2 - 40) /
                 Math.max(1, Array.from(page.name).length),
             ) * scale,
-          color: palette.text,
+          color: overlayInk[contrast.overlays.title],
           fontFamily: titleFont,
         }}
       >
         {page.name}
       </Text>
       <Image
-        source={palette.text !== "#FFFFFF" && colorText(palette.bg) === "#000000" ? require("../../assets/brand/wordmark-dark.png") : require("../../assets/brand/wordmark.png")}
+        testID={`page-logo-${contrast.overlays.logo}`}
+        source={contrast.overlays.logo === "dark" ? require("../../assets/brand/wordmark-dark.png") : require("../../assets/brand/wordmark.png")}
         resizeMode="contain"
         style={{
           position: "absolute",
