@@ -46,6 +46,8 @@ jobs:
         run: |
           set -o pipefail
           xcodebuild -workspace macos/binder-copy-desktop.xcworkspace -scheme binder-copy-desktop-macOS -configuration Release -destination 'generic/platform=macOS' -archivePath build/BinderCopy.xcarchive ARCHS='arm64 x86_64' ONLY_ACTIVE_ARCH=NO CURRENT_PROJECT_VERSION="$BINDERCOPY_BUILD_NUMBER" BINDERCOPY_API_URL="$BINDERCOPY_API_URL" BINDERCOPY_AUTH_URL="$BINDERCOPY_AUTH_URL" BINDERCOPY_PUBLISHABLE_KEY="$BINDERCOPY_PUBLISHABLE_KEY" archive 2>&1 | tee macos-archive.log
+      - name: Preserve signed archive for verification recovery
+        run: tar -czf build/BinderCopy.xcarchive.tgz -C build BinderCopy.xcarchive
       - run: python3 scripts/verify-store-archive.py
       - name: Export App Store installer
         run: |
@@ -70,6 +72,7 @@ jobs:
           name: bindercopy-macos-store-${{ inputs.build_number }}
           path: |
             build/export/*.pkg
+            build/BinderCopy.xcarchive.tgz
             evidence
             macos-archive.log
             macos-export.log

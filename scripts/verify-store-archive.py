@@ -1,4 +1,5 @@
 import os
+from check_bundle_credentials import verify_bundle
 import plistlib
 import subprocess
 from pathlib import Path
@@ -25,8 +26,7 @@ assert entitlements.get('com.apple.security.get-task-allow') is not True
 architectures = subprocess.check_output(['lipo', '-archs', str(app / 'Contents/MacOS' / info['CFBundleExecutable'])], text=True).split()
 assert {'arm64', 'x86_64'}.issubset(architectures), 'Store app must support Apple Silicon and Intel'
 bundle = (app / 'Contents/Resources/main.jsbundle').read_bytes()
-for forbidden in [b'sb_secret_', b'BEGIN PRIVATE KEY', b'BEGIN RSA PRIVATE KEY']:
-    assert forbidden not in bundle, 'Forbidden credential marker in bundle'
+verify_bundle(app / 'Contents/Resources/main.jsbundle')
 Path('evidence').mkdir(exist_ok=True)
 with Path('evidence/entitlements.plist').open('wb') as stream:
     plistlib.dump(entitlements, stream)
