@@ -521,7 +521,8 @@ export default function Workbench({
       : width >= 600
         ? 3
         : 2;
-  const cardWidth = Math.max(1, (gridWidth - (columns - 1) * 12) / columns);
+  const cardGap = picker && !desktop ? 8 : 12;
+  const cardWidth = Math.max(1, (gridWidth - (columns - 1) * cardGap) / columns);
   const cardGrid = (select: (card: Card) => void) => (
     <View
       style={{ flex: 1, gap: 12 }}
@@ -539,16 +540,16 @@ export default function Workbench({
       />
       {searching ? (
         <ActivityIndicator color={c.accent} />
-      ) : (
+      ) : !picker ? (
         <Text style={s.caption}>{total.toLocaleString()} cards</Text>
-      )}
+      ) : null}
       <FlatList
         key={columns}
         numColumns={columns}
         data={results}
         keyExtractor={(card) => card.id}
-        contentContainerStyle={{ gap: 12, paddingVertical: 16 }}
-        columnWrapperStyle={{ gap: 12 }}
+        contentContainerStyle={{ gap: picker ? 16 : 12, paddingVertical: picker ? 8 : 16 }}
+        columnWrapperStyle={{ gap: cardGap }}
         renderItem={({ item }) => (
           <View style={{ width: cardWidth }}><Pressable
             accessibilityRole="button"
@@ -562,7 +563,7 @@ export default function Workbench({
               style={s.cardArt}
               resizeMode="contain"
             />
-            <Text numberOfLines={1} style={[s.buttonText, { marginTop: 8, paddingRight: picker ? 28 : 0 }]}>
+            <Text numberOfLines={1} style={[picker ? s.caption : s.buttonText, { marginTop: 8, paddingRight: picker ? 28 : 0, color: c.text }]}>
               {item.name}
             </Text>
             <Text numberOfLines={1} style={[s.caption, {paddingRight: picker ? 28 : 0}]}>
@@ -587,13 +588,13 @@ export default function Workbench({
       />
     </View>
   );
-  const sheet = (shown: Page, interactive: boolean) => (
+  const sheet = (shown: Page, interactive: boolean, showLocks = !interactive) => (
     <PageSheet
       api={api}
       page={shown}
       cards={cards}
       titleFont="Audiowide"
-      showLocks={!interactive}
+      showLocks={showLocks}
       maximumWidth={interactive && zoom ? 1400 : 820}
       selected={interactive ? selected : -1}
       onDragging={interactive ? setDragging : undefined}
@@ -809,7 +810,7 @@ export default function Workbench({
         <Text numberOfLines={1} style={[s.buttonText, { fontWeight: "600" }]}>
           {sourceLabel} ▾
         </Text>
-        <Text style={s.caption}>
+        <Text numberOfLines={1} style={s.caption}>
           Replaces the {page.slots.filter((slot) => !slot.locked).length}{" "}
           unlocked slots
         </Text>
@@ -1623,6 +1624,7 @@ export default function Workbench({
                 }}
               />
             </View>
+            {picker === "favorite" && <Text style={s.caption}>We’ll build the page around it.</Text>}
             {replacement && (
               <View style={[s.row, { gap: 12 }]}>
                 <View style={{ width: 100 }}>
@@ -1836,7 +1838,7 @@ export default function Workbench({
               </Text>
             </View>
             <ScrollView contentContainerStyle={{ gap: 24, padding: 16 }}>
-              {sheet(page, false)}
+              {sheet(page, false, false)}
               {appearance}
             </ScrollView>
             <View

@@ -241,7 +241,7 @@ export default function PageSheet({
               selected >= 0 && selected !== i && { opacity: 0.82 },
               {
                 borderColor:
-                  target === i || selected === i ? colors.text : "transparent",
+                  target === i || selected === i ? colors.text : slot.cardId ? "transparent" : "#858c864d",
                 borderWidth:
                   target === i || selected === i ? 2 : slot.cardId ? 0 : 1,
               },
