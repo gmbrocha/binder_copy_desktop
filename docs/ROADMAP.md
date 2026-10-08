@@ -9,6 +9,6 @@
 7. Implement sandbox purchases when commercial decisions are ready; prepare privacy/deletion/signing requirements.
 8. Build and upload iPhone/macOS betas to TestFlight; verify availability and record exact versions.
 
-Immediate repository task: Validate React Native macOS dependencies and Mac build access; build the resizable native shell and API integration.
+Immediate repository task: obtain Apple signing access and verify actual Keychain persistence, then complete native photo/export/drag/focus and production auth gates. Native compilation, shell and dialog/accessibility repairs are already proven at their recorded checkpoints.
 
 Use CURRENT_STATE.md for the live work queue. Changes in order may be justified by access/dependencies; record reasons without dropping required gates.

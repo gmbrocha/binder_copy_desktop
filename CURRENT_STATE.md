@@ -18,7 +18,7 @@ Ship the full native macOS client through TestFlight alongside iPhone, using the
 
 ## Active work
 
-Extend Mac native XCTest through NSOpenPanel photo selection, colors-only generation, Keep and NSSavePanel export, checking the actual saved PNG bytes. This checks adapters with a fixture; production render fidelity remains a separate gate. Run 37720140611's evidence is retained under .local/native-smoke-37720140611. Media run 37721275072 at 940dcaa is pending and may be blocked by the same Keychain failure. See docs/SIGNING.md.
+Extend Mac native XCTest through NSOpenPanel photo selection, colors-only generation, Keep and NSSavePanel export, checking the actual saved PNG bytes. This checks adapters with a fixture; production render fidelity remains a separate gate. Run 37720140611's evidence is retained under .local/native-smoke-37720140611. Media run 37721275072 at 940dcaa failed reopening the saved page: the Keychain deletion failure kept Library active, so no photo/export steps ran. Screenshot/log evidence is retained under .local/native-smoke-37721275072. Native compatibility run 37722303026 at 14065ca is queued; do not claim the entitlement change fixes runtime storage yet. See docs/SIGNING.md.
 
 ## Blockers
 
@@ -29,7 +29,7 @@ Extend Mac native XCTest through NSOpenPanel photo selection, colors-only genera
 
 ## Next actions
 
-1. Run the extended Mac media test and fix observed failures; verify drag/focus and remaining native parity.
+1. Inspect compile 37722303026 at 14065ca, then obtain authorized signing and verify secure storage; rerun separate workspace/media tests and finish drag/focus/parity proof.
 2. After pending confirmation, provision Supabase and test live login, refresh, logout and deletion. Configure production email delivery before external testers.
 3. Complete backup/one-writer/public API gates, signing and both TestFlight uploads; verify actual beta availability.
 

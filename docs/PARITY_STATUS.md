@@ -19,5 +19,5 @@ Frozen reference: f35163d. Full ports remain the objective. Implementation is di
 | Branding | Original assets, Audiowide, clear lock icons, cream iPhone splash, full Mac icon set | Actual launch/resize/status-bar checks |
 | Release | Actual unsigned Xcode builds on both platforms | Signing, production cutover, privacy disclosures, beta review, TestFlight availability |
 
-14 unit tests per client pass. Tests cover save races, stale proposals, locking, local photo payloads, drag hit regions, auth rotation/logout, account-isolated atomic draft storage and safe backdrop retries. First simulator fixture test failed before builder visibility; improved diagnostics are pending; they do not substitute for real backend/auth and physical-device checks.
+iPhone has 14 passing unit tests; Mac has 15. Tests cover save races, stale proposals, locking, local photo payloads, drag hit regions, auth rotation/logout, account-isolated atomic draft storage and safe backdrop retries. iPhone simulator photo/share and page regression flows pass. Mac native details/filter/heading/Library controls pass, but secure-storage failure blocks saved-page reopening and the media extension. Neither substitutes for real backend/auth, correctly signed Keychain or physical-device checks.
 
