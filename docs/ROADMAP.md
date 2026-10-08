@@ -9,6 +9,6 @@
 7. Implement sandbox purchases when commercial decisions are ready; prepare privacy/deletion/signing requirements.
 8. Build and upload iPhone/macOS betas to TestFlight; verify availability and record exact versions.
 
-Immediate repository task: reviewed stabilization is shipped in both build 2s and native API 0234fd3. Next are owner physical acceptance/minor UI feedback, verified founder linking, and wider-distribution gates. Use CURRENT_STATE.md for exact evidence and limitations.
+Immediate repository task: finish 1.1.0 native subscription/consumable acceptance and private usage presentation under the approved monetization plan. Baseline build 3 is available internally; backend 09806e7 is live with paid dispatch off. See CURRENT_STATE.md for exact gates.
 
 Use CURRENT_STATE.md for the live work queue. Changes in order may be justified by access/dependencies; record reasons without dropping required gates.

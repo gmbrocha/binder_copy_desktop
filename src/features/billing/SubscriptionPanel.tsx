@@ -15,6 +15,7 @@ export default function SubscriptionPanel({ api, accountId, blocked, onChanged }
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
+  const [showUsage, setShowUsage] = useState(false);
   const account = useRef<string | undefined>(accountId);
   account.current = accountId;
   const pending = useRef(false);
@@ -70,6 +71,11 @@ export default function SubscriptionPanel({ api, accountId, blocked, onChanged }
     })} />}
     {offer?.state.tier === 'paid' && <Action label="Manage subscription" disabled={busy || blocked}
       onPress={() => run(async () => { await Linking.openURL('https://apps.apple.com/account/subscriptions'); })} />}
+    {!!offer?.recentUsage?.length && <Action label={showUsage ? 'Hide recent usage' : 'Recent usage'} disabled={busy || blocked} onPress={() => setShowUsage(value => !value)} />}
+    {showUsage && offer?.recentUsage?.map(item => <View key={item.id} style={s.product}>
+      <Text style={s.body}>{item.kind === 'image' ? 'Background' : 'Theme lookup'} · {item.status === 'consumed' ? '1 credit used' : item.status === 'released' ? 'Credit returned' : 'In progress'}</Text>
+      <Text style={s.caption}>{new Date(item.createdAt).toLocaleString()}{item.environment === 'Sandbox' ? ' · Test purchase credits' : ''}</Text>
+    </View>)}
     {!!error && <Action label="Retry" disabled={busy || blocked} onPress={() => run(load)} />}
     {offer?.privacyUrl && <Action label="Privacy" disabled={busy || blocked} onPress={() => run(async () => { await Linking.openURL(offer.privacyUrl!); })} />}
     {offer?.termsUrl && <Action label="Terms" disabled={busy || blocked} onPress={() => run(async () => { await Linking.openURL(offer.termsUrl!); })} />}

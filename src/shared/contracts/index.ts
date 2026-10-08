@@ -152,4 +152,5 @@ export type BillingOffer = {
   purchasingAvailable: boolean;
   privacyUrl?: string;
   termsUrl?: string;
+  recentUsage?: { id: string; kind: 'image' | 'theme'; createdAt: number; status: 'pending' | 'consumed' | 'released'; environment: 'Production' | 'Sandbox' }[];
 };

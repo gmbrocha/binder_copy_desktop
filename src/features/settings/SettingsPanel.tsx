@@ -87,7 +87,7 @@ export default function SettingsPanel({
           />
         )}
       </View>
-      {bootstrap?.user.id && <SubscriptionPanel api={api} accountId={bootstrap.user.id} blocked={busy || blocked} onChanged={async () => onBootstrap(await api.bootstrap())} />}
+      {bootstrap?.user.id && <SubscriptionPanel key={bootstrap.user.id} api={api} accountId={bootstrap.user.id} blocked={busy || blocked} onChanged={async () => onBootstrap(await api.bootstrap())} />}
       <View style={s.panel}>
         <Text style={s.heading}>Catalog</Text>
         <Text style={s.body}>
