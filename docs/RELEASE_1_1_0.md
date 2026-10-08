@@ -79,3 +79,24 @@ Signed Mac UI run 37849344941 at eb09f79 passed workspace/persistence, native ph
 Founder testing remains limited to verified founder admins and the non-renewing $5 aggregate reservation. Customer purchases/provider spending stay off. No paid inference was used for this release's color/UI verification. The supported-model benchmark is backlog-only in backend docs/ROADMAP.md; no runtime model switch.
 
 Shared development ledger: $341.975258 counted/reserved, $158.024742 unreserved. The $65 Actions monthly stop limit is separate; conservative CI reservations remain pending billing reconciliation.
+
+## 1.1.0 (9) — one shared loading animation
+
+Both platforms are VALID / IN_BETA_TESTING, verified 2026-10-08 23:46 UTC. iPhone was assigned at 23:32 UTC and Mac at 23:46 UTC after its final interaction gate passed. Existing private internal group: ba56be7f-b9ef-4031-b191-a677f79a0edd. No external/public release or new tester invitation.
+
+| Platform | Runtime source | Signed archive | Apple build | Package SHA-256 |
+| --- | --- | --- | --- | --- |
+| iPhone | 30db2b4 | 37858500047 | e3f7bfe5-9737-44bc-8f91-b3940714c60e | 4aca1c4a7f4f984d3f4a7615975e1ee342b643956c456b88874edee12022ed3e |
+| macOS universal | 66bac70 | 37858492571 | caf3a7ff-7b6b-452e-baa9-c91552e65350 | 2e105ee08c2d44ddcbe240e6839be9daf33555b666c31c57baa55cc83d473a52 |
+
+The approved 48-point cream Poké Ball replaces visible Loading text. Its black band/ring rotates clockwise once every 1.4 seconds with the native animation driver. The overlay retains its 750ms threshold, dimmed background, top-modal placement, and media/render completion holds. Reduce Motion displays the same ball without rotation, and animation stops while backgrounded or unmounted. Screen-reader Loading/busy semantics remain; they are not visible text.
+
+All 13 ActivityIndicator instances in each client were removed. Picker/search, startup/auth, Library, settings, purchases, card/tag actions and generation now register their busy lifetime with the single overlay. No legacy loading-wheel references remain in application source; platform-owned purchase/auth system dialogs are outside this app-rendered UI change.
+
+Both final sources pass typecheck, pinned contract/credential boundaries and 25 iPhone / 26 Mac tests. Signed archives passed native compilation, signatures and entitlements. Downloaded packages passed version, production endpoint and decoded credential checks; the Mac binary includes arm64 and x86_64. Backend runtime remains 1d31475799b1bc772bcf4af5e944ad2d6cff3925, contract snapshot 0.2.3 from b6b1ed5. No backend deployment or provider call was needed.
+
+iPhone 13 Pro simulator parity run 37858503701 passed at the exact released source. Two screenshots show a single undimmed cream ball at different rotation angles over the dimmed picker, with no old wheel or visible Loading label. The test confirms the indicator disappears before accepting the page, then exercises replacement, Undo, custom colors, saved pages, catalog/settings and Reapply. Fixture loading measured 8536ms through render, including its intentional 8-second generation delay. Evidence: iPhone .local/spinner-ui-37858503701.
+
+Mac signed interaction run 37858496318 passed at the exact released source: workspace/persistence, native photo/custom-color/export and generated-overlay contrast, three tests with zero failures in 127.604 seconds. Reviewed the final photo/custom-color view; screenshots and test logs are preserved in Mac .local/spinner-ui-37858496318. No Mac-specific animated-frame or Reapply assertion, physical-device acceptance, native Reduce Motion toggle test or actual StoreKit transaction acceptance is claimed for this release.
+
+Initial build-9 runs 37857871793, 37857875314 and 37857867968 were canceled before upload after the owner requested removal of every old wheel. Replacement runs above contain that cleanup. Shared delivery ledger is $359.975258 counted/reserved and $140.024742 unreserved; canceled-run reservations remain conservative pending billing reconciliation. The $65 Actions stop limit is separate. Supported-image-model benchmarking remains backlog-only; live gpt-image-1-mini and founder/customer gates are unchanged.
