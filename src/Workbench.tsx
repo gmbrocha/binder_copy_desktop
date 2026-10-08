@@ -535,6 +535,7 @@ export default function Workbench({
     >
       <SearchControls
         api={api}
+        createId={createId}
         bootstrap={bootstrap}
         query={query}
         onQuery={setQuery}
@@ -1808,6 +1809,7 @@ export default function Workbench({
             </View>
             <SearchControls
               api={api}
+              createId={createId}
               bootstrap={bootstrap}
               query={theme}
               onQuery={setTheme}

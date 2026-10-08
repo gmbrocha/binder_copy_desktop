@@ -10,6 +10,10 @@ Retain the detailed handoff and freeze the PWA source as reference. Each repo us
 
 ## Future decisions
 
+## 2026-10-08 - commercial specification accepted
+
+Owner accepted Monetization & Paid Launch Specification v1.0 in Drive: https://docs.google.com/document/d/1Srtu90yHf4hpiJ4vmcQ6RVa2xApUq8eDy5uB-NvMBak . Backend docs/MONETIZATION_APPROVED_V1.md preserves the source revision. Plus is $3.99 monthly/$29.99 annual, with 10 backgrounds and 50 uncached theme lookups per entitlement month. Packs are 10/$2.99 and 30/$6.99, non-expiring. No launch count quotas, publishing, 100-pack or extra local-only persistence. Native prices remain localized StoreKit values. Validate replacement image model, costs, Apple lifecycle and finite operating budget before paid activation. This supersedes earlier provisional prices/quantities, not the application's 1.1.0 release version.
+
 2026-10-07: macOS requires React Native 0.83.10 for react-native-macos 0.83.0, while Expo iPhone uses SDK 57 / RN 0.86.3. Keep runtime versions separate. Contracts and initial presentation/session sources are synchronized explicitly; no sibling imports at runtime. The initial presentation is only a vertical slice, with full parity still required.
 
 Use the existing public repository's standard GitHub macos-26 runner for unsigned build proof before renting a Mac. Official cost and available runner labels: https://docs.github.com/en/actions/reference/runners/github-hosted-runners . Build artifacts/logs contain no provider keys or user data. A CI compile does not replace interactive/device QA.

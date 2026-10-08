@@ -22,6 +22,7 @@ import Icon from "../../components/Icon";
 import { colors as c, type as t } from "../../design/tokens";
 export default function SearchControls({
   api,
+  createId,
   bootstrap,
   query,
   onQuery,
@@ -31,6 +32,7 @@ export default function SearchControls({
   showInterpretIcon = false,
 }: {
   api: ApiClient;
+  createId: () => string;
   bootstrap?: Bootstrap;
   query: string;
   onQuery: (query: string) => void;
@@ -50,6 +52,9 @@ export default function SearchControls({
   const pending = useRef(false);
   const [error, setError] = useState("");
   const currentQuery = useRef(query);
+  const currentAccount = useRef(bootstrap?.user.id);
+  currentAccount.current = bootstrap?.user.id;
+  const attempt = useRef<{ query: string; account?: string; requestId: string } | null>(null);
   currentQuery.current = query;
   const set = <K extends keyof Filters>(key: K, value: Filters[K]) =>
     onFilters({ ...filters, [key]: value });
@@ -72,10 +77,14 @@ export default function SearchControls({
   const interpret = () =>
     run(async () => {
       const input = query;
+      const account = bootstrap?.user.id;
+      if (!attempt.current || attempt.current.query !== input || attempt.current.account !== account)
+        attempt.current = { query: input, account, requestId: createId() };
       const parsed = await api.request<ParseResult>("/interpret", "POST", {
         query: input,
+        requestId: attempt.current.requestId,
       });
-      if (input !== currentQuery.current)
+      if (input !== currentQuery.current || account !== currentAccount.current)
         throw new Error("Search changed. Interpret the new phrase.");
       setSelected(parsed.tags);
       setInterpretation(parsed);
