@@ -22,6 +22,7 @@ import CardDetails from "./features/catalog/CardDetails";
 import { emptyFilters, type Card, type Page } from "./shared/contracts/index";
 import Appearance from "./features/build/Appearance";
 import PagesLibrary from "./features/library/PagesLibrary";
+import MissingCards from "./features/build/MissingCards";
 import SearchControls from "./features/catalog/SearchControls";
 import TagManager from "./features/catalog/TagManager";
 import SettingsPanel from "./features/settings/SettingsPanel";
@@ -73,11 +74,13 @@ export default function Workbench({
   createId,
   desktop = false,
   onSignOut,
+  onAccountDeleted,
 }: {
   api: ApiClient;
   createId: () => string;
   desktop?: boolean;
   onSignOut?: () => Promise<void>;
+  onAccountDeleted?: () => Promise<void>;
 }) {
   const { width } = useWindowDimensions();
   const [tab, setTab] = useState<"Build" | "Cards" | "Library">("Build");
@@ -127,7 +130,10 @@ export default function Workbench({
   const [theme, setTheme] = useState("");
   const [preview, setPreview] = useState(false);
   const [exportOpen, setExportOpen] = useState(false);
+  const [missingOpen, setMissingOpen] = useState(false);
   const busyRef = useRef(false);
+  const closingAccount = useRef(false);
+  const [accountDeleted, setAccountDeleted] = useState(false);
   const sessionRef = useRef(session);
   sessionRef.current = session;
   const searchVersion = useRef(0);
@@ -183,6 +189,7 @@ export default function Workbench({
       page.name !== "Untitled page" ||
       page.slots.some((slot) => slot.cardId);
     const persistDraft = () => {
+      if (closingAccount.current) return;
       if (session.dirty && meaningful) {
         journalHasDraft.current = true;
         void journal.current!.write(page).catch(report);
@@ -255,6 +262,7 @@ export default function Workbench({
     )
       return;
     const timer = setTimeout(() => {
+      if (closingAccount.current) return;
       void session.save().catch(report);
     }, 700);
     return () => clearTimeout(timer);
@@ -579,9 +587,7 @@ export default function Workbench({
           <Icon
             name={
               { Build: "grid", Cards: "cards", Library: "library" }[name] as
-                | "grid"
-                | "cards"
-                | "library"
+                "grid" | "cards" | "library"
             }
             size={18}
           />
@@ -788,13 +794,15 @@ export default function Workbench({
               ? "theme"
               : sourceOptions
                 ? "sources"
-                : exportOpen
-                  ? "export"
-                  : preview
-                    ? "preview"
-                    : settings
-                      ? "settings"
-                      : null;
+                : missingOpen
+                  ? "missing"
+                  : exportOpen
+                    ? "export"
+                    : preview
+                      ? "preview"
+                      : settings
+                        ? "settings"
+                        : null;
   const closeDialog = () => {
     if (busy) return;
     if (activeDialog === "confirm") setConfirm(null);
@@ -805,9 +813,11 @@ export default function Workbench({
     else if (activeDialog === "theme") setThemeOpen(false);
     else if (activeDialog === "sources") setSourceOptions(false);
     else if (activeDialog === "export") setExportOpen(false);
+    else if (activeDialog === "missing") setMissingOpen(false);
     else if (activeDialog === "preview") setPreview(false);
     else setSettings(false);
   };
+  if (accountDeleted) return <View style={[s.root, {padding: 24, justifyContent: 'center', gap: 20}]}><Text style={s.heading}>Account deletion requested</Text><Text style={s.body}>Your private content has been removed. Sign-in removal is being completed.</Text>{modalStatus}<Button label="Return to sign in" disabled={busy} onPress={() => run(async () => { await journal.current?.clear(); await onAccountDeleted?.(); })} /></View>;
   if (!draftReady || recovery)
     return (
       <View
@@ -1062,7 +1072,7 @@ export default function Workbench({
                       </Text>
                       <Button
                         label={`${new Set(page.slots.flatMap((slot) => (slot.cardId && !cards[slot.cardId]?.owned ? [slot.cardId] : []))).size} to collect`}
-                        onPress={() => setExportOpen(true)}
+                        onPress={() => setMissingOpen(true)}
                       />
                     </View>
                   )}
@@ -1310,7 +1320,7 @@ export default function Workbench({
                 <Button
                   label="Missing list"
                   disabled={busy}
-                  onPress={() => exportPage("csv")}
+                  onPress={() => setMissingOpen(true)}
                 />
               </View>
               <View style={{ flex: 1 }}>
@@ -1322,6 +1332,22 @@ export default function Workbench({
                 />
               </View>
             </View>
+          </View>
+        )}
+        {activeDialog === "missing" && (
+          <View style={{ flex: 1, backgroundColor: c.background }}>
+            {modalStatus}
+            <MissingCards
+              api={api}
+              page={page}
+              onCard={(card) => {
+                if (!busy) setDetail(card);
+              }}
+              onClose={() => {
+                if (!busy) setMissingOpen(false);
+              }}
+              onExport={() => exportPage("csv")}
+            />
           </View>
         )}
         {activeDialog === "export" && (
@@ -1379,6 +1405,15 @@ export default function Workbench({
               bootstrap={bootstrap}
               onBootstrap={setBootstrap}
               blocked={busy}
+              onDeleteAccount={onAccountDeleted ? async () => {
+                closingAccount.current = true;
+                try {
+                  await api.request('/account', 'DELETE', {confirmation: 'DELETE'});
+                } catch (e) { closingAccount.current = false; throw e; }
+                setAccountDeleted(true);
+                await journal.current?.clear();
+                await onAccountDeleted();
+              } : undefined}
               onClose={() => setSettings(false)}
               onSignOut={
                 onSignOut

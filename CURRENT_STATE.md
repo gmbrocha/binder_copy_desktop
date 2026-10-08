@@ -23,7 +23,7 @@ Finish native runtime and visual checks, including photos, share/file panels, se
 
 - Supabase dashboard is still signed out; owner has an outstanding sign-in request. Live auth project/issuer/email and public API origin are not configured.
 - Apple universal record 6820310010 and identifier com.clearpathsystems.bindercopy exist, team L349AVQ22W. Signing and TestFlight uploads remain pending.
-- Account deletion, entitlements/monthly metering, founder linking and remaining feature/visual parity are unfinished. Native accounts remain paid-disabled.
+- Live account deletion, entitlements/monthly metering, founder linking and remaining feature/visual parity are unfinished. Native accounts remain paid-disabled.
 - Transitive Expo/Metro/CLI dependency advisories require triage; do not force-downgrade the framework.
 
 ## Next actions
@@ -43,4 +43,9 @@ Finish native runtime and visual checks, including photos, share/file panels, se
 ## Latest implementation checkpoint
 
 2026-10-07 — aligned the builder with the frozen reference: compact mobile sources above the sheet, appearance in Preview, desktop sidebar, source shortcuts, zoom, selected-slot controls and Settings catalog refresh/status. Root dialogs share a single modal route. Both typechecks, 14 tests per client and full bundles pass. Mac c4e8848 Xcode run 37713222138 passed. Actual UI parity remains unverified; the first iPhone smoke failed before controls were exercised.
+
+
+## Library and account lifecycle checkpoint
+
+2026-10-07 — added a refreshable missing-card list, saved-page thumbnails and bundled legacy deterministic backgrounds from the frozen source renderer. Native Settings now confirms account deletion when the backend advertises support; accepted requests stop draft/autosave writes, clear secure local drafts and sign out. Backend 4d3aeae implements the API with 47 passing tests, but staging remains 59a75a3 and live deletion is not configured. Both client typechecks and JS bundles pass. Native confirmation flow remains unverified. Dependency review is recorded in docs/DEPENDENCY_REVIEW.md; advisories are not claimed resolved. iPhone diagnostic run 37714804608 remains active at def3b4c.
 

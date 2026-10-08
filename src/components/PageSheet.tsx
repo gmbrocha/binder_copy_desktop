@@ -17,6 +17,7 @@ import { colors } from "../design/tokens";
 import CardImage from "./CardImage";
 import Icon from "./Icon";
 import BackgroundImage from "./BackgroundImage";
+import CraftedBackground from "./CraftedBackground";
 
 type Drag = {
   from: number;
@@ -163,6 +164,7 @@ export default function PageSheet({
       {page.backdropMode !== "color" && page.backdrop && (
         <BackgroundImage api={api} id={page.backdrop.assetId} />
       )}
+      {page.backdropMode === undefined && !page.backdrop && <CraftedBackground palette={page.palette} />}
       <Text
         numberOfLines={1}
         style={{

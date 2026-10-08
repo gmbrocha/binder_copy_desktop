@@ -5,6 +5,7 @@ export type Bootstrap = {
     curateTags: boolean;
     manageCatalog: boolean;
     paidApi: boolean;
+    deleteAccount?: boolean;
   };
   tags: Tag[];
   sets: { id: string; name: string }[];

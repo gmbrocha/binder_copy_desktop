@@ -16,7 +16,7 @@ const auth = authURL && publishableKey ? createNativeAuth(authURL, publishableKe
 const api = server ? new ApiClient(server, () => auth?.accessToken() ?? Promise.resolve(null), __DEV__) : null;
 const createId = () => native.uuid();
 export default function App() {
-  const content = api && auth ? <AuthGate auth={auth}>{() => <Workbench api={api} createId={createId} desktop onSignOut={async () => {
+  const content = api && auth ? <AuthGate auth={auth}>{() => <Workbench api={api} createId={createId} desktop onAccountDeleted={() => auth.signOut()} onSignOut={async () => {
     try { await api.request('/session/logout', 'POST', {}); } catch (e) { if (!(e instanceof ApiError && e.status === 401)) throw e; }
     await auth.signOut();
   }} />}</AuthGate> : api && __DEV__ && /^http:\/\/(localhost|127\.0\.0\.1)/.test(server) ? <Workbench api={api} createId={createId} desktop /> : <Text style={{ color: colors.text, padding: 24 }}>Server configuration required.</Text>;

@@ -15,6 +15,7 @@ export default function SettingsPanel({
   onBootstrap,
   onClose,
   onSignOut,
+  onDeleteAccount,
   blocked,
 }: {
   api: ApiClient;
@@ -22,10 +23,12 @@ export default function SettingsPanel({
   onBootstrap: (data: Bootstrap) => void;
   onClose: () => void;
   onSignOut?: () => Promise<void>;
+  onDeleteAccount?: () => Promise<void>;
   blocked: boolean;
 }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  const [confirmDelete, setConfirmDelete] = useState(false);
   const pending = useRef(false);
   useEffect(() => {
     if (!bootstrap?.catalog?.running) return;
@@ -124,6 +127,14 @@ export default function SettingsPanel({
           />
         )}
       </View>
+      {onDeleteAccount && bootstrap?.capabilities?.deleteAccount && <View style={s.panel}>
+        {confirmDelete ? <>
+          <Text style={s.heading}>Delete account?</Text>
+          <Text style={s.body}>Your pages, collection and generated backgrounds will be permanently removed. Shared tag corrections remain without your name.</Text>
+          <Action label="Cancel" disabled={busy || blocked} onPress={() => setConfirmDelete(false)} />
+          <Action label="Permanently delete account" disabled={busy || blocked} onPress={() => run(onDeleteAccount)} />
+        </> : <Action label="Delete account" disabled={busy || blocked} onPress={() => setConfirmDelete(true)} />}
+      </View>}
     </ScrollView>
   );
 }
