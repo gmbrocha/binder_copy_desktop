@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { ApiClient } from '../api/client';
 import { hasImageBackground, solidOverlays, type OverlayPage, type PageOverlays } from '../shared/domain/overlays';
 
-// Cache is scoped to the authenticated API client, never shared across accounts.
-const cache = new WeakMap<ApiClient, Map<string, Promise<PageOverlays>>>();
 export default function usePageOverlays(api: ApiClient, page: OverlayPage) {
+  // AuthGate remounts the page tree on identity changes. Never retain private
+  // page names/art IDs in a module cache: the API client itself spans accounts.
+  const cache = useRef({ api, entries: new Map<string, Promise<PageOverlays>>() });
   const input: OverlayPage = { size: page.size, name: page.name, palette: page.palette,
     customColor: page.customColor, backdrop: page.backdrop, backdropMode: page.backdropMode };
   const key = JSON.stringify(input);
@@ -15,8 +16,8 @@ export default function usePageOverlays(api: ApiClient, page: OverlayPage) {
   useEffect(() => {
     if (!image) return;
     let active = true;
-    let entries = cache.get(api);
-    if (!entries) { entries = new Map(); cache.set(api, entries); }
+    if (cache.current.api !== api) cache.current = { api, entries: new Map() };
+    const entries = cache.current.entries;
     let request = entries.get(key);
     if (!request) {
       if (entries.size >= 64) entries.delete(entries.keys().next().value!);
