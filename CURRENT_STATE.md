@@ -4,14 +4,17 @@
 Deliver the owner-approved 1.1.0 native experience and paid-launch specification while preserving PWA-derived UI. Internal beta is available; commercial activation remains gated. Backend docs/MONETIZATION_APPROVED_V1.md is authoritative.
 
 ## Verified state
-- macOS **1.1.0 (4)**, source 08bd960, Apple e760f81f-c048-453e-bc43-1f181002781b: VALID / IN_BETA_TESTING in existing private internal group ba56be7f-b9ef-4031-b191-a677f79a0edd. Signed archive workflow 37821792293 passed. Build-4 installation/physical acceptance remains unverified.
-- Both iPhone and Mac build 4 are internally available. Previous build 3 remains available. One tester is in the group; Sagar's prior team invitation does not prove acceptance/group access. No public link or external release was created.
-- Live shared API 91d35e9382c19b4be208733fbcc3b1f4346871ad passed 90 tests/typecheck in staging and production with backup and health checks. Supabase/Zoho authentication, private content isolation and PNG/CSV probes passed. Catalog 21,256 cards.
-- Shared contract 0.2.1 exported from backend bf5109914fd39d4d44c69ce3853dcff6694ca18b. No runtime sibling imports. Small approved icons, interpretation retry IDs and account-private recent usage are included.
-- Owner app admin binding is live for gmbrocha@gmail.com. Sagar identity and curator assignments remain unverified. Commercial purchases do not grant staff powers.
+
+- Both iPhone and Mac **1.1.0 (5)** are VALID / IN_BETA_TESTING in existing private internal group ba56be7f-b9ef-4031-b191-a677f79a0edd. One tester is present; Sagar invitation acceptance is unverified. Build 4 remains available; no public link/external distribution. Build-5 physical acceptance is pending.
+- iPhone runtime source 8bd8201, archive 37830778717, Apple 14278cbe-4ccc-491e-a52d-e96e7e370ddb. Mac runtime source b8c7e13, universal archive 37830531204, Apple c6b387ca-76f6-4f54-a996-ced13f1cbb14. Both archives passed native compile, signing/entitlements and package inspection.
+- OVH API runtime **8006c767913467b2c660e45602772c3a04e6cc7a** is live at https://bindercopy-api.clearpathsystems.tools after staging, backup and promotion. All 92 tests/typecheck passed on Windows and Linux. A production promotion initially used a mistyped release-directory hash; the same reviewed archive was immediately redeployed into the correct full-hash path and health/readlink reverified. No data was replaced.
+- Shared contract **0.2.2**, exported from backend 4cdf8e84aed28d4c10d06a20a30394c4065e8ced, is pinned in both clients. Pale presets and arbitrary validated #RRGGBB custom solid colors are available on Free, with no provider calls/credits. Preview, Library thumbnails and PNG export agree; contrast-aware title and existing dark wordmark keep light pages readable.
+- Supabase/Zoho auth, private account separation, deletion and backup/restore remain verified. Catalog has 21,256 cards. Public free-account custom save/reopen/exact PNG-pixel probes passed; disposable identities were removed. Frozen PWA remains untouched.
+- Owner gmbrocha@gmail.com is a verified admin. Sagar native identity and curator assignments remain unknown. Purchases never grant staff powers.
 
 ## Active work
-Owner requested much lighter preset page backgrounds and arbitrary custom colors on Free. Contract 0.2.2 adds validated customColor; native picker/hex input, preview, thumbnail, Undo/save and PNG export are implemented locally. This supersedes earlier dark preset values. Backend 92 tests, client 24 tests, typecheck and boundary checks pass. Contract 0.2.2 snapshot is pinned to backend 4cdf8e8. Native custom-color UI checks and build 5 follow; installed build 4 is unchanged.
+
+The requested light presets/free custom colors are implemented, deployed and available in build 5 on both platforms. Final release records are being reconciled while Mac native UI verification finishes. The final iPhone UI retry requires GitHub billing to be restored. No new paid AI usage. See docs/CUSTOM_COLORS.md for controls and data behavior.
 
 Native StoreKit 2 bridges support subscriptions/consumables, account tokens, localized offers, restore/manage and verify-before-finish. Recovery retains unfinished evidence, handles account switches and never initiates a purchase on launch. Settings history resets by account. Both client release archives passed tests/typecheck, native compilation, signature/entitlement and credential/contract checks.
 
@@ -20,6 +23,9 @@ Apple Sandbox-only receipt verification and server notifications are live; signe
 Approved policy: Plus $3.99/month or $29.99/year with 10 backgrounds and 50 uncached lookups each anchored month; image packs 10/$2.99 and 30/$6.99. No page/collection count caps, publishing or 100-pack. Runtime remains Mini while measured Flare-medium replacement awaits native acceptance and explicit pricing policy.
 
 ## Blockers
+
+GitHub refused to start private iPhone UI run 37832199099 because of failed account payments or a spending limit. Owner has been notified; do not blindly retry or change recurring billing. The signed build uploaded before this block and is available. Public Mac native verification still runs.
+
 Apple commercial/tax readiness and real purchase acceptance remain incomplete. Reviewed public disclosures and an explicit operating budget are required before activation.
 
 ## Next actions
@@ -27,14 +33,16 @@ Apple commercial/tax readiness and real purchase acceptance remain incomplete. R
 2. Complete product review metadata/US pack availability and reviewed public privacy/terms/retention disclosures.
 3. Run actual Apple purchase/renewal/restore/refund/account-switch/cross-platform wallet scenarios from backend docs/STOREKIT_ACCEPTANCE.md on both devices. Commercial prerequisites and actual Apple-authenticated purchase session remain required.
 4. Obtain explicit finite operating/Sandbox/staff budget and finish free-user cost/alert delivery gates before paid activation. Founder identities remain separately verified.
-5. Preserve source-fidelity UI and validate build 4 on physical devices. Do not rerun paid CI merely for documentation updates.
+5. Preserve source-fidelity UI and validate build 5 on physical devices. Do not rerun paid CI merely for documentation updates.
 
 ## Verification
-23 local client tests, typecheck and boundary/hash checks passed again in the signed archive. StoreKit native regressions passed in iPhone 37811589729 and Mac 37811601080 before small retry/history updates; the final archives compiled those updates. Local package version, bundle/public URLs and decoded credential inspection passed. Exact hashes are in docs/RELEASE_1_1_0.md. Full actual Apple sandbox transaction acceptance remains pending.
+
+Backend: 92 tests/typecheck, staged and live Linux checks, anonymous denial, live disposable free-account save/reopen/PNG/CSV/privacy/paid-denial/deletion probes passed. Final custom export was visually inspected. Client archives: 23 iPhone / 24 Mac tests, typechecks, contract/hash and credential checks, signed native compilation and artifact inspection passed.
+
+iPhone native run 37830130469 passed baseline and photo/share flows. Added custom-color script stopped because it did not scroll to Apply; corrected run 37832199099 never started due GitHub billing. Full final iPhone custom-color interaction is not yet verified. Mac initial run 37830138184 passed workspace/persistence; its added color test used a phone-only selector. Corrected desktop inline-picker run 37832987903 is in progress.
+
+Build 5 is available internally, but availability/compilation is not physical installation or real Apple purchase acceptance. Exact package hashes are in the release record. Shared delivery budget: $206.975258 counted/reserved, $293.024742 remaining; backend docs/BUDGET.md is authoritative. The never-started UI retry hold was released; canceled archive reservations remain conservative.
 
 ## Last checkpoint
-Mac run 37830138184 passed the workspace/persistence flow; the added color check used the phone-only Preview & export selector. Corrected to the desktop inline picker and explicit scroll-to-hex. Initial screenshot confirms pale presets and Custom in the right rail. Corrected native rerun follows; release archive remains independent.
 
-Visual PNG review caught poor cream-logo contrast on pale backgrounds. Preview/thumbnail/export now select the existing dark wordmark for light solid colors. Initial build-5 archives were canceled before upload; replacement archives follow. Native interaction checks continue on the custom-color implementation.
-
-October 8, 2026 after 18:30 UTC: build 4 available internally, updated beta notes and release evidence. Shared delivery total $188.975258 counted/reserved, $311.024742 remaining; backend docs/BUDGET.md is authoritative. Preserve unrelated docs/UI_PARITY.md. No live client changes after archive source 08bd960; this checkpoint updates release documentation.
+October 8, 2026, 19:38 UTC: Apple confirmed both build-5 betas IN_BETA_TESTING. Backend/custom-color production probe passed. Corrected Mac UI run is active; corrected iPhone UI run cannot start until GitHub billing is resolved. Preserve unrelated docs/UI_PARITY.md.
