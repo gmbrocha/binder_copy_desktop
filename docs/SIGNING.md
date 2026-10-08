@@ -8,7 +8,7 @@ Native run 37720140611 passed the selected controls but its Library screenshot s
 
 The app now declares its own `$(AppIdentifierPrefix)$(PRODUCT_BUNDLE_IDENTIFIER)` Keychain access group. The native bridge preserves the OSStatus in the NSError without including stored values. Native workspace tests now fail when an error banner is present. Actual signed application entitlements, not just the source plist, must show the expected application identifier, team and Keychain group. The CI evidence step exports the actual entitlements and signing inspection. The entitlement change is not claimed to resolve runtime storage until tested with valid signing/provisioning.
 
-Apple organization API access is not enabled: the signed-in Integrations page presents Request Access. Owner action/required confirmation is pending. This is separate from membership and the already-created app record.
+Apple API access is enabled. Owner approved BinderCopy releases App Manager team key G5BZLPY265 for BinderCopy-only automation. The browser download event timed out after Apple marked the key downloaded; the credential file has not been located. Owner recovery is pending. Do not claim signing access or duplicate/revoke keys without resolving that outcome. Existing Expo key is untouched and unavailable in the current EAS account. Unsigned native compile 37722303026 at 14065ca passed; signed runtime storage remains unverified.
 
 ## Release sequence
 

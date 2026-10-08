@@ -18,24 +18,24 @@ Ship the full native macOS client through TestFlight alongside iPhone, using the
 
 ## Active work
 
-Extend Mac native XCTest through NSOpenPanel photo selection, colors-only generation, Keep and NSSavePanel export, checking the actual saved PNG bytes. This checks adapters with a fixture; production render fidelity remains a separate gate. Run 37720140611's evidence is retained under .local/native-smoke-37720140611. Media run 37721275072 at 940dcaa failed reopening the saved page: the Keychain deletion failure kept Library active, so no photo/export steps ran. Screenshot/log evidence is retained under .local/native-smoke-37721275072. Native compatibility run 37722303026 at 14065ca is queued; do not claim the entitlement change fixes runtime storage yet. See docs/SIGNING.md.
+Extend Mac native XCTest through NSOpenPanel photo selection, colors-only generation, Keep and NSSavePanel export, checking the actual saved PNG bytes. This checks adapters with a fixture; production render fidelity remains a separate gate. Run 37720140611's evidence is retained under .local/native-smoke-37720140611. Media run 37721275072 at 940dcaa failed reopening the saved page: the Keychain deletion failure kept Library active, so no photo/export steps ran. Screenshot/log evidence is retained under .local/native-smoke-37721275072. Native compatibility run 37722303026 at 14065ca passed; do not claim the entitlement change fixes runtime storage yet. See docs/SIGNING.md.
 
 ## Blockers
 
-- Supabase free organization exists and Oregon project form is prepared with Data API disabled. Required browser confirmation to create credentials is still unanswered; project creation is paused at that boundary.
-- Live issuer/public settings, production email delivery, authenticated public API and founder identity linking remain unfinished.
-- Apple organization API access is not enabled; its Request Access page is open for owner action. EAS has no distribution credentials. Browser Apple login alone does not configure signing.
+- Supabase project jmxlvjjuiykugraaqrib is active, with ES256 JWTs, anonymous sign-in disabled, email confirmation required and a 900-second token lifetime. Live backend code verification/refresh/privacy/logout/deletion probe passed using two disposable identities, both removed. Actual email/native login remains pending.
+- Transactional email setup (Zoho CPaaS terms confirmation), authenticated public API and founder identity linking remain unfinished.
+- Apple API access is enabled and owner approved BinderCopy releases App Manager key G5BZLPY265. Browser one-time download timed out without a file path; owner asked to recover .p8. No usable local signing credential yet; existing Expo key untouched.
 - Physical-device/drag/complete visual proof, privacy/support disclosures and final dependency review remain release gates. Native paid API access stays disabled for every role.
 
 ## Next actions
 
-1. Inspect compile 37722303026 at 14065ca, then obtain authorized signing and verify secure storage; rerun separate workspace/media tests and finish drag/focus/parity proof.
-2. After pending confirmation, provision Supabase and test live login, refresh, logout and deletion. Configure production email delivery before external testers.
+1. Recover the authorized signing credential and verify secure storage; rerun separate workspace/media tests and finish drag/focus/parity proof.
+2. Finish transactional email delivery and actual native login before external testers. Backend live provider checks passed; see backend CURRENT_STATE.md.
 3. Complete backup/one-writer/public API gates, signing and both TestFlight uploads; verify actual beta availability.
 
 ## Verification
 
-The passing Mac test uses actual native controls and local disposable fixtures. Ad-hoc signing is not App Store signing. Backend now passes 52 tests on Windows/Linux; clients pass 14 unit tests each. See docs/VERIFICATION.md and docs/PARITY_STATUS.md for scoped evidence.
+The passing Mac test uses actual native controls and local disposable fixtures. Ad-hoc signing is not App Store signing. Backend now passes 52 tests on Windows/Linux; iPhone passes 14 unit tests and Mac passes 15. See docs/VERIFICATION.md and docs/PARITY_STATUS.md for scoped evidence.
 
 ## Last checkpoint
 
