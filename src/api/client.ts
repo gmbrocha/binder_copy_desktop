@@ -1,5 +1,5 @@
 import type { Card, Filters, Page, Tag } from '../shared/contracts/index';
-export type Bootstrap = { user: { id: string; name: string; role: string }; tags: Tag[]; aiConfigured: boolean; backdropConfigured: boolean; catalog: { count: number; sets: number }; visual: { indexed: number } };
+export type Bootstrap = { user: { id: string; name: string; role: string }; capabilities?: { curateTags: boolean; manageCatalog: boolean; paidApi: boolean }; tags: Tag[]; aiConfigured: boolean; backdropConfigured: boolean; catalog: { count: number; sets: number }; visual: { indexed: number } };
 export type Search = { cards: Card[]; ids: string[]; total: number; method?: string; note?: string };
 export class ApiError extends Error {
   constructor(public status: number, message: string) { super(message); }
@@ -45,5 +45,9 @@ export class ApiClient {
   save(page: Page) { return this.request<Page>('/pages/' + page.id, 'PUT', page); }
   cards(ids: string[]) { return this.request<{ cards: Card[] }>('/cards/batch', 'POST', { ids }); }
   image(id: string) { return this.baseUrl + '/api/art/' + encodeURIComponent(id); }
+  async imageSource(id: string) {
+    const token = await this.token();
+    return { uri: this.image(id), headers: token ? { Authorization: 'Bearer ' + token } : undefined };
+  }
   ownership(id: string, owned: boolean) { return this.request<{ owned: boolean }>('/ownership/' + encodeURIComponent(id), 'PUT', { owned }); }
 }
