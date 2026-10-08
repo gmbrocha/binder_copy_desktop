@@ -11,3 +11,7 @@ The native dependency audits contain build-tool advisories. A passing compile do
 This is a scoped triage, not a zero-vulnerability claim. Repeat the audit against the final lockfiles before signing. Do not expose development servers publicly or process untrusted build configuration. Source and native JavaScript artifacts are separately scanned for the actual copied provider credentials; scans pass.
 
 References: https://github.com/advisories/GHSA-vfj7-8cjw-p6xm, https://github.com/advisories/GHSA-86w9-cpqp-85rv, https://github.com/advisories/GHSA-w5hq-g745-h8pq.
+
+## React Native macOS paragraph accessibility
+
+Pinned react-native-macos 0.83.0 includes an unconditional isAccessibilityElement=NO in RCTParagraphComponentView while excluding the iOS paragraph accessibilityElements provider on macOS. Run 37717058682 showed all plain text absent from the native AX tree. scripts/patch-macos-accessibility.mjs applies a macOS-only superclass check on install, fails on a version/source mismatch and is idempotent. iOS behavior is unchanged. Review/remove this correction when upgrading; native screenshot/AX validation remains required.

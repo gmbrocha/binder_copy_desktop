@@ -47,3 +47,7 @@ Unit coverage includes save races, stale proposals, locking, local photo payload
 ## Expanded native media checkpoint
 
 Reserved one additional private iPhone simulator run (maximum 45 minutes) before dispatch to exercise OS photo selection, local color extraction and PNG share-sheet opening. This uses fixture images and no paid API calls; it does not prove the production PNG renderer or real-device delivery. Mac native UI selector repair is ready to rerun; Supabase creation confirmation remains pending.
+
+## Mac text accessibility repair
+
+Native AX evidence led to an upstream RN macOS 0.83.0 issue: RCTParagraphComponentView always returns NO from isAccessibilityElement, but the iOS accessibilityElements provider is excluded on macOS. A version- and exact-source-guarded postinstall correction now uses the inherited AppKit accessible state on macOS only. Local application/idempotence and typecheck pass; native verification is pending. This preserves native secure storage and does not bypass any access failure.

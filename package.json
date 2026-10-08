@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "postinstall": "node scripts/patch-macos-accessibility.mjs",
     "verify:docs": "node scripts/check-docs.mjs",
     "setup:hooks": "git config core.hooksPath .githooks",
     "start": "react-native start",
