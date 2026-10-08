@@ -1,0 +1,42 @@
+name: Apple signing preflight
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  signing:
+    if: github.repository == 'gmbrocha/binder_copy_desktop' && github.ref == 'refs/heads/main'
+    environment: apple-signing
+    runs-on: macos-26-intel
+    timeout-minutes: 5
+    strategy:
+      fail-fast: false
+      matrix:
+        mode: [development, distribution]
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - name: Verify development signing setup
+        if: matrix.mode == 'development'
+        env:
+          MAC_DEVELOPMENT_P12: ${{ secrets.MAC_DEVELOPMENT_P12 }}
+          SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
+          MAC_DEVELOPMENT_PROFILE: ${{ secrets.MAC_DEVELOPMENT_PROFILE }}
+        run: bash scripts/import-ci-signing.sh
+      - name: Verify distribution signing setup
+        if: matrix.mode == 'distribution'
+        env:
+          APPLE_DISTRIBUTION_P12: ${{ secrets.APPLE_DISTRIBUTION_P12 }}
+          MAC_INSTALLER_P12: ${{ secrets.MAC_INSTALLER_P12 }}
+          SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
+          MAC_STORE_PROFILE: ${{ secrets.MAC_STORE_PROFILE }}
+        run: bash scripts/import-store-signing.sh
+      - name: Remove temporary Keychain
+        if: always()
+        run: |
+          security delete-keychain "$RUNNER_TEMP/bindercopy-signing.keychain-db" || true
+          rm -f "$RUNNER_TEMP/bindercopy-development.p12" "$RUNNER_TEMP/bindercopy-distribution.p12" "$RUNNER_TEMP/bindercopy-installer.p12" "$RUNNER_TEMP/bindercopy-profile.plist" "$RUNNER_TEMP/bindercopy-profile.provisionprofile" "$RUNNER_TEMP/bindercopy-store.provisionprofile"
+          for uuid in "${MAC_PROFILE_UUID:-}" "${MAC_STORE_PROFILE_UUID:-}"; do
+            if [[ -n "$uuid" ]]; then
+              rm -f "$HOME/Library/MobileDevice/Provisioning Profiles/$uuid.provisionprofile" "$HOME/Library/Developer/Xcode/UserData/Provisioning Profiles/$uuid.provisionprofile"
+            fi
+          done

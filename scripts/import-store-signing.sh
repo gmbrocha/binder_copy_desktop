@@ -14,10 +14,24 @@ security create-keychain -p "$SIGNING_PASSWORD" "$keychain"
 security set-keychain-settings -lut 21600 "$keychain"
 security unlock-keychain -p "$SIGNING_PASSWORD" "$keychain"
 for p12 in "$RUNNER_TEMP/bindercopy-distribution.p12" "$RUNNER_TEMP/bindercopy-installer.p12"; do
-  security import "$p12" -P "$SIGNING_PASSWORD" -A -t cert -f pkcs12 -k "$keychain"
+  printf "Importing application identity\n"
+security import "$p12" -P "$SIGNING_PASSWORD" -A -t cert -f pkcs12 -k "$keychain"
 done
 curl --fail --silent --show-error https://www.apple.com/certificateauthority/AppleWWDRCAG3.cer -o "$RUNNER_TEMP/bindercopy-wwdr.cer"
-security import "$RUNNER_TEMP/bindercopy-wwdr.cer" -k "$keychain"
+# The image may already contain this public intermediate. Accept an existing
+# copy only after comparing its complete DER bytes, not merely its common name.
+printf 'Checking Apple intermediate certificate\n'
+security find-certificate -a -p "$keychain" > "$RUNNER_TEMP/bindercopy-public-certificates.pem"
+if ! python3 - "$RUNNER_TEMP/bindercopy-public-certificates.pem" "$RUNNER_TEMP/bindercopy-wwdr.cer" <<'PY'
+import base64, pathlib, re, sys
+certificates = re.findall(rb'-----BEGIN CERTIFICATE-----(.*?)-----END CERTIFICATE-----', pathlib.Path(sys.argv[1]).read_bytes(), re.S)
+expected = pathlib.Path(sys.argv[2]).read_bytes()
+sys.exit(0 if any(base64.b64decode(cert) == expected for cert in certificates) else 1)
+PY
+then
+  security import "$RUNNER_TEMP/bindercopy-wwdr.cer" -k "$keychain"
+fi
+printf 'Configuring private-key access and provisioning profile\n' 
 security list-keychains -d user -s "$keychain" "$HOME/Library/Keychains/login.keychain-db"
 security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$SIGNING_PASSWORD" "$keychain" >/dev/null
 security cms -D -i "$RUNNER_TEMP/bindercopy-store.provisionprofile" > "$RUNNER_TEMP/bindercopy-profile.plist"
