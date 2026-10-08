@@ -13,9 +13,9 @@ Stabilize the full native iPhone/macOS internal betas and shared VPS backend wit
 - Contracts/domain snapshot 0.1.0 from e844450 uses canonical LF hashes checked in both clients. iPhone Expo 57.0.27/RN 0.86.3; Mac RN macOS 0.83.0/RN 0.83.10 and CLI 20.2.0. Runtime versions were not force-downgraded to silence dependency advisories.
 
 ## Active work
-PWA-fidelity implementation is complete in both clients. iPhone build 3 is available in internal TestFlight. Mac source 0ab358d passed universal archive 37791911701 and package inspection; signed UI retry is required before upload/assignment. See client docs/UI_PARITY.md. Preserve prior beta builds.
+PWA-fidelity implementation is complete in both clients. iPhone build 3 is available internally. Mac final candidate 05561aa is in signed UI run 37795937114 and universal archive 37795941341. It includes explicit test waits for async dialog dismissal and the PWA desktop sidebar's full-width Regenerate row. Prior verified packages remain unshipped; final screenshot/release gates are pending.
 
-Sagar's app-scoped Apple team invitation is pending acceptance; internal group enrollment has not been completed.
+Sagar's app-scoped Apple team invitation remains pending acceptance. No group enrollment claim.
 
 ## Blockers
 No audit/release blocker. Broader release acceptance still requires physical gestures/accessibility/larger text, native email recovery/account switching and real output delivery, founder identity linking, Zoho sender review, final shared-catalog reconciliation, privacy/support/asset rights and external distribution review. Native paid features/subscriptions remain off. The owner has now authorized the PWA-fidelity pass; native screenshot and release checks are active.
@@ -34,3 +34,5 @@ October 8, 2026: iPhone PWA-fidelity source 84fcff8 passed all three actual iPho
 Mac source 0ab358d passed universal archive 37791911701 and actual package checks (SHA256 0d6a724ec3df768ca32181008a974ec4e3ad13d18a8ac6e94eac7979e22f9ca0). UI run 37791906880 passed photo/export and name editing/saving, then clicked Cards before the async save dialog closed. The test now waits for dialog disappearance before navigating, retaining every assertion; application source is unchanged. Screenshot review also found the desktop source text squeezed beside Regenerate. Matching the frozen PWA sidebar CSS now places Regenerate on its own full-width row. Both native verification and archive must rerun for this final visual correction; previous packages remain unshipped. Prior source 3141669 passed its archive/photo export but failed an immediate name-field existence check; final candidate adds the explicit wait and compact desktop dialog/label refinements. Mac TestFlight remains build 2. Backend runtime remains 0234fd3 with paid dispatch off. No PWA edits, production private-data changes or paid AI calls.
 
 Shared counted/reserved $179.833235; $320.166765 unreserved. Backend docs/BUDGET.md is authoritative. Sagar's Apple team invitation is still awaiting acceptance; no tester group enrollment claim.
+
+Final packaging correction: a Windows editing script double-encoded Workbench punctuation in 05561aa. Restored its original UTF-8 characters, including multiplication signs and apostrophes. No behavior or test selector changes. Native UI run 37795937114 remains useful for unchanged behavior; the archive must use the corrected source.
