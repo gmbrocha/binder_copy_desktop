@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { Animated, PanResponder, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Animated, Image, PanResponder, Pressable, StyleSheet, Text, View } from 'react-native';
 import type { ApiClient } from '../api/client';
 import type { Card, Page } from '../shared/contracts';
 import { palettes } from '../shared/domain/palettes';
@@ -8,6 +8,7 @@ import { swapTarget, type Rect } from '../features/build/dragGeometry';
 import { colors } from '../design/tokens';
 import CardImage from './CardImage';
 import Icon from './Icon';
+import BackgroundImage from './BackgroundImage';
 
 type Drag = { from: number; startX: number; startY: number; captured: boolean; dx: number; dy: number };
 export default function PageSheet({ api, page, cards, selected = -1, onSelect, onLock, onSwap, onDragging, titleFont }: { api: ApiClient; page: Page; cards: Record<string, Card>; selected?: number; onSelect?: (index: number) => void; onLock?: (index: number) => void; onSwap?: (from: number, to: number) => void; onDragging?: (active: boolean) => void; titleFont?: string }) {
@@ -51,7 +52,9 @@ export default function PageSheet({ api, page, cards, selected = -1, onSelect, o
   useEffect(() => () => { drag.current = null; offset.stopAnimation(); current.current.onDragging?.(false); }, []);
   const palette = palettes[page.palette ?? 'forge'];
   return <View onLayout={event => setWidth(event.nativeEvent.layout.width)} style={[s.board, { backgroundColor: palette.bg, aspectRatio: layout.width / layout.height }]} {...responder.panHandlers}>
-    <Text numberOfLines={2} style={{ position: 'absolute', left: layout.pad * scale, right: layout.pad * scale, top: 46 * scale, fontSize: Math.max(12, 42 * scale), color: palette.text, fontFamily: titleFont }}>{page.name}</Text>
+    {page.backdropMode !== 'color' && page.backdrop && <BackgroundImage api={api} id={page.backdrop.assetId} />}
+    <Text numberOfLines={1} style={{ position: 'absolute', left: (layout.pad + 20) * scale, right: layout.pad * scale, top: 52 * scale, lineHeight: 56 * scale, fontSize: Math.min(46, (layout.width - layout.pad * 2 - 40) / Math.max(1, Array.from(page.name).length)) * scale, color: palette.text, fontFamily: titleFont }}>{page.name}</Text>
+    <Image source={require('../../assets/brand/wordmark.png')} resizeMode="contain" style={{ position: 'absolute', left: layout.pad * scale, top: (layout.height - 72) * scale, width: 220 * scale, height: 45 * scale }} />
     {page.slots.map((slot, i) => <View key={i} style={[s.position, rects[i], { opacity: floating === i ? 0.24 : 1 }]}>
       <Pressable accessibilityRole="button" accessibilityLabel={`Slot ${i + 1}: ${slot.cardId ? cards[slot.cardId]?.name ?? 'Card' : 'empty'}${slot.locked ? ', locked' : ''}`} accessibilityState={{ selected: selected === i }} onPress={() => { if (!drag.current && Date.now() > suppressUntil.current) onSelect?.(i); }} delayLongPress={350} onLongPress={event => {
         if (!onSwap || !slot.cardId || slot.locked || drag.current) return;

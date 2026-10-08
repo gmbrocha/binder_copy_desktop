@@ -1,5 +1,5 @@
 import type { Card, Filters, Page, Tag } from '../shared/contracts/index';
-export type Bootstrap = { user: { id: string; name: string; role: string }; capabilities?: { curateTags: boolean; manageCatalog: boolean; paidApi: boolean }; tags: Tag[]; aiConfigured: boolean; backdropConfigured: boolean; catalog: { count: number; sets: number }; visual: { indexed: number } };
+export type Bootstrap = { user: { id: string; name: string; role: string }; capabilities?: { curateTags: boolean; manageCatalog: boolean; paidApi: boolean }; tags: Tag[]; sets: { id: string; name: string }[]; types: { name: string }[]; categories: { name: string }[]; years: { year: string }[]; aiConfigured: boolean; backdropConfigured: boolean; catalog: { count: number; sets: number }; visual: { indexed: number } };
 export type Search = { cards: Card[]; ids: string[]; total: number; method?: string; note?: string };
 export class ApiError extends Error {
   constructor(public status: number, message: string) { super(message); }
@@ -48,6 +48,10 @@ export class ApiClient {
   async imageSource(id: string) {
     const token = await this.token();
     return { uri: this.image(id), headers: token ? { Authorization: 'Bearer ' + token } : undefined };
+  }
+  async backgroundSource(id: string) {
+    const token = await this.token();
+    return { uri: this.baseUrl + '/api/backdrops/' + encodeURIComponent(id), headers: token ? { Authorization: 'Bearer ' + token } : undefined };
   }
   async export(page: Page, format: 'png' | 'csv'): Promise<Uint8Array> {
     const token = await this.token();

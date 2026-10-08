@@ -12,9 +12,9 @@ export class PageSession {
   saving = false;
   private acknowledged: string;
   private pending?: Promise<void>;
-  constructor(page: Page, private persist: (page: Page) => Promise<Page>, private changed: () => void) {
+  constructor(page: Page, private persist: (page: Page) => Promise<Page>, private changed: () => void, recovered = false) {
     this.page = clone(page);
-    this.acknowledged = page.revision ? content(page) : '';
+    this.acknowledged = page.revision && !recovered ? content(page) : '';
   }
   get dirty() { return content(this.page) !== this.acknowledged; }
   edit(update: (page: Page) => Page) {

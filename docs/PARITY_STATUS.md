@@ -1,20 +1,22 @@
 # Native parity checkpoint
 
-Frozen reference: f35163d. Full ports remain the objective. This inventory distinguishes implementation from native/device proof; an entry here is not a TestFlight release claim.
+Frozen reference: f35163d. Full ports remain the objective. Implementation is distinct from actual native interaction proof.
 
-| Workflow | Implemented | Still required |
+| Workflow | Implemented | Remaining proof or work |
 | --- | --- | --- |
-| Build / Cards / Library | Native navigation, bounded builder, adaptive catalog grid | Visual comparison on actual iPhone and Mac, full responsive polish |
-| Identity | Supabase email-code screen, secure sessions, protected images, logout | Live project/email provider, Apple sign-in, account deletion, founder linking |
-| Manual pages | Named identity, sizes, slots, locks, save, Undo, reopen | Local draft recovery and conflict recovery UI; size-change confirmation |
-| Generation | Favorite/card colors/photo/theme, preview, shuffle, keep, regenerate | Native end-to-end tests; source replacement/clear controls |
-| Photo colors | Local thumbnail extraction, server receives only hex colors | Real iOS Photos and macOS file-panel verification |
-| Reordering | 350 ms hold, inner-60% swap trigger, return animation; manual Move alternative | Real touch/mouse/keyboard interaction verification |
-| Appearance | Deterministic palettes, original title font/geometry | Generated backdrop preview/keep/reset and capability handling |
-| Export | Backend PNG and missing CSV; native share/save adapters | Native file/share verification, visual equality of preview/export |
-| Card details | Metadata, ownership, prices, shared tag editing, history/Undo, conflict reload | Full catalog filters, search interpretation/mapping, shared tag management |
-| Library | Private pages/open and collection | Page rename/duplicate/delete controls and counts/empty states |
-| Settings | Identity and catalog summary, sign out | Admin catalog refresh/status; account deletion; support/privacy links |
-| Branding | Original icons, Audiowide, cream iPhone launch splash | macOS launch behavior, full icon/splash visual checks |
+| Navigation and visual system | Build / Cards / Library, fixed chrome, bounded desktop builder, equal-width catalog grids, shared type/color roles | Compare every view to accepted PWA on actual iPhone/Mac; refine native layout |
+| Identity | Email-code UI, secure sessions, token rotation, protected images, local logout | Live Supabase, production API, founder linking, account deletion, Apple sign-in if used |
+| Manual pages | Name/identity, sizes, locks, tap/manual move, long-hold swap, save/Undo, resize confirmation | Device touch/keyboard/drag proof and complete source/zoom controls |
+| Recovery | Encrypted account-scoped draft journal, interrupted-write protection, restore/discard; retry/save-copy/reload for conflicts | Native crash/background/Keychain tests; offline launch currently needs bootstrap access |
+| Generation | Favorite/card colors/photo/theme; preview/shuffle/keep; stale results and locks protected; clear inspiration | Native end-to-end interaction and exact source presentation |
+| Photo | Local bounded extraction on both platforms; server receives only colors | Actual Photos/file-panel tests |
+| Appearance | Compact palette chooser, artwork suggestions, background preview/keep/reset; same request ID on uncertain retry; original font/logo | Capability-gated live service, image preview/export visual comparison, fallback behavior |
+| Export | Backend PNG/CSV with native iOS share sheet and Mac save panel | Native files/share verification and export tooltip polish |
+| Cards | Filters, search interpretation, optional shared mappings, ownership, prices, tags/history/Undo, stale edit recovery | Native all-filter checks; real image loading/performance |
+| Shared tags | Create/edit/aliases/category/delete; expected snapshot for conflict safety | Native UI verification, backend 59a75a3 or newer required for guard |
+| Library | Private pages and collection; rename/duplicate/delete, counts/empty state | Native workflows; richer page thumbnails |
+| Settings | Identity/catalog summary, sign out | Catalog refresh/status, privacy/support URLs, account lifecycle |
+| Branding | Original assets, Audiowide, clear lock icons, cream iPhone splash, full Mac icon set | Actual launch/resize/status-bar checks |
+| Release | Actual unsigned Xcode builds on both platforms | Signing, production cutover, privacy disclosures, beta review, TestFlight availability |
 
-Unit tests cover save races, stale generation, locks, private-photo payloads, drag hit regions and auth rotation/logout. Native file panels, Keychain and gesture behavior require native runtime checks. Release signing, privacy disclosures, beta review and TestFlight availability are pending.
+14 unit tests per client pass. Tests cover save races, stale proposals, locking, local photo payloads, drag hit regions, auth rotation/logout, account-isolated atomic draft storage and safe backdrop retries. Simulator fixture tests are pending; they do not substitute for real backend/auth and physical-device checks.
