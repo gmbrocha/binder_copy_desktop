@@ -9,6 +9,12 @@ final class NativeSmoke: XCTestCase {
     super.tearDown()
   }
 
+  private func waitUntilGone(_ element: XCUIElement, in app: XCUIApplication) {
+    let gone = expectation(for: NSPredicate(format: "exists == false"), evaluatedWith: element)
+    wait(for: [gone], timeout: 15)
+    XCTAssertFalse(element.exists, app.debugDescription)
+  }
+
   private func capture(_ title: String, in app: XCUIApplication) {
     let shot = XCTAttachment(screenshot: app.screenshot())
     shot.name = title
@@ -42,16 +48,19 @@ final class NativeSmoke: XCTestCase {
     name.typeKey("a", modifierFlags: .command)
     name.typeText("Desktop test")
     app.buttons["Save page"].click()
+    waitUntilGone(name, in: app)
     tab("Cards", in: app).click()
     XCTAssertTrue(app.buttons["Fixture 1, Demo set"].waitForExistence(timeout: 30), app.debugDescription)
     app.buttons["Fixture 1, Demo set"].click()
     XCTAssertTrue(app.buttons["Add to collection"].waitForExistence(timeout: 10), app.debugDescription)
     capture("Card details", in: app)
     app.buttons["Done"].click()
+    waitUntilGone(app.buttons["Add to collection"], in: app)
     app.buttons["Filters"].click()
     XCTAssertTrue(app.buttons["Reset"].waitForExistence(timeout: 10), app.debugDescription)
     capture("Card filters", in: app)
     app.buttons["Done"].click()
+    waitUntilGone(app.buttons["Reset"], in: app)
     tab("Library", in: app).click()
     XCTAssertTrue(app.buttons["Open Desktop test"].waitForExistence(timeout: 15), app.debugDescription)
     let library = XCTAttachment(screenshot: app.screenshot())
@@ -65,6 +74,7 @@ final class NativeSmoke: XCTestCase {
     XCTAssertTrue(app.textFields["Page name"].waitForExistence(timeout: 10), app.debugDescription)
     XCTAssertEqual(app.textFields["Page name"].value as? String, "Desktop test")
     app.buttons["Cancel"].click()
+    waitUntilGone(name, in: app)
     XCTAssertFalse(app.buttons["Dismiss error"].exists, app.debugDescription)
     app.terminate()
     app.launch()
@@ -77,6 +87,7 @@ final class NativeSmoke: XCTestCase {
     XCTAssertTrue(app.textFields["Page name"].waitForExistence(timeout: 10), app.debugDescription)
     XCTAssertEqual(app.textFields["Page name"].value as? String, "Desktop test")
     app.buttons["Cancel"].click()
+    waitUntilGone(name, in: app)
     XCTAssertFalse(app.buttons["Dismiss error"].exists, app.debugDescription)
   }
 
@@ -95,6 +106,7 @@ final class NativeSmoke: XCTestCase {
     XCTAssertTrue(app.buttons["Keep this page"].waitForExistence(timeout: 30), app.debugDescription)
     capture("Photo proposal", in: app)
     app.buttons["Keep this page"].click()
+    waitUntilGone(app.buttons["Keep this page"], in: app)
     XCTAssertTrue(app.buttons["Export"].waitForExistence(timeout: 10))
     capture("Kept desktop page", in: app)
     app.buttons["Export"].click()

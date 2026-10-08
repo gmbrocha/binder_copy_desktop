@@ -13,15 +13,17 @@ Stabilize the full native iPhone/macOS internal betas and shared VPS backend wit
 - Contracts/domain snapshot 0.1.0 from e844450 uses canonical LF hashes checked in both clients. iPhone Expo 57.0.27/RN 0.86.3; Mac RN macOS 0.83.0/RN 0.83.10 and CLI 20.2.0. Runtime versions were not force-downgraded to silence dependency advisories.
 
 ## Active work
-PWA-fidelity implementation and iPhone screenshot/native verification pass. iPhone build 3 is available internally; Mac build/test verification is still running. See docs/UI_PARITY.md and the final-source identifiers below. Mac release still requires native verification and Apple validation; preserve previous builds.
+PWA-fidelity implementation is complete in both clients. iPhone build 3 is available in internal TestFlight. Mac source 0ab358d passed universal archive 37791911701 and package inspection; signed UI retry is required before upload/assignment. See client docs/UI_PARITY.md. Preserve prior beta builds.
+
+Sagar's app-scoped Apple team invitation is pending acceptance; internal group enrollment has not been completed.
 
 ## Blockers
 No audit/release blocker. Broader release acceptance still requires physical gestures/accessibility/larger text, native email recovery/account switching and real output delivery, founder identity linking, Zoho sender review, final shared-catalog reconciliation, privacy/support/asset rights and external distribution review. Native paid features/subscriptions remain off. The owner has now authorized the PWA-fidelity pass; native screenshot and release checks are active.
 
 ## Next actions
-1. Finish actual iPhone/Mac UI runs, inspect screenshots against frozen PWA, and correct regressions before release.
-2. Archive verified source, upload/assign the next internal beta builds, and record exact versions and evidence.
-3. Physical iPhone/PWA and Mac acceptance remains separate. Preserve existing account permissions and disabled paid dispatch.
+1. Review the final Mac native screenshots and test result; upload the verified universal package and assign build 3 internally after Apple validation.
+2. Record final source/package/build evidence, reconcile release docs and push all documentation checkpoints.
+3. Owner physical iPhone/PWA and Mac acceptance remains separate. Preserve account permissions and disabled paid dispatch. Enroll Sagar after he accepts the Apple invitation.
 
 ## Verification
 This repo: 19 tests pass; cross-repo total 91 (18 iPhone, 19 Mac, 54 backend). All typechecks, complete bundles, private-credential checks, contract hashes, documentation UTF-8/nonempty checks and relative Markdown links pass. Source CI and native workflows against the audited application sources pass. Backend production dependency audit is clean; inherited native build-tool advisories are triaged, not falsely described as zero.
@@ -29,6 +31,6 @@ This repo: 19 tests pass; cross-repo total 91 (18 iPhone, 19 Mac, 54 backend). A
 ## Last checkpoint
 October 8, 2026: iPhone PWA-fidelity source 84fcff8 passed all three actual iPhone 13 Pro simulator flows in 37787120817. Screenshots reviewed; Preview safe area/back navigation, replacement cancel/reroll/Keep/Undo, persistence, photo/share, filters and Library pass. Signed archive 37787125805 verified and package uploaded to Apple as 1.0.0 (3); Apple build 007bb941-a4e9-49ab-8f61-698f75178013 is VALID / IN_BETA_TESTING, assigned to the existing internal group at 14:07 UTC. Package SHA-256 297165e4d3b61e3adf82992d8841e178e551a9772b39f5109731b48c037b3a27. Prior candidate package was not uploaded.
 
-Mac source 3141669 passed universal archive 37787138880 and the native photo/export flow, but workspace run 37787134816 checked the name field before the portal mounted. Screenshot confirms the field appeared. Added an explicit existence wait, compact name dialog, readable palette labels and right-aligned zoom; rerun required. Earlier Mac candidates were canceled as superseded. Mac TestFlight remains build 2. Backend runtime remains 0234fd3 with paid dispatch off. No PWA edits, production private-data changes or paid AI calls.
+Mac source 0ab358d passed universal archive 37791911701 and actual package checks (SHA256 0d6a724ec3df768ca32181008a974ec4e3ad13d18a8ac6e94eac7979e22f9ca0). UI run 37791906880 passed photo/export and name editing/saving, then clicked Cards before the async save dialog closed. The test now waits for dialog disappearance before navigating, retaining every assertion; application source is unchanged. A final UI-only rerun is required. Prior source 3141669 passed its archive/photo export but failed an immediate name-field existence check; final candidate adds the explicit wait and compact desktop dialog/label refinements. Mac TestFlight remains build 2. Backend runtime remains 0234fd3 with paid dispatch off. No PWA edits, production private-data changes or paid AI calls.
 
 Shared counted/reserved $179.833235; $320.166765 unreserved. Backend docs/BUDGET.md is authoritative. Sagar's Apple team invitation is still awaiting acceptance; no tester group enrollment claim.

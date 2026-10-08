@@ -2,7 +2,7 @@
 
 ## Accepted baseline
 
-The owner’s installed iPhone 13 Pro PWA is the design authority. Frozen PWA application revision f35163d346de9b5b005ece9033d6675a91350d70 (checkout 000b623: handoff documentation only). Do not redesign the PWA or use older chat-era layouts as specifications. The owner authorized implementing the findings on October 8, 2026. Account/security/capability differences remain intentional.
+The ownerâ€™s installed iPhone 13 Pro PWA is the design authority. Frozen PWA application revision f35163d346de9b5b005ece9033d6675a91350d70 (checkout 000b623: handoff documentation only). Do not redesign the PWA or use older chat-era layouts as specifications. The owner authorized implementing the findings on October 8, 2026. Account/security/capability differences remain intentional.
 
 ## Evidence and limits
 
@@ -10,9 +10,9 @@ A read-only 60-card catalog sample and in-memory PWA store were used to run the 
 
 Reference captures, element geometry/typography JSON, walkthrough results, isolated compiled PWA and capture script are in the iPhone repository `.local/pwa-parity-2026-10-08/`; open its `index.html` gallery. Main captures use the iPhone 13 Pro profile (390 x 844, DPR 3) with simulated 47px top and 34px bottom insets. Desktop and 320px supplemental captures are explicitly named. The first instrumentation attempt failed because a transpiler helper leaked into the browser init function; it was fixed and the full walkthrough reran successfully. Only the final captures/results are the reference.
 
-Windows WebKit does not reproduce the iPhone’s actual SF font rasterization, OS keyboard, status bar, Home Screen PWA lifecycle or gestures. These captures establish source structure/layout; they are not claimed to be screenshots from the owner’s phone. Existing build-2 native evidence is an actual iPhone 13 Pro simulator run (37738720783), but uses logo fixtures instead of the PWA catalog images. Pixel-perfect parity cannot be inferred from comparing different fixtures. User-supplied real-device captures remain the final authority.
+Windows WebKit does not reproduce the iPhoneâ€™s actual SF font rasterization, OS keyboard, status bar, Home Screen PWA lifecycle or gestures. These captures establish source structure/layout; they are not claimed to be screenshots from the ownerâ€™s phone. Existing build-2 native evidence is an actual iPhone 13 Pro simulator run (37738720783), but uses logo fixtures instead of the PWA catalog images. Pixel-perfect parity cannot be inferred from comparing different fixtures. User-supplied real-device captures remain the final authority.
 
-## Findings and implemented corrections (native verification pending)
+## Implemented corrections
 
 | View / interaction | Frozen PWA behavior | Native correction |
 | --- | --- | --- |
@@ -44,12 +44,16 @@ Windows WebKit does not reproduce the iPhone’s actual SF font rasterization, O
 
 Android emulation on Windows is useful for broad shared-layout checks only. It is not an iOS fidelity gate. Use macOS iOS Simulator/CI for authoritative native iOS layout and native macOS for the Mac app. No Android port or hosted Mac rental was added.
 
-## Current checkpoint
+## Current checkpoint — October 8, 2026
 
-Local iPhone 18 tests and Mac 19 tests/typechecks pass, including new stale-replacement tests. Client boundaries and iPhone bundle pass. Expanded simulator and signed Mac screenshot checks are next. TestFlight still serves build 2; no new availability claim until a verified build is uploaded and assigned. Backend runtime and paid capabilities are unchanged.
+- iPhone application source **84fcff80d0644f9bceb246f5f926467de1177e20** passed all three native iPhone 13 Pro / iOS 26.4 simulator flows in **37787120817**. Naming, favorite generation, lock/save/reopen/ownership, Photos/colors/share, replacement cancel/reroll/Keep/Undo, Preview/back, filters, Library and Settings passed. Screenshots reviewed against the frozen PWA. Signed archive **37787125805** passed; **1.0.0 (3)** is VALID / IN_BETA_TESTING, Apple **007bb941-a4e9-49ab-8f61-698f75178013**.
+- Mac source **0ab358d** is under signed native verification **37791906880** and universal archive **37791911701**. It adds a compact name dialog, readable palette labels and right-aligned zoom. Mac TestFlight still serves build 2 until this candidate passes and is uploaded.
+- Local checks: 18 iPhone and 19 Mac tests, both typechecks and client/contract boundaries pass. Existing backend 54-test evidence remains applicable; no backend runtime change.
+- Real-artwork reference: `index.html`; matching fixture captures: `matched/`; embedded side-by-side report: `comparison.html`, all under the iPhone ignored `.local/pwa-parity-2026-10-08/` evidence directory. Matching reference capture now passes at 390x844 and desktop 1280x720/1440x1000.
+- No paid AI calls, PWA edits or production private-data changes. Existing account capabilities and disabled paid dispatch are unchanged. Physical owner acceptance remains pending; these results do not establish pixel-perfect parity or physical gesture acceptance.
 
-October 8 follow-up: first iPhone run 37782494271 stopped on Maestro keyboard dismissal, not a save failure. Native tests now tap Save directly, explicitly wait for splash animation, and exercise cancel/review/keep/reroll/Undo. Card details now use compact artwork, stacked icon actions, ownership chip and Place in page, with existing capability guards; picker information buttons and proposal Change restored. Actual native screenshots still pending.
+## Failures found and resolved during verification
 
-Screenshot finding: iPhone 37784513314 exposed zero safe-area padding inside the full-screen Preview modal. Corrected explicit root top/bottom insets, sheet footer clearance, output lock visibility, empty-slot dashed borders and picker density. Persistence/photo/share/replacement/Undo already passed; the final navigation flow must rerun after this fix. Matched PWA/logo-fixture captures are now available in `.local/pwa-parity-2026-10-08/matched/` in the iPhone repo, separate from the real-artwork reference.
+The first iPhone run (37782494271) stopped at an unsupported Maestro keyboard-dismiss action. The test now uses the real Save/Done controls and waits for the splash. The next run (37784513314) passed persistence and photo/share but exposed Preview controls under the status bar. Explicit root safe-area insets fixed that real UI defect; final run 37787120817 passes. Empty-slot borders, preview-only lock visibility and picker density were corrected during screenshot review. Superseded packages were not uploaded.
 
-Final iPhone source 84fcff8: simulator run 37787120817 passes all three flows and reviewed screenshots, including corrected Preview safe-area/back navigation. Signed archive 37787125805 passes. Side-by-side review artifact: iPhone `.local/pwa-parity-2026-10-08/comparison.html`. Build 3 is uploaded/processing, not yet available. Mac source 3141669 verification remains active. Real-device acceptance is still pending.
+Mac run 37787134816 passed native photo generation and exact saved PNG verification, but the workspace test checked the name field immediately after portal opening. The captured screen showed the dialog/field present. The retry explicitly waits for the field, retains value/persistence assertions, and captures name/details/filter/proposal screens. Its result must be recorded separately when complete.
