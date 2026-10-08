@@ -41,8 +41,8 @@ Backend: 92 tests/typecheck, staged and live Linux checks, anonymous denial, liv
 
 iPhone native run 37830130469 passed baseline and photo/share flows. Added custom-color script stopped because it did not scroll to Apply; corrected run 37832199099 never started due GitHub billing. Full final iPhone custom-color interaction is not yet verified. Mac initial run 37830138184 passed workspace/persistence; its added color test used a phone-only selector. Corrected desktop inline-picker run 37832987903 is in progress.
 
-Build 5 is available internally, but availability/compilation is not physical installation or real Apple purchase acceptance. Exact package hashes are in the release record. Shared delivery budget: $206.975258 counted/reserved, $293.024742 remaining; backend docs/BUDGET.md is authoritative. The never-started UI retry hold was released; canceled archive reservations remain conservative.
+Build 5 is available internally, but availability/compilation is not physical installation or real Apple purchase acceptance. Exact package hashes are in the release record. Shared delivery budget: $291.975258 counted/reserved, $208.024742 remaining; backend docs/BUDGET.md is authoritative. The never-started UI retry hold was released; canceled archive reservations remain conservative.
 
 ## Last checkpoint
 
-October 8, 2026, 19:38 UTC: Apple confirmed both build-5 betas IN_BETA_TESTING. Backend/custom-color production probe passed. Corrected Mac UI run is active; corrected iPhone UI run cannot start until GitHub billing is resolved. Preserve unrelated docs/UI_PARITY.md.
+October 8, 2026: Owner reports $85 gross GitHub macOS runner usage today; recorded conservatively pending reconciliation with existing reservations. Shared total $291.975258, remainder $208.024742. At 19:38 UTC, Apple confirmed both build-5 betas IN_BETA_TESTING. Backend/custom-color production probe passed. Corrected Mac UI run is active; corrected iPhone UI run cannot start until GitHub billing is resolved. Preserve unrelated docs/UI_PARITY.md.
