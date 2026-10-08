@@ -23,3 +23,9 @@ Actual Mac unsigned Xcode build 37710882761 passed at 44556cd, including native 
 ## Native modal failure and repair
 
 Runs 37718404669 / 37718688423 launched the app, entered a name and browsed fixture cards, but opening card details threw in Fabric Modal creation. The failure is an app/runtime compatibility issue, not a passed flow. All Mac dialogs now use DesktopDialogHost instead of the unsupported native Modal host, including nested filters/color selections and confirmations. Typecheck, 14 tests, full JS bundle and credential boundary scan pass. Native dialog/AX verification remains pending. Evidence screenshots were exported from the Xcode result bundles.
+
+## macOS interaction proof — 2026-10-07
+
+Run 37720140611 at 4c35716 passed actual native name entry, accessible builder heading, card browsing/details, filters and saved Library entry. This verifies the dialog-host and paragraph-accessibility repairs observed in earlier failing runs. Screenshots/logs: .local/native-smoke-37720140611. No signing, live auth, physical-device, photo/export or drag proof is inferred from that pass.
+
+The next test extends the same workflow through the real NSOpenPanel and NSSavePanel, with a fixed disposable PNG and byte-for-byte output assertion. The fixture rejects raw photo uploads and accepts extracted hex colors only. This extended check is not yet run.

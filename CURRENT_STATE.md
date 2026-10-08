@@ -1,59 +1,40 @@
 # Current state — BinderCopy macOS
 
-## Platform checkpoint
-
-React Native macOS 0.83.0 / RN 0.83.10, with native Keychain/photo/save-panel adapters. Actual Xcode compile 37713222138 passed at c4e8848. The first native XCTest attempt 37716056106 compiled the app but failed on an empty generated test-module name; repaired in a7fe2ef. Native UI run 37717058682 compiled and launched the real builder, but failed on a test selector: plain React Native text was absent from the Mac accessibility tree. The recorded tree includes the builder controls. Selectors now target observed buttons and AX tab elements, and screenshots are always attached. No complete native interaction pass is claimed yet.
-
-The existing sandbox/network/user-selected-file entitlement file is now wired into both Mac build configurations. Local ad-hoc test signing does not prove distribution signing or data-protection Keychain access. App Store Connect 6820310010 / com.clearpathsystems.bindercopy / L349AVQ22W. No signed store package or TestFlight upload. Superseded compatibility runs are automatically cancelled.
 ## Objective
 
-Ship the full native client through TestFlight, sharing the OVH backend and preserving frozen PWA f35163d behavior/design. Production remains the PC-hosted PWA until the one-writer cutover gates pass.
+Ship the full native macOS client through TestFlight alongside iPhone, using the shared OVH backend within the owner's $500 combined budget. Frozen PWA f35163d remains production; no production cutover yet.
 
 ## Verified state
 
-- Build / Cards / Library, compact mobile builder, desktop canvas/sidebar, original branding and shared design roles are implemented.
-- Four generation sources, preview/Keep, named page identity, serialized save/Undo, locks/drag, local photo colors, PNG/CSV exports, appearance/backdrops and encrypted draft recovery are implemented.
-- Library rename/duplicate/delete/thumbnails, missing-card list, card filters/interpretation/prices, shared tag editing/history/Undo and Settings catalog refresh are implemented.
-- Native account deletion is conditional on backend capability, explicitly confirmed, stops autosave/draft writes, clears the local journal and signs out. Live deletion is not configured yet.
-- 14 unit tests per client, TypeScript and full JS bundles pass. Copied provider/admin keys are ignored and excluded; source/artifact scans pass. No new paid AI calls.
-- Shared contract/domain snapshot 0.1.0 is pinned to backend b04e673. No runtime sibling imports.
-- Backend 5fe29e9 is verified private staging: 49 Linux tests, typecheck and paid-disabled health passed. An isolated VPS recovery rehearsal on 21,256 cards preserved deletion tombstones, other-account data and financial safety records. Production remains untouched.
+- React Native macOS 0.83.0 / RN 0.83.10. Actual native interaction run 37720140611 at 4c35716 passed accessible builder heading, name entry, card browsing/details, filters, and named saved page in Library.
+- Earlier native evidence exposed Fabric Modal host creation failure and inaccessible paragraph text. All Mac dialogs now use a root AppKit-backed RN view host. A pinned, exact-source-guarded install patch sets the macOS Text accessible default and reads paragraph props directly. Explicit accessibility opt-out remains supported; iPhone is unchanged.
+- Four generation sources, named preview/Keep, serialized save/Undo, locks/hold-drag, local photo colors, PNG/CSV export, appearance/backdrops, encrypted draft recovery, Library management, card filters/ownership/prices/shared curation and Settings are implemented. Full native parity is not yet proven.
+- 14 local tests, typecheck, full JS bundle and secret-boundary scans pass. Contract/domain snapshot 0.1.0 is pinned to backend b04e673; no runtime sibling imports.
+- Private VPS staging runs fa603e1 after backup, 52 Linux tests/typecheck and paid-disabled health verification. Original production remains untouched. Offline recovery rehearsal preserved deletion tombstones, other-account data and financial records on isolated copies of the 21,256-card catalog.
+- iPhone run 37719211595 at 431b60f passed page building/locking/Library, photo selection/local colors and actual PNG share-sheet opening with fixture bytes.
+- Apple universal app 6820310010, bundle com.clearpathsystems.bindercopy, team L349AVQ22W exists. No distribution signing, upload or TestFlight availability.
 
 ## Active work
 
-Native runtime/visual proof and production auth setup. Supabase is now signed in; free organization Clearpath Systems LLC exists. BinderCopy project form is prepared in Oregon with database API disabled. Required browser confirmation for creating credentials is pending.
+Extend Mac native XCTest through NSOpenPanel photo selection, colors-only generation, Keep and NSSavePanel export, checking the actual saved PNG bytes. This checks adapters with a fixture; production render fidelity remains a separate gate. Run 37720140611's evidence is retained under .local/native-smoke-37720140611.
 
 ## Blockers
 
-- Live Supabase project/issuer/public settings, email delivery and authenticated public API are unfinished.
-- Apple distribution signing and TestFlight uploads are pending; simulator/local signing is not store signing.
-- Founder identity linking, entitlements/monthly metering, privacy/support disclosures and final dependency review remain release gates. Native accounts remain paid-disabled.
-- Real-device photo/share/drag and complete visual parity still require verification.
+- Supabase free organization exists and Oregon project form is prepared with Data API disabled. Required browser confirmation to create credentials is still unanswered; project creation is paused at that boundary.
+- Live issuer/public settings, production email delivery, authenticated public API and founder identity linking remain unfinished.
+- EAS has no distribution credentials. Browser Apple login alone does not configure signing.
+- Physical-device/drag/complete visual proof, privacy/support disclosures and final dependency review remain release gates. Native paid API access stays disabled for every role.
 
 ## Next actions
 
-1. Complete Supabase project setup after the pending confirmation and configure live auth/backend public settings.
-2. Inspect native runtime evidence, repair observed failures and extend photo/export/drag checks.
-3. Complete release/privacy/account and VPS cutover gates; sign/upload both platforms and verify TestFlight availability.
+1. Run the extended Mac media test and fix observed failures; verify drag/focus and remaining native parity.
+2. After pending confirmation, provision Supabase and test live login, refresh, logout and deletion. Configure production email delivery before external testers.
+3. Complete backup/one-writer/public API gates, signing and both TestFlight uploads; verify actual beta availability.
 
 ## Verification
 
-Unit coverage includes save races, stale proposals, locking, local photo payloads, drag geometry, auth rotation/logout, interrupted draft storage and safe background retries. Backend tests independently prove privacy, permissions and spending boundaries. See docs/PARITY_STATUS.md, docs/DEPENDENCY_REVIEW.md and backend docs/ACCOUNT_DELETION.md. Full port completion is not yet claimed.
+The passing Mac test uses actual native controls and local disposable fixtures. Ad-hoc signing is not App Store signing. Backend now passes 52 tests on Windows/Linux; clients pass 14 unit tests each. See docs/VERIFICATION.md and docs/PARITY_STATUS.md for scoped evidence.
 
 ## Last checkpoint
 
-2026-10-07 local — shared counted/reserved budget $134.833235, unreserved $365.166765. Copied keys remain server-only. No physical device, production login or TestFlight proof yet.
-
-## Expanded native media checkpoint
-
-Reserved one additional private iPhone simulator run (maximum 45 minutes) before dispatch to exercise OS photo selection, local color extraction and PNG share-sheet opening. This uses fixture images and no paid API calls; it does not prove the production PNG renderer or real-device delivery. Mac native UI selector repair is ready to rerun; Supabase creation confirmation remains pending.
-
-## Mac text accessibility repair
-
-Native AX evidence led to an upstream RN macOS 0.83.0 issue: RCTParagraphComponentView always returns NO from isAccessibilityElement, but the iOS accessibilityElements provider is excluded on macOS. A version- and exact-source-guarded postinstall correction now uses the inherited AppKit accessible state on macOS only. Local application/idempotence and typecheck pass; native verification is pending. This preserves native secure storage and does not bypass any access failure.
-
-## Native dialog runtime repair
-
-Runs 37718404669 and 37718688423 progressed through native name entry and catalog browsing, then exposed a real React Native Fabric Modal host render exception when opening details. Screenshots/logs are retained in the corresponding .local/native-smoke directories. Replaced every Mac Modal use with a shared root dialog host using native AppKit-backed RN views, stacked dialogs, background interaction exclusion and Escape handling. Also corrected the RN macOS Text JS default so the paragraph accessibility patch receives accessible=true unless explicitly disabled. Fourteen tests, typecheck, full bundle and boundary scan pass; actual native dialog/heading/filter/Library rerun is pending. iPhone remains independent and unchanged by the Mac fixes. Private backend is 15c4c8f with 51 Linux tests.
-
-The text patch now reads the paragraph accessible prop directly: the superclass getter delegates to its non-accessible drawing subview. This follows the inspected runtime implementation; the superseded a7ffefb UI run is cancelled and the combined fix will be verified together.
+2026-10-07 local — counted/reserved $134.833235, unreserved $365.166765 across all repos. Public Mac CI is free; private iOS reservations remain conservative pending billing reconciliation. No new paid AI calls.

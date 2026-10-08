@@ -12,6 +12,7 @@ const server = http.createServer(async (req, res) => {
     let raw = ''; for await (const chunk of req) { raw += chunk; if (raw.length > 100000) throw new Error('Oversized fixture request'); }
     const body = raw ? JSON.parse(raw) : {};
     if (pathname === '/api/health') return send({ ok: true });
+    if (pathname === '/api/export/png') { res.writeHead(200, { 'Content-Type': 'image/png' }); return res.end(art); }
     if (pathname === '/api/bootstrap') return send({ user: { id: 'native-ui-fixture', name: 'UI test', role: 'user' }, capabilities: { curateTags: false, manageCatalog: false, paidApi: false }, aiConfigured: false, backdropConfigured: false, tags: [{ id: 'blue', label: 'Blue', category: 'color', aliases: [] }], sets: [{ id: 'demo', name: 'Demo set' }], types: [{ name: 'Water' }], categories: [{ name: 'Pokemon' }], years: [{ year: '2026' }], catalog: { count: 12, sets: 1 }, visual: { indexed: 12 } });
     if (pathname.startsWith('/api/art/')) { res.writeHead(200, { 'Content-Type': 'image/png' }); return res.end(art); }
     if (pathname === '/api/cards/search') { const found = cards.filter(card => (!body.filters.q || card.name.toLowerCase().includes(body.filters.q.toLowerCase())) && (body.filters.ownership !== 'owned' || card.owned) && (body.filters.ownership !== 'needed' || !card.owned)); return send({ cards: found.slice(body.offset, body.offset + body.limit), ids: found.map(c => c.id), total: found.length }); }
@@ -25,7 +26,10 @@ const server = http.createServer(async (req, res) => {
       if (req.method === 'DELETE') { pages.delete(id); return send({ ok: true }); }
       const saved = { ...body, revision: (current?.revision ?? 0) + 1 }; pages.set(id, saved); return send(saved);
     }
-    if (pathname === '/api/generate' || pathname === '/api/colors/generate') return send({ slots: body.slots.map((slot, i) => slot.locked ? slot : { cardId: cards[i % cards.length].id, locked: false }), cards, palette: 'ocean' });
+    if (pathname === '/api/generate' || pathname === '/api/colors/generate') {
+      if (pathname === '/api/colors/generate' && (!Array.isArray(body.colors) || !body.colors.length || body.colors.some(color => !/^#[a-f0-9]{6}$/i.test(color)) || Object.keys(body).some(key => !['slots', 'filters', 'colors'].includes(key)))) return send({ error: 'Only extracted colors may be uploaded.' }, 400);
+      return send({ slots: body.slots.map((slot, i) => slot.locked ? slot : { cardId: cards[i % cards.length].id, locked: false }), cards, palette: 'ocean' });
+    }
     if (pathname === '/api/palette') return send({ palette: 'ocean' });
     if (pathname === '/api/colors/from-card') return send({ colors: ['#123456'] });
     if (pathname === '/api/interpret') return send({ tags: ['blue'], remaining: '', recognized: ['blue'], note: '', source: 'rules' });

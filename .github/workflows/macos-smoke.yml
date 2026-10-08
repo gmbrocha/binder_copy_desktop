@@ -21,6 +21,8 @@ jobs:
       - run: ruby scripts/add-ui-test-target.rb
       - name: Start local fixtures and Metro
         run: |
+          mkdir -p /tmp/bindercopy-media-results
+          cp assets/brand/icon.png /tmp/bindercopy-native-photo.png
           node scripts/native-fixture-server.mjs > fixture.log 2>&1 &
           npx react-native start --host 127.0.0.1 --port 8081 > metro.log 2>&1 &
       - name: Exercise actual macOS controls

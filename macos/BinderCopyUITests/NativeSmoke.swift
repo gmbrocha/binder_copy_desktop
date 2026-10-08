@@ -44,5 +44,31 @@ final class NativeSmoke: XCTestCase {
     library.name = "Native desktop Library"
     library.lifetime = .keepAlways
     add(library)
+    app.buttons["Open Desktop test"].click()
+    XCTAssertTrue(app.buttons["A photo"].waitForExistence(timeout: 10))
+    app.buttons["A photo"].click()
+    XCTAssertTrue(app.buttons["Open"].waitForExistence(timeout: 10), app.debugDescription)
+    app.typeKey("g", modifierFlags: [.command, .shift])
+    app.typeText("/tmp/bindercopy-native-photo.png")
+    app.typeKey(.return, modifierFlags: [])
+    app.buttons["Open"].click()
+    XCTAssertTrue(app.buttons["Keep this page"].waitForExistence(timeout: 30), app.debugDescription)
+    app.buttons["Keep this page"].click()
+    XCTAssertTrue(app.buttons["Export"].waitForExistence(timeout: 10))
+    app.buttons["Export"].click()
+    app.buttons["Download image"].click()
+    XCTAssertTrue(app.buttons["Save"].waitForExistence(timeout: 15), app.debugDescription)
+    app.typeKey("g", modifierFlags: [.command, .shift])
+    app.typeText("/tmp/bindercopy-media-results")
+    app.typeKey(.return, modifierFlags: [])
+    app.buttons["Save"].click()
+    let exported = URL(fileURLWithPath: "/tmp/bindercopy-media-results/BinderCopy.png")
+    let saved = expectation(for: NSPredicate { _, _ in FileManager.default.fileExists(atPath: exported.path) }, evaluatedWith: nil)
+    wait(for: [saved], timeout: 10)
+    XCTAssertEqual(try Data(contentsOf: exported), try Data(contentsOf: URL(fileURLWithPath: "/tmp/bindercopy-native-photo.png")))
+    let media = XCTAttachment(screenshot: app.screenshot())
+    media.name = "Native photo generation and saved PNG"
+    media.lifetime = .keepAlways
+    add(media)
   }
 }
