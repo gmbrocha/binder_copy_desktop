@@ -51,3 +51,31 @@ iPhone native parity/custom-color/generated-contrast run 37840871818 passed on i
 Reviewed medium preset/custom exports and three existing generated scenes with cached card images, without provider calls. Evidence: backend .local/midtone-review.png, .local/generated-overlay-review.png, .local/public-api-midtone.json; iPhone .local/overlay-ui-37840871818; Mac .local/overlay-ui-37841100347. Native build-6 iPhone was processed but withheld from beta assignment; Mac build-6 archive was canceled. Build 7 is the released correction.
 
 Shared delivery total $314.475258 counted/reserved, $185.524742 remaining. Includes the owner-reported $85 gross Actions figure pending net/hold reconciliation; $65 provider monthly stop limit is separate from the $500 project cap. No new paid image calls.
+
+## 1.1.0 (8) — generation, loading and saved backgrounds
+
+Both platforms are VALID / IN_BETA_TESTING in existing private internal group ba56be7f-b9ef-4031-b191-a677f79a0edd, verified October 8, 2026 at 22:27 UTC. One tester is confirmed. Prior builds remain available. Physical build-8 installation is unverified; no external or public release.
+
+| Platform | Runtime source | Signed archive | Apple build | Package SHA-256 |
+| --- | --- | --- | --- | --- |
+| iPhone | ba33d87 | 37849618998 | fa6138c1-fe53-40c7-9d54-91b64346edde | 10ce0f0e081a363cc064f7b020bfb3652c17cd05b2415dbbe83163b6bf8b86d5 |
+| macOS universal | 406b20e | 37849622968 | d20bd397-2523-42a9-a64b-99e171fd1aee | 803d005fedfba9b7ae514776efb9f15ab9202763dc176cff26555b94a0145d6e |
+
+Live backend: 1d31475799b1bc772bcf4af5e944ad2d6cff3925. Shared contract snapshot 0.2.3 remains pinned to b6b1ed5.
+
+- Color generation hydrates missing artwork in a bounded shortlist and avoids new duplicates; locks and existing slots survive insufficient distinct matches. The cache is no longer treated as the eligible catalog.
+- Empty slots have cream corner brackets, plus signs and numbers.
+- Explicit actions lasting at least 750ms show centered cream Audiowide Loading over a dimmed background, including native sheets/dialogs. Image/contrast render holds extend the overlay until ready; fast/passive work does not start it.
+- Saved generated art survives trying a solid color. Reapply appears beside Saved, restores the same asset without generation, and disappears once Applied.
+
+Backend: 100 tests/typecheck passed on Windows, isolated staging and production Linux. Backup/promotion and public disposable-account checks passed. Color generation produced 9 and 25 distinct cards with seed locked: final timings 7.450s first / 0.515s warm. Free custom colors, PNG/CSV, privacy, paid denial and cleanup passed. Evidence: .local/live-color-fix.json and .local/public-api-founder-gated.json.
+
+Final archives passed 25 iPhone / 26 Mac tests, typechecks, boundaries, native compilation, signatures and entitlements. Downloaded packages passed version/endpoints/decoded credential checks; Mac includes arm64/x86_64.
+
+iPhone 13 Pro simulator parity run 37852188590 at 416fb50 passed Loading, Reapply, custom colors, saved pages and catalog flows. Runtime matches ba33d87; later changes only adjust test timing and center Reapply above Preview's fixed footer. Final fixture generation measured 8076ms API / 8432ms rendered, including an intentional 8-second delay. Screenshots verify undimmed cream Loading, cream empty slots, Saved/Reapply and restored Applied state. Earlier runs 37849332712/37850564956 failed test observation/tap positioning and are retained.
+
+Signed Mac UI run 37849344941 at eb09f79 passed workspace/persistence, native photo/custom/export and generated contrast. Final 406b20e additionally wraps explicit interpretation/Library actions in the tested loading controller. No Mac-specific Reapply interaction assertion or real StoreKit transaction acceptance is claimed. Native evidence is in each client's .local/loading-ui-<run> directory. Initial archives 37849336679/37849340944 were canceled before upload for the final action-coverage audit.
+
+Founder testing remains limited to verified founder admins and the non-renewing $5 aggregate reservation. Customer purchases/provider spending stay off. No paid inference was used for this release's color/UI verification. The supported-model benchmark is backlog-only in backend docs/ROADMAP.md; no runtime model switch.
+
+Shared development ledger: $341.975258 counted/reserved, $158.024742 unreserved. The $65 Actions monthly stop limit is separate; conservative CI reservations remain pending billing reconciliation.
