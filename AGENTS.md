@@ -30,7 +30,7 @@ Every commit must stage a truthful CURRENT_STATE.md update. The repository commi
 
 The owner subsequently authorized full iPhone/macOS ports under a **$500 total budget**, including the purchased VPS conservatively. Consult the backend repo's docs/BUDGET.md before any spending; count paid/reserved amounts across all repositories, taxes and renewals. Continue implementation autonomously within that scope. Required tool confirmations still apply at the actual action. Do not fragment this into separate $500 allowances per repo.
 
-No provider secrets in client code, public environment variables, logs or Git. Development/CI/staging paid dispatch defaults off. Free accounts must make zero paid calls. Preserve the legacy image ledger and conservative reservations; do not automatically retry uncertain paid outcomes. The old image policy expires 2026-10-23 and requires review before extension/model changes. Do not buy another VPS: annual OVHcloud purchase is complete. New recurring services or changed purchase terms require user authorization.
+No provider secrets in client code, public environment variables, logs or Git. Development/CI/staging paid dispatch defaults off. Ordinary free operations must make zero paid calls; explicit image generation may consume verified purchased credits only after that feature passes release gates. Preserve the legacy image ledger and conservative reservations; do not automatically retry uncertain paid outcomes. The owner-selected Mini policy expires 2026-11-08 for review before the published 2026-12-01 shutdown; old ledger prices remain historical. Do not buy another VPS: annual OVHcloud purchase is complete. New recurring services or changed purchase terms require user authorization.
 
 ## Verification and release truth
 

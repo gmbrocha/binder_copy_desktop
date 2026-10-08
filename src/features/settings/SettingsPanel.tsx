@@ -9,6 +9,7 @@ import {
 import type { ApiClient, Bootstrap } from "../../api/client";
 import Action from "../../components/Action";
 import { colors as c, type as t } from "../../design/tokens";
+import SubscriptionPanel from "../billing/SubscriptionPanel";
 export default function SettingsPanel({
   api,
   bootstrap,
@@ -86,6 +87,7 @@ export default function SettingsPanel({
           />
         )}
       </View>
+      {bootstrap?.user.id && <SubscriptionPanel api={api} accountId={bootstrap.user.id} blocked={busy || blocked} onChanged={async () => onBootstrap(await api.bootstrap())} />}
       <View style={s.panel}>
         <Text style={s.heading}>Catalog</Text>
         <Text style={s.body}>

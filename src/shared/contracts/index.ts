@@ -131,3 +131,25 @@ export type ParseResult = {
   source: "rules" | "ai";
   proposal?: { id: string; phrase: string; tags: string[] };
 };
+
+/** 1.1.0 additive billing contract. Role and paid entitlement are independent. */
+export type BillingState = {
+  tier: 'free' | 'paid' | 'complimentary';
+  environment: 'Production' | 'Sandbox' | null;
+  expiresAt: number | null;
+  needsRefresh: boolean;
+  period: string;
+  allowanceMicroUsd: number;
+  committedMicroUsd: number;
+  remainingMicroUsd: number;
+  halted: boolean;
+  paidApi: boolean;
+  credits?: { includedImages: number; includedThemes: number; purchasedImages: number; purchasedDebt: number };
+};
+export type BillingOffer = {
+  state: BillingState;
+  productIds: string[];
+  purchasingAvailable: boolean;
+  privacyUrl?: string;
+  termsUrl?: string;
+};

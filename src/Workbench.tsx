@@ -33,6 +33,7 @@ import MissingCards from "./features/build/MissingCards";
 import SearchControls from "./features/catalog/SearchControls";
 import TagManager from "./features/catalog/TagManager";
 import SettingsPanel from "./features/settings/SettingsPanel";
+import { usePurchaseRecovery } from "./features/billing/usePurchaseRecovery";
 import { DraftJournal } from "./features/build/draftJournal";
 import { authStorage } from "./auth/storage";
 import { newPage, PageSession } from "./features/build/pageSession";
@@ -101,6 +102,10 @@ export default function Workbench({
   const { width } = useWindowDimensions();
   const [tab, setTab] = useState<"Build" | "Cards" | "Library">("Build");
   const [bootstrap, setBootstrap] = useState<Bootstrap>();
+  usePurchaseRecovery(api, bootstrap?.user.id, async () => {
+    const refreshed = await api.bootstrap();
+    setBootstrap(previous => previous?.user.id === refreshed.user.id ? refreshed : previous);
+  });
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
   const [, render] = useState(0);

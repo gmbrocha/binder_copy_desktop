@@ -11,6 +11,7 @@ prepare_react_native_project!
 target 'binder-copy-desktop-macOS' do
   platform :macos, '14.0'
   use_native_modules!
+  pod 'BinderPurchases', :path => '../native/BinderPurchases'
 
   # Flags change depending on the env values.
   flags = get_default_flags()

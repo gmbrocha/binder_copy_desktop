@@ -24,3 +24,13 @@ Owner confirmed iPhone installation/use, deferred small UI refinements, and auth
 ## 2026-10-08 - frozen PWA visual authority
 
 Owner explicitly asked to audit and faithfully mimic the frozen PWA on iPhone 13 Pro and macOS before further UI iteration. Use the current PWA code/screens, not obsolete chat decisions: phone Cards are two columns and picker three; locking lives in the contextual tray with a small locked badge; preview uses palette swatches. Preserve native account/permission boundaries. Automated workflow success alone is not visual parity; retain screenshot evidence and physical acceptance separately. See UI_PARITY.md.
+
+
+## 2026-10-08 - 1.1.0 privileges and subscriptions
+
+Owner authorized full account privileges and Apple subscriptions for the next 1.1.0 beta. Admins are only the owner and Sagar, bound to verified app identities; curator assignments are TBD. Account role and commercial entitlement are separate. New users are free by default. A paid subscription must never grant curation or administration. Apple verifies purchases; the backend owns account binding, expiration/revocation and usage reservations. TestFlight transactions are sandbox transactions, not revenue. Price and allowance await the owner's discussion; continue independent implementation without choosing them. Preserve the global image ledger and zero paid calls for free users. Commercial activation needs Apple's applicable agreements and review; no claim of real charging from TestFlight.
+
+
+## 2026-10-08 - image model selection
+
+Owner explicitly selected gpt-image-1-mini for generated backgrounds in 1.1.0. Preserve medium portrait quality, low input fidelity, one image and conservative reservations; do not silently substitute another model. Official rates were checked: text input $2/M, image input $2.50/M, image output $8/M. Round fractional micro-USD upward when settling. The new price policy expires November 8 for review; Apple's subscription work and the existing immutable global image ledger are unaffected. OpenAI currently schedules this model's shutdown for December 1, 2026. No paid call or live model deployment is implied by this source change.

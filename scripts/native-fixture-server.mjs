@@ -12,6 +12,7 @@ const server = http.createServer(async (req, res) => {
     let raw = ''; for await (const chunk of req) { raw += chunk; if (raw.length > 100000) throw new Error('Oversized fixture request'); }
     const body = raw ? JSON.parse(raw) : {};
     if (pathname === '/api/health') return send({ ok: true });
+    if (pathname === '/api/billing') return send({ state: { tier: 'free', environment: null, expiresAt: null, needsRefresh: false, period: '2026-10', allowanceMicroUsd: 0, committedMicroUsd: 0, remainingMicroUsd: 0, halted: false, paidApi: false }, productIds: [], purchasingAvailable: false });
     if (pathname === '/api/export/png') { res.writeHead(200, { 'Content-Type': 'image/png' }); return res.end(art); }
     if (pathname === '/api/bootstrap') return send({ user: { id: 'native-ui-fixture', name: 'UI test', role: 'user' }, capabilities: { curateTags: false, manageCatalog: false, paidApi: false }, aiConfigured: false, backdropConfigured: false, tags: [{ id: 'blue', label: 'Blue', category: 'color', aliases: [] }], sets: [{ id: 'demo', name: 'Demo set' }], types: [{ name: 'Water' }], categories: [{ name: 'Pokemon' }], years: [{ year: '2026' }], catalog: { count: 12, sets: 1 }, visual: { indexed: 12 } });
     if (pathname.startsWith('/api/art/')) { res.writeHead(200, { 'Content-Type': 'image/png' }); return res.end(art); }
@@ -42,4 +43,3 @@ const server = http.createServer(async (req, res) => {
   } catch { return send({ error: 'Fixture request failed.' }, 500); }
 });
 server.listen(4181, '127.0.0.1', () => process.stdout.write('Local UI fixture ready; no external API calls.\n'));
-
