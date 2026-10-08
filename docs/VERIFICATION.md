@@ -29,3 +29,7 @@ Runs 37718404669 / 37718688423 launched the app, entered a name and browsed fixt
 Run 37720140611 at 4c35716 passed actual native name entry, accessible builder heading, card browsing/details, filters and saved Library entry. This verifies the dialog-host and paragraph-accessibility repairs observed in earlier failing runs. Screenshots/logs: .local/native-smoke-37720140611. No signing, live auth, physical-device, photo/export or drag proof is inferred from that pass.
 
 The next test extends the same workflow through the real NSOpenPanel and NSSavePanel, with a fixed disposable PNG and byte-for-byte output assertion. The fixture rejects raw photo uploads and accepts extracted hex colors only. This extended check is not yet run.
+
+## Secure-storage correction to interaction evidence
+
+Visual review of run 37720140611 shows a Keychain deletion error in Library despite its passing interaction assertions. Treat this as an unresolved persistence/signing gate, not a successful storage test. Native tests now reject visible errors. Added the app-specific Keychain group, retained native OSStatus errors without secret contents, and added actual signed-entitlement evidence collection. No storage protection was removed. Local typecheck and all 15 tests pass, including a build-settings guard rejecting preview origins/secrets/absent build numbers. Actual signed Keychain validation remains blocked on Apple access/credentials.

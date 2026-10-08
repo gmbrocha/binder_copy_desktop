@@ -33,7 +33,7 @@ RCT_EXPORT_METHOD(getSecret:(NSString *)key resolver:(RCTPromiseResolveBlock)res
   CFTypeRef result = NULL;
   OSStatus status = SecItemCopyMatching((__bridge CFDictionaryRef)query, &result);
   if (status == errSecItemNotFound) { resolve([NSNull null]); return; }
-  if (status != errSecSuccess) { reject(@"keychain_read", @"Secure storage is unavailable.", nil); return; }
+  if (status != errSecSuccess) { reject(@"keychain_read", @"Secure storage is unavailable.", [NSError errorWithDomain:NSOSStatusErrorDomain code:status userInfo:nil]); return; }
   NSData *data = CFBridgingRelease(result);
   NSString *value = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
   if (!value) { reject(@"keychain_decode", @"Stored session could not be read.", nil); return; }
@@ -48,12 +48,12 @@ RCT_EXPORT_METHOD(setSecret:(NSString *)key value:(NSString *)value resolver:(RC
     query[(__bridge id)kSecAttrAccessible] = (__bridge id)kSecAttrAccessibleWhenUnlockedThisDeviceOnly;
     status = SecItemAdd((__bridge CFDictionaryRef)query, NULL);
   }
-  if (status != errSecSuccess) { reject(@"keychain_write", @"Session could not be stored securely.", nil); return; }
+  if (status != errSecSuccess) { reject(@"keychain_write", @"Session could not be stored securely.", [NSError errorWithDomain:NSOSStatusErrorDomain code:status userInfo:nil]); return; }
   resolve([NSNull null]);
 }
 RCT_EXPORT_METHOD(removeSecret:(NSString *)key resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
   OSStatus status = SecItemDelete((__bridge CFDictionaryRef)[self queryForKey:key]);
-  if (status != errSecSuccess && status != errSecItemNotFound) { reject(@"keychain_delete", @"Stored session could not be removed.", nil); return; }
+  if (status != errSecSuccess && status != errSecItemNotFound) { reject(@"keychain_delete", @"Stored session could not be removed.", [NSError errorWithDomain:NSOSStatusErrorDomain code:status userInfo:nil]); return; }
   resolve([NSNull null]);
 }
 RCT_EXPORT_METHOD(pickPhotoPixels:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {

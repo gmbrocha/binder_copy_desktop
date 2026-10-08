@@ -44,7 +44,14 @@ final class NativeSmoke: XCTestCase {
     library.name = "Native desktop Library"
     library.lifetime = .keepAlways
     add(library)
-    app.buttons["Open Desktop test"].click()
+    XCTAssertFalse(app.buttons["Dismiss error"].exists, "Native persistence must not report a secure-storage or save error: \(app.debugDescription)")
+  }
+
+  func testNativePhotoAndExport() throws {
+    continueAfterFailure = false
+    let app = XCUIApplication(bundleIdentifier: "com.clearpathsystems.bindercopy")
+    app.launch()
+    XCTAssertTrue(app.buttons["A favorite card"].waitForExistence(timeout: 90), app.debugDescription)
     XCTAssertTrue(app.buttons["A photo"].waitForExistence(timeout: 10))
     app.buttons["A photo"].click()
     XCTAssertTrue(app.buttons["Open"].waitForExistence(timeout: 10), app.debugDescription)

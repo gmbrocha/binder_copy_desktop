@@ -34,6 +34,8 @@ jobs:
         if: always()
         run: |
           mkdir -p evidence
+          codesign -d --entitlements :- build/Build/Products/Debug/binder-copy-desktop.app > evidence/app-entitlements.plist 2> evidence/signing-inspection.log || true
+          codesign -dv build/Build/Products/Debug/binder-copy-desktop.app 2>> evidence/signing-inspection.log || true
           xcrun xcresulttool export attachments --path native-ui.xcresult --output-path evidence/screenshots || true
       - uses: actions/upload-artifact@v4
         if: always()
