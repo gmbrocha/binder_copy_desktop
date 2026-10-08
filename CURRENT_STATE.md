@@ -1,33 +1,34 @@
-# Current state - BinderCopy macOS
+# Current state — BinderCopy macOS
 
 ## Objective
-Deliver 1.1.0 TestFlight with verified Apple subscriptions/consumables, founder-only admins, curator permissions and bounded paid features. Preserve the accepted PWA-derived UI. Commercial specification v1.0 approved October 8: https://docs.google.com/document/d/1Srtu90yHf4hpiJ4vmcQ6RVa2xApUq8eDy5uB-NvMBak . Backend docs/MONETIZATION_APPROVED_V1.md is the versioned snapshot.
+Deliver the owner-approved 1.1.0 native experience and paid-launch specification while preserving PWA-derived UI. Internal beta is available; commercial activation remains gated. Backend docs/MONETIZATION_APPROVED_V1.md is authoritative.
 
 ## Verified state
-- iPhone 1.0.0 (3) at 84fcff8 is VALID / IN_BETA_TESTING; actual iPhone 13 Pro native run 37787120817 and archive 37787125805 passed. Owner approves its UI.
-- Mac 1.0 (3) at cbabc2b is VALID / IN_BETA_TESTING as of October 8 16:41 UTC, Apple 9548f2e3-3f76-4027-bb8a-ea53dbf7c1d8. Native run 37800698083 and universal archive 37799816041 passed. Prior builds remain available.
-- Approved smaller B icons are committed after build-3 sources and are included in this next source checkpoint. Preserve their exact files.
-- Live backend is 09806e716347aa1bdc46b2e145b942430f3fb217 with native paid dispatch off. Supabase/Zoho authentication, private account boundaries and previous export/build workflows were verified in the baseline release.
-- Shared contract 0.2.1 exported from backend bf5109914fd39d4d44c69ce3853dcff6694ca18b; additive billing balances and legal links. No runtime sibling imports.
+- macOS **1.1.0 (4)**, source 08bd960, Apple e760f81f-c048-453e-bc43-1f181002781b: VALID / IN_BETA_TESTING in existing private internal group ba56be7f-b9ef-4031-b191-a677f79a0edd. Signed archive workflow 37821792293 passed. Build-4 installation/physical acceptance remains unverified.
+- Both iPhone and Mac build 4 are internally available. Previous build 3 remains available. One tester is in the group; Sagar's prior team invitation does not prove acceptance/group access. No public link or external release was created.
+- Live shared API 91d35e9382c19b4be208733fbcc3b1f4346871ad passed 90 tests/typecheck in staging and production with backup and health checks. Supabase/Zoho authentication, private content isolation and PNG/CSV probes passed. Catalog 21,256 cards.
+- Shared contract 0.2.1 exported from backend bf5109914fd39d4d44c69ce3853dcff6694ca18b. No runtime sibling imports. Small approved icons, interpretation retry IDs and account-private recent usage are included.
+- Owner app admin binding is live for gmbrocha@gmail.com. Sagar identity and curator assignments remain unverified. Commercial purchases do not grant staff powers.
 
 ## Active work
-Native StoreKit 2 bridge now supports subscriptions and consumables with app-account tokens. The server verifies current Apple evidence before transactions finish. Settings includes native localized offers, restore/manage, included/purchased balances and privacy/terms. Foreground recovery retains unfinished evidence, rejects account switches and never prompts for purchases on launch. Version source set to 1.1.0; no 1.1.0 archive/upload yet.
+Native StoreKit 2 bridges support subscriptions/consumables, account tokens, localized offers, restore/manage and verify-before-finish. Recovery retains unfinished evidence, handles account switches and never initiates a purchase on launch. Settings history resets by account. Both client release archives passed tests/typecheck, native compilation, signature/entitlement and credential/contract checks.
 
-The backend foundation passes 84 tests, including interrupted delivery recovery and exclusion of revoked subscription grants. Plus is approved at $3.99/month or $29.99/year with 10 backgrounds and 50 uncached lookups monthly; packs 10/$2.99 and 30/$6.99. No design/collection count caps, publishing or 100-pack at launch. Apple configuration and paid enablement remain off. Mini is an experimental path; validate a supported replacement and measured economics before paid launch.
+Apple Sandbox-only receipt verification and server notifications are live; signed TEST delivery succeeded October 8 at 18:26 UTC. New purchase offers are hidden and provider dispatch is off; all operational allowances remain zero. Neither native compile nor a TEST notification proves real purchase acceptance.
 
-Interpretation retries now retain a per-query/account request ID while the view remains mounted, enabling backend result recovery without duplicate charging after a lost response. Native StoreKit runs 37811589729 (iPhone 37eca91) and 37811601080 (Mac 19fc41e) passed compilation and regressions; they predate the retry and recent-usage UI changes.
+Approved policy: Plus $3.99/month or $29.99/year with 10 backgrounds and 50 uncached lookups each anchored month; image packs 10/$2.99 and 30/$6.99. No page/collection count caps, publishing or 100-pack. Runtime remains Mini while measured Flare-medium replacement awaits native acceptance and explicit pricing policy.
 
 ## Blockers
-Actual Apple sandbox purchases need configured products, IAP credentials and applicable commercial prerequisites. Apple login is restored, four product drafts are configured, and the purchase key authenticates to Sandbox. Paid Apps Agreement is accepted but Pending User Info; banking Processing and W-9 support remain owner actions. Commercial policy is approved; finite operational budget and paid activation gates remain. No new curator grant. Owner founder grant is live; Sagar native identity remains to verify.
+Apple commercial/tax readiness and real purchase acceptance remain incomplete. Reviewed public disclosures and an explicit operating budget are required before activation.
 
 ## Next actions
-1. Run native StoreKit compilation and UI regressions; fix actual failures.
-2. Recent private usage and account-switch reset are implemented; verify final native presentation. Preserve cloud saves and collections without count quotas; local-only persistence expansion is excluded from launch.
-3. Stage/deploy paid-disabled backend and validate purchase settings; run actual sandbox lifecycle checks once Apple setup is available.
-4. Archive/upload 1.1.0 after gates pass; document exact TestFlight availability and physical-device limits.
+1. Owner resolves Apple W-9/Finance and processing bank details. No tax certification by the agent. Email monitoring belongs elsewhere.
+2. Complete product review metadata/US pack availability and reviewed public privacy/terms/retention disclosures.
+3. Run actual Apple purchase/renewal/restore/refund/account-switch/cross-platform wallet scenarios from backend docs/STOREKIT_ACCEPTANCE.md on both devices. Commercial prerequisites and actual Apple-authenticated purchase session remain required.
+4. Obtain explicit finite operating/Sandbox/staff budget and finish free-user cost/alert delivery gates before paid activation. Founder identities remain separately verified.
+5. Preserve source-fidelity UI and validate build 4 on physical devices. Do not rerun paid CI merely for documentation updates.
 
 ## Verification
-Local client 23 tests, typecheck and private-credential/contract-hash boundary checks pass for this checkpoint. The separate 1.1.0 StoreKit native regression passed; real Apple purchase acceptance is still unverified. Billing coordinator tests cover pending/cancelled, verify-before-finish, restore, unfinished evidence, account changes and duplicate operations.
+23 local client tests, typecheck and boundary/hash checks passed again in the signed archive. StoreKit native regressions passed in iPhone 37811589729 and Mac 37811601080 before small retry/history updates; the final archives compiled those updates. Local package version, bundle/public URLs and decoded credential inspection passed. Exact hashes are in docs/RELEASE_1_1_0.md. Full actual Apple sandbox transaction acceptance remains pending.
 
 ## Last checkpoint
-October 8, 2026: added collapsed account-private recent usage in Settings and reset purchase/history state when accounts change. Contract 0.2.1 snapshots match backend bf51099; client typecheck, tests and boundary checks passed. 1.1.0 native StoreKit compilation/regressions passed before these small presentation changes; no 1.1.0 archive uploaded. Shared delivery budget $184.472075 counted/reserved and $315.527925 remaining; backend docs/BUDGET.md authoritative. Production paid dispatch stays off.
+October 8, 2026 after 18:30 UTC: build 4 available internally, updated beta notes and release evidence. Shared delivery total $188.975258 counted/reserved, $311.024742 remaining; backend docs/BUDGET.md is authoritative. Preserve unrelated docs/UI_PARITY.md. No live client changes after archive source 08bd960; this checkpoint updates release documentation.
