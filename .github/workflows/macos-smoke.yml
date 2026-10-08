@@ -1,0 +1,40 @@
+name: macOS native interaction smoke
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  smoke:
+    runs-on: macos-26
+    timeout-minutes: 60
+    env:
+      RCT_NEW_ARCH_ENABLED: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.22.2'
+          cache: npm
+      - run: npm ci
+      - run: npm run verify:boundary
+      - run: pod install --project-directory=macos
+      - run: ruby scripts/add-ui-test-target.rb
+      - name: Start local fixtures and Metro
+        run: |
+          node scripts/native-fixture-server.mjs > fixture.log 2>&1 &
+          npx react-native start --host 127.0.0.1 --port 8081 > metro.log 2>&1 &
+      - name: Exercise actual macOS controls
+        shell: bash
+        run: |
+          set -o pipefail
+          xcodebuild -workspace macos/binder-copy-desktop.xcworkspace -scheme binder-copy-desktop-macOS -configuration Debug -destination 'platform=macOS,arch=arm64' -derivedDataPath build -resultBundlePath native-ui.xcresult ONLY_ACTIVE_ARCH=YES CODE_SIGNING_ALLOWED=YES CODE_SIGN_IDENTITY=- test 2>&1 | tee native-ui.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: macos-interaction-evidence
+          path: |
+            native-ui.xcresult
+            native-ui.log
+            metro.log
+            fixture.log
+          retention-days: 2

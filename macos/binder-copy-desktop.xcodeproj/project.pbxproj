@@ -349,6 +349,8 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
 				INFOPLIST_FILE = "binder-copy-desktop-macos/Info.plist";
+				CODE_SIGN_ENTITLEMENTS = "binder-copy-desktop-macOS/binder-copy-desktop.entitlements";
+				DEVELOPMENT_TEAM = L349AVQ22W;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				OTHER_LDFLAGS = (
@@ -371,6 +373,8 @@
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				INFOPLIST_FILE = "binder-copy-desktop-macos/Info.plist";
+				CODE_SIGN_ENTITLEMENTS = "binder-copy-desktop-macOS/binder-copy-desktop.entitlements";
+				DEVELOPMENT_TEAM = L349AVQ22W;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				OTHER_LDFLAGS = (

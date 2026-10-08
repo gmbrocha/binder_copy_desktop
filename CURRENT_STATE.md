@@ -49,3 +49,8 @@ Finish native runtime and visual checks, including photos, share/file panels, se
 
 2026-10-07 — added a refreshable missing-card list, saved-page thumbnails and bundled legacy deterministic backgrounds from the frozen source renderer. Native Settings now confirms account deletion when the backend advertises support; accepted requests stop draft/autosave writes, clear secure local drafts and sign out. Backend 4d3aeae implements the API with 47 passing tests, but staging remains 59a75a3 and live deletion is not configured. Both client typechecks and JS bundles pass. Native confirmation flow remains unverified. Dependency review is recorded in docs/DEPENDENCY_REVIEW.md; advisories are not claimed resolved. iPhone diagnostic run 37714804608 remains active at def3b4c.
 
+
+## Desktop runtime proof preparation
+
+2026-10-07 — added a manual native XCTest fixture workflow using the actual app, local API/Metro and retained screenshots in xcresult. Connected the existing sandbox/file/network entitlements file to both Mac build configurations; it was previously present without a build-setting reference. Local ad-hoc tests do not prove Apple distribution signing or data-protection Keychain access. iPhone's diagnostic screenshot confirms missing simulator Keychain entitlement, under repair separately. Mac runtime evidence is pending; public-repository runner has no new paid reservation.
+
