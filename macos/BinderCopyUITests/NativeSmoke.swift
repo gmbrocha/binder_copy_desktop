@@ -1,11 +1,24 @@
 import XCTest
 
 final class NativeSmoke: XCTestCase {
+  override func tearDown() {
+    let screen = XCTAttachment(screenshot: XCUIScreen.main.screenshot())
+    screen.name = "Final native screen"
+    screen.lifetime = .keepAlways
+    add(screen)
+    super.tearDown()
+  }
+
+  private func tab(_ name: String, in app: XCUIApplication) -> XCUIElement {
+    // React Native macOS exposes role=tab as an AX Other, not an NSButton.
+    app.descendants(matching: .any).matching(NSPredicate(format: "label == %@", name)).firstMatch
+  }
+
   func testNativeWorkspace() throws {
     continueAfterFailure = false
     let app = XCUIApplication(bundleIdentifier: "com.clearpathsystems.bindercopy")
     app.launch()
-    let builder = app.staticTexts["Build a page"]
+    let builder = app.buttons["A favorite card"]
     XCTAssertTrue(builder.waitForExistence(timeout: 90), app.debugDescription)
     let initial = XCTAttachment(screenshot: app.screenshot())
     initial.name = "Native desktop builder"
@@ -16,12 +29,12 @@ final class NativeSmoke: XCTestCase {
     name.click()
     name.typeKey("a", modifierFlags: .command)
     name.typeText("Desktop test")
-    app.buttons["Cards"].click()
+    tab("Cards", in: app).click()
     XCTAssertTrue(app.buttons["Fixture 1, Demo set"].waitForExistence(timeout: 30), app.debugDescription)
     app.buttons["Fixture 1, Demo set"].click()
-    XCTAssertTrue(app.staticTexts["Card details"].waitForExistence(timeout: 10), app.debugDescription)
+    XCTAssertTrue(app.buttons["Add to collection"].waitForExistence(timeout: 10), app.debugDescription)
     app.buttons["Done"].click()
-    app.buttons["Library"].click()
+    tab("Library", in: app).click()
     XCTAssertTrue(app.buttons["Open Desktop test"].waitForExistence(timeout: 15), app.debugDescription)
     let library = XCTAttachment(screenshot: app.screenshot())
     library.name = "Native desktop Library"

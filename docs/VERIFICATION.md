@@ -15,3 +15,7 @@ Add actual test/build/device/staging/TestFlight evidence here as completed. Neve
 ## 2026-10-07 native parity checkpoint
 
 Actual Mac unsigned Xcode build 37710882761 passed at 44556cd, including native media and font resources; auth checkpoint 37709242736 also passed. Later background/search/Library/draft changes pass 14 tests and TypeScript. No interactive Mac runtime or signed Keychain proof yet.
+
+## Native Mac UI selector correction
+
+37717058682 at a7fe2ef built and launched the native app; its accessibility tree contained the actual builder, page-name field and generation controls. The XCTest failed because plain React Native heading text was not exposed as StaticText on macOS. Test selectors now use observed button labels and AX tab elements. Final screen attachments and extracted screenshot artifacts are retained for the next run. No complete interaction pass is claimed.

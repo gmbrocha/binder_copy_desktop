@@ -28,6 +28,11 @@ jobs:
         run: |
           set -o pipefail
           xcodebuild -workspace macos/binder-copy-desktop.xcworkspace -scheme binder-copy-desktop-macOS -configuration Debug -destination 'platform=macOS,arch=arm64' -derivedDataPath build -resultBundlePath native-ui.xcresult ONLY_ACTIVE_ARCH=YES CODE_SIGNING_ALLOWED=YES CODE_SIGN_IDENTITY=- test 2>&1 | tee native-ui.log
+      - name: Export native screenshots
+        if: always()
+        run: |
+          mkdir -p evidence
+          xcrun xcresulttool export attachments --path native-ui.xcresult --output-path evidence/screenshots || true
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -37,4 +42,5 @@ jobs:
             native-ui.log
             metro.log
             fixture.log
+            evidence
           retention-days: 2

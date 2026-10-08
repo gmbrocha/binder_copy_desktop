@@ -1,66 +1,49 @@
 # Current state — BinderCopy macOS
 
+## Platform checkpoint
+
+React Native macOS 0.83.0 / RN 0.83.10, with native Keychain/photo/save-panel adapters. Actual Xcode compile 37713222138 passed at c4e8848. The first native XCTest attempt 37716056106 compiled the app but failed on an empty generated test-module name; repaired in a7fe2ef. Native UI run 37717058682 compiled and launched the real builder, but failed on a test selector: plain React Native text was absent from the Mac accessibility tree. The recorded tree includes the builder controls. Selectors now target observed buttons and AX tab elements, and screenshots are always attached. No complete native interaction pass is claimed yet.
+
+The existing sandbox/network/user-selected-file entitlement file is now wired into both Mac build configurations. Local ad-hoc test signing does not prove distribution signing or data-protection Keychain access. App Store Connect 6820310010 / com.clearpathsystems.bindercopy / L349AVQ22W. No signed store package or TestFlight upload. Superseded compatibility runs are automatically cancelled.
 ## Objective
 
-Ship the full macOS client through TestFlight, sharing the VPS backend with the other native port. Preserve frozen PWA f35163d behavior and the accepted design.
+Ship the full native client through TestFlight, sharing the OVH backend and preserving frozen PWA f35163d behavior/design. Production remains the PC-hosted PWA until the one-writer cutover gates pass.
 
 ## Verified state
 
-- Repository scaffold, AGENTS.md, durable documentation and CURRENT_STATE commit guard are active. Original PWA runtime/source remains unchanged.
-- React Native macOS 0.83.0 / RN 0.83.10, separate native Keychain, photo and save-panel adapters.
-- Actual unsigned Xcode build passed: 44556cd / run 37710882761; prior auth build 37709242736 also succeeded. No signed build, native UI proof or TestFlight availability is implied.
-- Shared native implementation includes Build / Cards / Library, four generation sources with preview/keep, named page identity, serialized save/Undo, locks, drag swapping, photo color extraction, PNG/CSV export, card prices/curation/history and protected images.
-- This checkpoint adds background preview/keep/reset and retry IDs; artwork palette suggestion; Library rename/duplicate/delete; size-change confirmation; save-conflict recovery; account-scoped encrypted draft recovery; full search filters/interpretation/shared mappings; shared tag management; exact-width card grids and equal action widths.
-- 14 unit tests and typechecks pass for both clients. Complete final iOS and Mac JS bundles pass; actual copied provider-key scans run before commit.
-- Private VPS backend is now 59a75a3, with 45 Linux tests passed. Native tag writes include expected snapshots and reject stale changes. Production remains the original PC-hosted PWA.
-- Contracts/domain helpers 0.1.0 pinned/hash-recorded from backend b04e673. No sibling runtime imports. Copied .env.local remains ignored and provider keys are excluded from native bundles.
+- Build / Cards / Library, compact mobile builder, desktop canvas/sidebar, original branding and shared design roles are implemented.
+- Four generation sources, preview/Keep, named page identity, serialized save/Undo, locks/drag, local photo colors, PNG/CSV exports, appearance/backdrops and encrypted draft recovery are implemented.
+- Library rename/duplicate/delete/thumbnails, missing-card list, card filters/interpretation/prices, shared tag editing/history/Undo and Settings catalog refresh are implemented.
+- Native account deletion is conditional on backend capability, explicitly confirmed, stops autosave/draft writes, clears the local journal and signs out. Live deletion is not configured yet.
+- 14 unit tests per client, TypeScript and full JS bundles pass. Copied provider/admin keys are ignored and excluded; source/artifact scans pass. No new paid AI calls.
+- Shared contract/domain snapshot 0.1.0 is pinned to backend b04e673. No runtime sibling imports.
+- Backend 5fe29e9 is verified private staging: 49 Linux tests, typecheck and paid-disabled health passed. An isolated VPS recovery rehearsal on 21,256 cards preserved deletion tombstones, other-account data and financial safety records. Production remains untouched.
 
 ## Active work
 
-Finish native runtime and visual checks, including photos, share/file panels, secure storage, keyboard, long-hold drag and background display. First iPhone fixture smoke 37713222655 compiled and launched but failed initial builder visibility before exercising controls. A second diagnostic run is reserved; screenshots and runtime logs will be retained. This is real native UI testing against fixture data, not proof of production auth or artwork parity. See docs/PARITY_STATUS.md for remaining gates.
+Native runtime/visual proof and production auth setup. Supabase is now signed in; free organization Clearpath Systems LLC exists. BinderCopy project form is prepared in Oregon with database API disabled. Required browser confirmation for creating credentials is pending.
 
 ## Blockers
 
-- Supabase dashboard is still signed out; owner has an outstanding sign-in request. Live auth project/issuer/email and public API origin are not configured.
-- Apple universal record 6820310010 and identifier com.clearpathsystems.bindercopy exist, team L349AVQ22W. Signing and TestFlight uploads remain pending.
-- Live account deletion, entitlements/monthly metering, founder linking and remaining feature/visual parity are unfinished. Native accounts remain paid-disabled.
-- Transitive Expo/Metro/CLI dependency advisories require triage; do not force-downgrade the framework.
+- Live Supabase project/issuer/public settings, email delivery and authenticated public API are unfinished.
+- Apple distribution signing and TestFlight uploads are pending; simulator/local signing is not store signing.
+- Founder identity linking, entitlements/monthly metering, privacy/support disclosures and final dependency review remain release gates. Native accounts remain paid-disabled.
+- Real-device photo/share/drag and complete visual parity still require verification.
 
 ## Next actions
 
-1. Dispatch improved iPhone simulator diagnostics, inspect the actual screenshot and repair the startup/interaction failure.
-2. Complete native visual parity, missing-card list, Library thumbnails and account lifecycle. Exercise real photo, export, drag, Keychain and draft recovery.
-3. Configure authenticated public VPS access when owner signs into Supabase; sign and upload both platform betas, then verify TestFlight availability.
+1. Complete Supabase project setup after the pending confirmation and configure live auth/backend public settings.
+2. Inspect native runtime evidence, repair observed failures and extend photo/export/drag checks.
+3. Complete release/privacy/account and VPS cutover gates; sign/upload both platforms and verify TestFlight availability.
 
 ## Verification
 
-14/14 tests per client cover save/Undo races, stale generation, locks, photo payload privacy, drag regions, token rotation/logout, interrupted draft writes/account isolation and background retry deduplication. TypeScript passes both versions. Recent Xcode builds passed at the listed commits. No paid AI calls. No physical-device or signed-Keychain proof yet.
+Unit coverage includes save races, stale proposals, locking, local photo payloads, drag geometry, auth rotation/logout, interrupted draft storage and safe background retries. Backend tests independently prove privacy, permissions and spending boundaries. See docs/PARITY_STATUS.md, docs/DEPENDENCY_REVIEW.md and backend docs/ACCOUNT_DELETION.md. Full port completion is not yet claimed.
 
 ## Last checkpoint
 
-2026-10-07 — background, Library, search/curation and recovery checkpoint. Backend 59a75a3 deployed privately after backup, typecheck and 45 tests. iPhone 778687d / Xcode 37710937557 and Mac 44556cd / Xcode 37710882761 passed. Shared counted/reserved delivery budget $121.333235 (includes second simulator diagnostic job), remaining $378.666765. All owner data and old production remain preserved.
+2026-10-07 local — shared counted/reserved budget $130.333235, unreserved $369.666765. Copied keys remain server-only. No physical device, production login or TestFlight proof yet.
 
-## Latest implementation checkpoint
+## Expanded native media checkpoint
 
-2026-10-07 — aligned the builder with the frozen reference: compact mobile sources above the sheet, appearance in Preview, desktop sidebar, source shortcuts, zoom, selected-slot controls and Settings catalog refresh/status. Root dialogs share a single modal route. Both typechecks, 14 tests per client and full bundles pass. Mac c4e8848 Xcode run 37713222138 passed. Actual UI parity remains unverified; the first iPhone smoke failed before controls were exercised.
-
-
-## Library and account lifecycle checkpoint
-
-2026-10-07 — added a refreshable missing-card list, saved-page thumbnails and bundled legacy deterministic backgrounds from the frozen source renderer. Native Settings now confirms account deletion when the backend advertises support; accepted requests stop draft/autosave writes, clear secure local drafts and sign out. Backend 4d3aeae implements the API with 47 passing tests, but staging remains 59a75a3 and live deletion is not configured. Both client typechecks and JS bundles pass. Native confirmation flow remains unverified. Dependency review is recorded in docs/DEPENDENCY_REVIEW.md; advisories are not claimed resolved. iPhone diagnostic run 37714804608 remains active at def3b4c.
-
-
-## Desktop runtime proof preparation
-
-2026-10-07 — added a manual native XCTest fixture workflow using the actual app, local API/Metro and retained screenshots in xcresult. Connected the existing sandbox/file/network entitlements file to both Mac build configurations; it was previously present without a build-setting reference. Local ad-hoc tests do not prove Apple distribution signing or data-protection Keychain access. iPhone's diagnostic screenshot confirms missing simulator Keychain entitlement, under repair separately. Mac runtime evidence is pending; public-repository runner has no new paid reservation.
-
-
-## Secure storage and environment boundary checkpoint
-
-2026-10-07 — expanded copied-key scans to include backend admin/service-role/access-token variants. Secure-storage errors use concise user copy while development logs retain the cause. macOS native XCTest run 37716056106 is active at a3109fb; runtime/Keychain proof is still pending. VPS 4d3aeae is active privately after 47 Linux tests, with production and auth setup unchanged.
-
-
-## macOS XCTest harness repair
-
-2026-10-07 — native UI run 37716056106 compiled/signed the app locally but failed compiling its test bundle because the generated XCTest target had an empty module name. Explicit product/module names now fix the harness configuration; native interactions were not exercised. Superseded compatibility builds are cancelled automatically, while the manual interaction run stays independent. iPhone fixture UI run 37715877594 passed. Supabase free organization is created; project credential provisioning confirmation is pending.
-
+Reserved one additional private iPhone simulator run (maximum 45 minutes) before dispatch to exercise OS photo selection, local color extraction and PNG share-sheet opening. This uses fixture images and no paid API calls; it does not prove the production PNG renderer or real-device delivery. Mac native UI selector repair is ready to rerun; Supabase creation confirmation remains pending.
