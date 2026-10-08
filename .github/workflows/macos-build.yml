@@ -5,6 +5,9 @@ on:
     paths: ['App.tsx', 'src/**', 'macos/**', 'package*.json', '*.config.js', '.github/workflows/macos-build.yml']
 permissions:
   contents: read
+concurrency:
+  group: macos-compatibility-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   build:
     runs-on: macos-26

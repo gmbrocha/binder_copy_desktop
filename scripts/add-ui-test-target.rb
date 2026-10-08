@@ -10,6 +10,7 @@ target.source_build_phase.add_file_reference(group.new_file('NativeSmoke.swift')
 target.build_configurations.each do |configuration|
   configuration.build_settings.merge!({
     'GENERATE_INFOPLIST_FILE' => 'YES', 'SWIFT_VERSION' => '5.0',
+    'PRODUCT_NAME' => 'BinderCopyUITests', 'PRODUCT_MODULE_NAME' => 'BinderCopyUITests',
     'PRODUCT_BUNDLE_IDENTIFIER' => 'com.clearpathsystems.bindercopy.uitests',
     'TEST_TARGET_NAME' => app.name, 'CODE_SIGN_IDENTITY' => '-',
     'CODE_SIGNING_ALLOWED' => 'YES', 'ENABLE_APP_SANDBOX' => 'NO'

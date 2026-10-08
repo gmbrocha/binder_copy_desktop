@@ -59,3 +59,8 @@ Finish native runtime and visual checks, including photos, share/file panels, se
 
 2026-10-07 — expanded copied-key scans to include backend admin/service-role/access-token variants. Secure-storage errors use concise user copy while development logs retain the cause. macOS native XCTest run 37716056106 is active at a3109fb; runtime/Keychain proof is still pending. VPS 4d3aeae is active privately after 47 Linux tests, with production and auth setup unchanged.
 
+
+## macOS XCTest harness repair
+
+2026-10-07 — native UI run 37716056106 compiled/signed the app locally but failed compiling its test bundle because the generated XCTest target had an empty module name. Explicit product/module names now fix the harness configuration; native interactions were not exercised. Superseded compatibility builds are cancelled automatically, while the manual interaction run stays independent. iPhone fixture UI run 37715877594 passed. Supabase free organization is created; project credential provisioning confirmation is pending.
+
