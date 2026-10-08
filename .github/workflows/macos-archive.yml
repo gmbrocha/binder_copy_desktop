@@ -1,0 +1,76 @@
+name: macOS signed App Store archive
+on:
+  workflow_dispatch:
+    inputs:
+      build_number:
+        description: Unused positive App Store build number
+        required: true
+        type: string
+permissions:
+  contents: read
+concurrency:
+  group: macos-store-archive
+  cancel-in-progress: false
+jobs:
+  archive:
+    if: github.repository == 'gmbrocha/binder_copy_desktop' && github.ref == 'refs/heads/main'
+    environment: apple-signing
+    runs-on: macos-26
+    timeout-minutes: 60
+    env:
+      RCT_NEW_ARCH_ENABLED: '1'
+      BINDERCOPY_BUILD_NUMBER: ${{ inputs.build_number }}
+      BINDERCOPY_API_URL: https://bindercopy-api.clearpathsystems.tools
+      BINDERCOPY_AUTH_URL: https://jmxlvjjuiykugraaqrib.supabase.co
+      BINDERCOPY_PUBLISHABLE_KEY: sb_publishable_63GybVNLUPK3E0QkSOIX0w_iPzekFgF
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '22.22.2'
+          cache: npm
+      - run: node scripts/check-release-config.mjs
+      - run: npm ci
+      - run: npm run typecheck && npm test && npm run verify:boundary
+      - run: pod install --project-directory=macos
+      - name: Import App Store signing credentials
+        env:
+          APPLE_DISTRIBUTION_P12: ${{ secrets.APPLE_DISTRIBUTION_P12 }}
+          MAC_INSTALLER_P12: ${{ secrets.MAC_INSTALLER_P12 }}
+          SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
+          MAC_STORE_PROFILE: ${{ secrets.MAC_STORE_PROFILE }}
+        run: bash scripts/import-store-signing.sh
+      - run: ruby scripts/configure-store-signing.rb
+      - name: Archive universal signed release
+        shell: bash
+        run: |
+          set -o pipefail
+          xcodebuild -workspace macos/binder-copy-desktop.xcworkspace -scheme binder-copy-desktop-macOS -configuration Release -destination 'generic/platform=macOS' -archivePath build/BinderCopy.xcarchive ARCHS='arm64 x86_64' ONLY_ACTIVE_ARCH=NO CURRENT_PROJECT_VERSION="$BINDERCOPY_BUILD_NUMBER" BINDERCOPY_API_URL="$BINDERCOPY_API_URL" BINDERCOPY_AUTH_URL="$BINDERCOPY_AUTH_URL" BINDERCOPY_PUBLISHABLE_KEY="$BINDERCOPY_PUBLISHABLE_KEY" archive 2>&1 | tee macos-archive.log
+      - run: python3 scripts/verify-store-archive.py
+      - name: Export App Store installer
+        run: |
+          python3 - <<'PY'
+          import os, plistlib
+          options = {'method': 'app-store-connect', 'destination': 'export', 'teamID': 'L349AVQ22W', 'signingStyle': 'manual', 'signingCertificate': 'Apple Distribution', 'installerSigningCertificate': '3rd Party Mac Developer Installer: Clearpath Systems LLC (L349AVQ22W)', 'manageAppVersionAndBuildNumber': False, 'provisioningProfiles': {'com.clearpathsystems.bindercopy': os.environ['MAC_STORE_PROFILE_UUID']}}
+          with open('build/ExportOptions.plist', 'wb') as stream: plistlib.dump(options, stream)
+          PY
+          set -o pipefail
+          xcodebuild -exportArchive -archivePath build/BinderCopy.xcarchive -exportPath build/export -exportOptionsPlist build/ExportOptions.plist 2>&1 | tee macos-export.log
+      - name: Remove temporary credentials
+        if: always()
+        run: |
+          security delete-keychain "$RUNNER_TEMP/bindercopy-signing.keychain-db" || true
+          rm -f "$RUNNER_TEMP/bindercopy-distribution.p12" "$RUNNER_TEMP/bindercopy-installer.p12" "$RUNNER_TEMP/bindercopy-store.provisionprofile" "$RUNNER_TEMP/bindercopy-profile.plist"
+          if [[ -n "${MAC_STORE_PROFILE_UUID:-}" ]]; then
+            rm -f "$HOME/Library/MobileDevice/Provisioning Profiles/$MAC_STORE_PROFILE_UUID.provisionprofile" "$HOME/Library/Developer/Xcode/UserData/Provisioning Profiles/$MAC_STORE_PROFILE_UUID.provisionprofile"
+          fi
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: bindercopy-macos-store-${{ inputs.build_number }}
+          path: |
+            build/export/*.pkg
+            evidence
+            macos-archive.log
+            macos-export.log
+          retention-days: 3

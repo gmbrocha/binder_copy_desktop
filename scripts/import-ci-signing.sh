@@ -17,7 +17,7 @@ security create-keychain -p "$SIGNING_PASSWORD" "$keychain"
 security set-keychain-settings -lut 21600 "$keychain"
 security unlock-keychain -p "$SIGNING_PASSWORD" "$keychain"
 security import "$p12" -P "$SIGNING_PASSWORD" -A -t cert -f pkcs12 -k "$keychain"
-curl --fail --silent --show-error https://certs.apple.com/wwdrg3.der -o "$RUNNER_TEMP/bindercopy-wwdr.cer"
+curl --fail --silent --show-error https://www.apple.com/certificateauthority/AppleWWDRCAG3.cer -o "$RUNNER_TEMP/bindercopy-wwdr.cer"
 security import "$RUNNER_TEMP/bindercopy-wwdr.cer" -k "$keychain"
 security list-keychains -d user -s "$keychain" "$HOME/Library/Keychains/login.keychain-db"
 security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$SIGNING_PASSWORD" "$keychain" >/dev/null
