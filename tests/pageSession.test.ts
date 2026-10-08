@@ -1,0 +1,30 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { PageSession, newPage } from '../src/features/build/pageSession.ts';
+import type { Page } from '../src/shared/contracts/index.ts';
+test('Undo during delayed save is persisted with the acknowledged revision', async () => {
+  const pending: { page: Page; resolve: (page: Page) => void }[] = [];
+  const session = new PageSession(newPage('draft'), page => new Promise(resolve => pending.push({ page, resolve })), () => {});
+  session.edit(p => ({ ...p, name: 'Moonlit forest' }));
+  const saving = session.save();
+  session.undo();
+  pending[0].resolve({ ...pending[0].page, revision: 1 });
+  await new Promise(resolve => setImmediate(resolve));
+  assert.equal(pending[1].page.name, 'Untitled page');
+  assert.equal(pending[1].page.revision, 1);
+  pending[1].resolve({ ...pending[1].page, revision: 2 });
+  await saving;
+  assert.equal(session.page.name, 'Untitled page');
+  assert.equal(session.page.revision, 2);
+  assert.equal(session.dirty, false);
+});
+test('keeping a generated proposal preserves named draft identity and conflicts preserve local work', async () => {
+  const session = new PageSession(newPage('saved-draft'), async () => { throw new Error('Conflict'); }, () => {});
+  session.edit(p => ({ ...p, name: 'My page' }));
+  session.edit(p => ({ ...p, slots: p.slots.map((s, i) => i ? s : { cardId: 'card-1', locked: true }) }));
+  await assert.rejects(session.save(), /Conflict/);
+  assert.equal(session.page.id, 'saved-draft');
+  assert.equal(session.page.name, 'My page');
+  assert.equal(session.page.slots[0].cardId, 'card-1');
+  assert.equal(session.dirty, true);
+});

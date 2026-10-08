@@ -1,7 +1,7 @@
 node_modules/
 .expo/
 dist/
-build/
+/build/
 coverage/
 .env
 .env.*

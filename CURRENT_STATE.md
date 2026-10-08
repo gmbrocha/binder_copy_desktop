@@ -6,31 +6,36 @@ Ship the native macOS client using React Native macOS, with a required compatibi
 
 ## Verified state
 
-- Existing folder inspected; empty Git repository with the owner-configured origin.
+- Scaffold 2d65f4a committed/pushed to owner-configured public remote. Credentials remain ignored.
 - Baseline PWA and detailed handoff retained unchanged.
 - Three-repository boundary accepted October 7, 2026.
 - Documentation, implementation directories, CI documentation check and CURRENT_STATE commit guard scaffolded.
-- No native binary, new backend deployment, customer auth or billing implementation is complete yet.
+- React Native macOS 0.83.0 with required React Native 0.83.10 initialized, native Xcode project and NSUUID helper added. TypeScript and two delayed-save/conflict tests pass.
+- Metro macOS bundle succeeds with Babel export-namespace transform; this is not an Xcode build.
+- Early Build/Cards/Library vertical slice uses real API search, manual slots, locks, favorite proposals, save/Undo and personal Library. Shared UI copied from the initial iPhone implementation; contract 0.1.0 pinned to backend 384684f with hashes.
+- VPS staging backend 384684f passed 41 Linux tests, backup/restore and CPU visual search. Public production remains the original PWA.
+- New macOS compatibility workflow uses standard macos-26 GitHub runner, which is free for this public repository. No signing credentials supplied. No native binary or TestFlight upload yet.
 
 ## Active work
 
-Scaffold verified; preparing first commit, Linux provisioning and baseline extraction / native dependency proof.
+Prove actual Xcode build on GitHub macOS, then complete native auth and feature/visual parity. This foundation is not feature-complete and is not ready for release.
 
 ## Blockers
 
-- VPS key-based SSH and passwordless sudo verified; application provisioning/migration is next.
+- Release gates: authenticated public API, complete photo/colors/theme/backdrop/export/curation/filter/drag features, native visual/device verification, signing and TestFlight. Current desktop connection is a loopback staging development configuration only.
+- npm reports transitive build-tool advisories; triage before release without force-downgrading React Native.
 - Apple organization membership verified (Clearpath Systems LLC, team L349AVQ22W); app identifiers and actual Mac build access still need verification before signing.
 
 ## Next actions
 
-1. Validate scaffold and enable commit guard.
-2. Validate React Native macOS dependencies and Mac build access; build the resizable native shell and API integration.
-3. Record exact verification and commit/push checkpoint here.
+1. Commit/push native foundation and inspect actual macOS CI result; fix build failures.
+2. Complete authenticated vertical slice and accepted visual system; remove development connection from release configuration.
+3. Finish all PWA behavior parity and release gates, never call JS bundle verification a native binary.
 
 ## Verification
 
-`npm run verify:docs` passed. `npm run setup:hooks` enabled the state-maintenance guard. Historical PWA: 39 tests, typecheck and isolated web build passed; these do not verify this repository.
+`npm run typecheck`, `npm test` (2/2), Metro macOS bundle passed. Xcode compile/device execution pending. Docs and key-boundary checks required at commit.
 
 ## Last checkpoint
 
-2026-10-07 — scaffold checks passed, SSH key access verified, Apple team inspected. Owner authorized full ports with a $500 total cap; shared spend tracked in backend docs/BUDGET.md. Current production remains the PC-hosted PWA; VPS app migration not completed.
+2026-10-07 — native foundation prepared for actual Mac CI. No additional spending. Shared budget lives in backend docs/BUDGET.md. No App Store availability claimed.

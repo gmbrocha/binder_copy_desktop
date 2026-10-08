@@ -10,4 +10,8 @@ Retain the detailed handoff and freeze the PWA source as reference. Each repo us
 
 ## Future decisions
 
+2026-10-07: macOS requires React Native 0.83.10 for react-native-macos 0.83.0, while Expo iPhone uses SDK 57 / RN 0.86.3. Keep runtime versions separate. Contracts and initial presentation/session sources are synchronized explicitly; no sibling imports at runtime. The initial presentation is only a vertical slice, with full parity still required.
+
+Use the existing public repository's standard GitHub macos-26 runner for unsigned build proof before renting a Mac. Official cost and available runner labels: https://docs.github.com/en/actions/reference/runners/github-hosted-runners . Build artifacts/logs contain no provider keys or user data. A CI compile does not replace interactive/device QA.
+
 Append dated context, decision, consequences and verification for consequential choices. Do not use this section as an undifferentiated transcript.

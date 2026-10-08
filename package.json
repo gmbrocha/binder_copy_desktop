@@ -2,12 +2,38 @@
   "name": "binder-copy-desktop",
   "version": "0.1.0",
   "private": true,
-  "type": "module",
   "scripts": {
     "verify:docs": "node scripts/check-docs.mjs",
-    "setup:hooks": "git config core.hooksPath .githooks"
+    "setup:hooks": "git config core.hooksPath .githooks",
+    "start": "react-native start",
+    "macos": "react-native run-macos",
+    "typecheck": "tsc --noEmit",
+    "test": "tsx --test tests/*.test.ts",
+    "verify:boundary": "node scripts/check-client-boundary.mjs",
+    "bundle:macos": "react-native bundle --platform macos --dev false --entry-file index.js --bundle-output .local/main.jsbundle --assets-dest .local/assets"
   },
   "engines": {
     "node": ">=22.16"
+  },
+  "dependencies": {
+    "react": "19.2.0",
+    "react-native": "0.83.10",
+    "react-native-macos": "0.83.0",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.25.2",
+    "@babel/plugin-transform-export-namespace-from": "^7.29.7",
+    "@babel/preset-env": "^7.25.3",
+    "@babel/runtime": "^7.25.0",
+    "@react-native-community/cli": "20.0.0",
+    "@react-native-community/cli-platform-ios": "20.0.0",
+    "@react-native/babel-preset": "0.83.10",
+    "@react-native/metro-config": "0.83.10",
+    "@react-native/typescript-config": "0.83.10",
+    "@types/node": "^26.6.4",
+    "@types/react": "^19.2.0",
+    "tsx": "^4.23.15",
+    "typescript": "^5.8.3"
   }
 }
