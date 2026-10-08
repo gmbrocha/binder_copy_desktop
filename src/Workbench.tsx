@@ -567,7 +567,7 @@ export default function Workbench({
               {item.name}
             </Text>
             <Text numberOfLines={1} style={[s.caption, {paddingRight: picker ? 28 : 0}]}>
-              {item.setName} · {item.number}
+              {item.setName} Â· {item.number}
             </Text>
           </Pressable>
           {picker && <Pressable accessibilityRole="button" accessibilityLabel={`Details for ${item.name}`} onPress={() => setDetail(item)} style={{position: "absolute", right: 0, bottom: 0, width: 32, height: 40, alignItems: "center", justifyContent: "center"}}><Icon name="info" size={18} color={c.muted}/></Pressable>}
@@ -736,7 +736,7 @@ export default function Workbench({
             },
           },
           {
-            label: "A card’s colors",
+            label: "A cardâ€™s colors",
             icon: "droplet" as IconName,
             action: () => {
               setSourceOptions(false);
@@ -808,19 +808,21 @@ export default function Workbench({
         style={{ flex: 1, gap: 4 }}
       >
         <Text numberOfLines={1} style={[s.buttonText, { fontWeight: "600" }]}>
-          {sourceLabel} ▾
+          {sourceLabel} â–¾
         </Text>
         <Text numberOfLines={1} style={s.caption}>
           Replaces the {page.slots.filter((slot) => !slot.locked).length}{" "}
           unlocked slots
         </Text>
       </Pressable>
-      <Button
-        label="Regenerate"
-        icon="shuffle"
-        disabled={busy || page.slots.every((slot) => slot.locked)}
-        onPress={() => run(() => generate({ kind: "repeat" }))}
-      />
+      <View style={desktop ? { width: "100%" } : undefined}>
+        <Button
+          label="Regenerate"
+          icon="shuffle"
+          disabled={busy || page.slots.every((slot) => slot.locked)}
+          onPress={() => run(() => generate({ kind: "repeat" }))}
+        />
+      </View>
     </View>
   ) : !filled ? (
     sourceTiles
@@ -895,7 +897,7 @@ export default function Workbench({
           </Text>
           {selectedCard && (
             <Text numberOfLines={1} style={s.caption}>
-              {selectedCard.setName} · {selectedCard.number}
+              {selectedCard.setName} Â· {selectedCard.number}
             </Text>
           )}
         </Pressable>
@@ -1230,7 +1232,7 @@ export default function Workbench({
                     {session.error
                       ? "Not saved"
                       : session.saving
-                        ? "Saving…"
+                        ? "Savingâ€¦"
                         : session.dirty
                           ? "Unsaved"
                           : "Saved"}
@@ -1302,7 +1304,7 @@ export default function Workbench({
                         <Pressable
                           key={size}
                           accessibilityRole="radio"
-                          accessibilityLabel={`${size} × ${size}`}
+                          accessibilityLabel={`${size} Ã— ${size}`}
                           accessibilityState={{ checked: page.size === size }}
                           disabled={busy}
                           onPress={() => resize(size)}
@@ -1321,7 +1323,7 @@ export default function Workbench({
                               page.size === size && { color: c.text },
                             ]}
                           >
-                            {size}×{size}
+                            {size}Ã—{size}
                           </Text>
                         </Pressable>
                       ))}
@@ -1427,7 +1429,7 @@ export default function Workbench({
               <View style={{ flex: 1, gap: 4 }}>
                 <Text style={s.title}>Library</Text>
                 <Text style={s.caption}>
-                  {bootstrap?.user.name} · only you see this
+                  {bootstrap?.user.name} Â· only you see this
                 </Text>
               </View>
               <Button
@@ -1611,7 +1613,7 @@ export default function Workbench({
                 {picker === "favorite"
                   ? "Pick a favorite card"
                   : picker === "colors"
-                    ? "Choose a card’s colors"
+                    ? "Choose a cardâ€™s colors"
                     : replacement
                       ? `Replace slot ${replacement.target + 1}`
                       : `Fill slot ${selected + 1}`}
@@ -1626,7 +1628,7 @@ export default function Workbench({
                 }}
               />
             </View>
-            {picker === "favorite" && <Text style={s.caption}>We’ll build the page around it.</Text>}
+            {picker === "favorite" && <Text style={s.caption}>Weâ€™ll build the page around it.</Text>}
             {replacement && (
               <View style={[s.row, { gap: 12 }]}>
                 <View style={{ width: 100 }}>
