@@ -109,17 +109,18 @@ final class NativeSmoke: XCTestCase {
     waitUntilGone(app.buttons["Keep this page"], in: app)
     XCTAssertTrue(app.buttons["Export"].waitForExistence(timeout: 10))
     capture("Kept desktop page", in: app)
-    app.buttons["Preview & export"].click()
     XCTAssertTrue(app.buttons["Custom color"].waitForExistence(timeout: 15), app.debugDescription)
     app.buttons["Custom color"].click()
     let hex = app.textFields["Hex color"]
     XCTAssertTrue(hex.waitForExistence(timeout: 10), app.debugDescription)
+    let colorScroll = app.scrollViews.containing(.textField, identifier: "Hex color").firstMatch
+    for _ in 0..<4 { if hex.isHittable { break }; colorScroll.scroll(byDeltaX: 0, deltaY: -300) }
+    XCTAssertTrue(hex.isHittable, app.debugDescription)
     hex.click()
     hex.typeKey("a", modifierFlags: .command)
     hex.typeText("#D7C2F0")
     app.buttons["Apply color"].click()
     capture("Free custom background color", in: app)
-    app.buttons["Builder"].click()
 
     app.buttons["Export"].click()
     app.buttons["Download image"].click()
