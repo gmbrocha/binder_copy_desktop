@@ -18,7 +18,7 @@ Ship the native macOS client using React Native macOS, with a required compatibi
 
 ## Active work
 
-Prove actual Xcode build on GitHub macOS, then complete native auth and feature/visual parity. This foundation is not feature-complete and is not ready for release.
+The first Xcode run (37706764519) failed in the upstream template's Swift initializer: stored properties were assigned after super.init(). Initialization order is corrected; the next CI run must verify it. Then complete native auth and feature/visual parity. This foundation is not feature-complete and is not ready for release.
 
 ## Blockers
 
@@ -38,4 +38,4 @@ Prove actual Xcode build on GitHub macOS, then complete native auth and feature/
 
 ## Last checkpoint
 
-2026-10-07 — native foundation prepared for actual Mac CI. No additional spending. Shared budget lives in backend docs/BUDGET.md. No App Store availability claimed.
+2026-10-07 — corrected Swift initialization after real Xcode failure. Backend 0408b1a is privately staged with 44 passing Linux tests. Apple universal record 6820310010 / com.clearpathsystems.bindercopy exists for both platforms. iPhone simulator build passed separately; Mac compile is being rerun. No additional spending for public-repo CI. Shared budget lives in backend docs/BUDGET.md. No App Store availability claimed.
