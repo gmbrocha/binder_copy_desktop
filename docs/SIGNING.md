@@ -1,6 +1,6 @@
 # macOS signing and native secure-storage gate
 
-App: BinderCopy, com.clearpathsystems.bindercopy, team L349AVQ22W. App Store Connect record 6820310010. Dedicated credentials/profiles produced a universal archive and accepted upload; build 1 is IN_BETA_TESTING.
+App: BinderCopy, com.clearpathsystems.bindercopy, team L349AVQ22W. App Store Connect record 6820310010. Dedicated credentials/profiles produced a universal archive and accepted upload; build 2 is IN_BETA_TESTING; build 1 remains available.
 
 ## Historical blocker (resolved by signed verification)
 
@@ -32,3 +32,13 @@ Signed interaction run 37730901723 failed before the first control query. The sa
 ## Actual release evidence
 
 Version 1.0 build 1: archive 37732288421 at f6f04d0, Apple 0891ef7d-af56-4616-a493-8b36eedef540 VALID / IN_BETA_TESTING. Actual application sandbox/Keychain/network/user-selected-file entitlements, both architectures, package signature and public release settings were verified. Operator key never entered CI.
+
+## October 8 final stabilization release
+
+- iPhone source f91d4077ee957803d8442116a08781121a5b8481: archive 37738717232 and both native interaction flows 37738720783 passed. Version 1.0.0 (2), Apple 92f725fe-4049-420b-bc13-f3342fac002d, VALID / IN_BETA_TESTING. IPA SHA256 56a3055ca76df6893d9e6e33200eefac9484d45267eb97e878d4cad0cbac6ec5.
+- Mac app source 9a13fe9e9d61241ea9508ffedf87617376bb87fd: universal archive 37738724585 passed. Signed workspace/photo/export/cold-restart retry 37741934886 at ccb5e7e passed after precompiling Metro in the test harness; application sources are identical to the archived commit. Version 1.0 (2), Apple 497f2e4e-ac73-4bd8-adae-958819bdf293, VALID / IN_BETA_TESTING. Installer SHA256 8528a8883dd30f7f38d889a8850773eb25e640130c476fcdce94081634ff8212.
+- Both builds are in the existing owner-only internal group; build 1 remains available. No external review, public link or additional tester was added. Physical installation is confirmed only for iPhone build 1.
+- Native API runtime 0234fd3b4502e3744afa57042d6f387af99186d3 is live after backup, 54 Linux tests/typecheck, health and anonymous rejection checks. Fresh live JWT/privacy/deletion, real PNG/CSV and generation/lock/name/ownership probes pass; all three disposable identities removed. Backup timer and loopback-only service binding verified.
+- Local iPhone 16, Mac 17 and backend 54 tests pass (87 total); all typechecks, complete bundles, credential checks and contract hashes pass. Actual release credentials/endpoints/entitlements verified; Mac supports arm64 and x86_64. Native screenshots and real backend PNG visually inspected. Fixture export evidence is distinct from real-output delivery on physical devices.
+- Documentation encoding, stale setup/release instructions and controls guide reconciled. Tracked-file checks find no copied private environment values or signing artifacts. Backend production dependencies have no audit advisories; upstream native build-tool findings remain documented in client DEPENDENCY_REVIEW.md.
+- Shared counted/reserved budget remains $157.333235, leaving $342.666765; no new paid AI usage. Frozen PWA application baseline f35163d is untouched. Its clean checkout is at handoff commit 000b623, which adds documentation only; SOURCE_BASELINE.json records both.

@@ -5,10 +5,10 @@ The frozen PWA f35163d is the product reference. Build / Cards / Library, genera
 | Area | Verified evidence | Remaining proof |
 | --- | --- | --- |
 | Auth/private service | Live Supabase JWT, account isolation, delivered codes, refresh/logout/deletion; VPS backup/restore | Native recovery/account switching and founder roles |
-| iPhone workflow | 37719211595: name/favorite/Keep/lock/save/reopen/details/collection; Photos/colors and share sheet with fixtures | Physical gesture/accessibility/output review |
-| iPhone distribution | 37731984784 signed archive; build 1 in internal testing; owner installed and is using it | Detailed user feedback and full acceptance |
-| Mac persistence | 37733468982: signed workspace and saved reopen after cold restart | Media run 37735539033 passed; physical Mac installation remains |
-| Mac distribution | 37732288421 universal signed package; Apple 0891ef7d-af56-4616-a493-8b36eedef540 VALID | IN_BETA_TESTING; updated build details in CURRENT_STATE |
+| iPhone workflow | 37738720783: name/favorite/Keep/lock/save/reopen/details/collection; Photos/colors and share sheet with fixtures | Physical gesture/accessibility/output review |
+| iPhone distribution | 37738717232 signed archive; build 2 in internal testing; owner installation confirmed for build 1 | Detailed user feedback and full acceptance |
+| Mac persistence | 37741934886: signed workspace, photo/native export and saved reopen after cold restart | Physical Mac installation and real-output acceptance remain |
+| Mac distribution | 37738724585 universal signed package; Apple 497f2e4e-ac73-4bd8-adae-958819bdf293 VALID / IN_BETA_TESTING | Owner physical installation/acceptance |
 | Rendering/generation | Public VPS four-real-card PNG/CSV and locked-seed image generation/save probes | Full native output delivery and visual comparison |
 | Shared curation | API revision/conflict/history/Undo and role tests | Role-enabled native interaction acceptance |
 | Recovery | Atomic account-scoped drafts; serialized saves/Undo and stale Library regression tests | Offline/background termination tests; cold start needs bootstrap |
