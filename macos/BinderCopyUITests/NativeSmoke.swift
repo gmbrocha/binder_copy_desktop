@@ -45,6 +45,19 @@ final class NativeSmoke: XCTestCase {
     library.lifetime = .keepAlways
     add(library)
     XCTAssertFalse(app.buttons["Dismiss error"].exists, "Native persistence must not report a secure-storage or save error: \(app.debugDescription)")
+    app.buttons["Open Desktop test"].click()
+    XCTAssertTrue(builder.waitForExistence(timeout: 15), app.debugDescription)
+    XCTAssertEqual(app.textFields["Page name"].value as? String, "Desktop test")
+    XCTAssertFalse(app.buttons["Dismiss error"].exists, app.debugDescription)
+    app.terminate()
+    app.launch()
+    XCTAssertTrue(builder.waitForExistence(timeout: 30), app.debugDescription)
+    tab("Library", in: app).click()
+    XCTAssertTrue(app.buttons["Open Desktop test"].waitForExistence(timeout: 15), app.debugDescription)
+    app.buttons["Open Desktop test"].click()
+    XCTAssertTrue(builder.waitForExistence(timeout: 15), app.debugDescription)
+    XCTAssertEqual(app.textFields["Page name"].value as? String, "Desktop test")
+    XCTAssertFalse(app.buttons["Dismiss error"].exists, app.debugDescription)
   }
 
   func testNativePhotoAndExport() throws {

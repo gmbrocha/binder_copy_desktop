@@ -1,0 +1,69 @@
+name: macOS signed interaction smoke
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: macos-signed-smoke
+  cancel-in-progress: false
+jobs:
+  smoke:
+    if: github.repository == 'gmbrocha/binder_copy_desktop' && github.ref == 'refs/heads/main'
+    environment: apple-signing
+    runs-on: macos-26-intel
+    timeout-minutes: 60
+    env:
+      RCT_NEW_ARCH_ENABLED: '1'
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '22.22.2'
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck && npm test && npm run verify:boundary
+      - run: pod install --project-directory=macos
+      - name: Import development signing into a temporary Keychain
+        env:
+          MAC_DEVELOPMENT_P12: ${{ secrets.MAC_DEVELOPMENT_P12 }}
+          SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
+          MAC_DEVELOPMENT_PROFILE: ${{ secrets.MAC_DEVELOPMENT_PROFILE }}
+        run: bash scripts/import-ci-signing.sh
+      - run: ruby scripts/add-ui-test-target.rb
+      - name: Start isolated fixtures
+        run: |
+          mkdir -p /tmp/bindercopy-media-results
+          cp assets/brand/icon.png /tmp/bindercopy-native-photo.png
+          node scripts/native-fixture-server.mjs > fixture.log 2>&1 &
+          npx react-native start --host 127.0.0.1 --port 8081 > metro.log 2>&1 &
+      - name: Exercise signed macOS controls and Keychain
+        shell: bash
+        run: |
+          set -o pipefail
+          xcodebuild -workspace macos/binder-copy-desktop.xcworkspace -scheme binder-copy-desktop-macOS -configuration Debug -destination 'platform=macOS,arch=x86_64' -derivedDataPath build -resultBundlePath native-ui.xcresult ONLY_ACTIVE_ARCH=YES test 2>&1 | tee native-ui.log
+      - name: Export native evidence
+        if: always()
+        run: |
+          mkdir -p evidence
+          codesign -d --entitlements :- build/Build/Products/Debug/binder-copy-desktop.app > evidence/app-entitlements.plist 2> evidence/signing-inspection.log || true
+          codesign -dv build/Build/Products/Debug/binder-copy-desktop.app 2>> evidence/signing-inspection.log || true
+          xcrun xcresulttool export attachments --path native-ui.xcresult --output-path evidence/screenshots || true
+      - name: Remove temporary credentials
+        if: always()
+        run: |
+          security delete-keychain "$RUNNER_TEMP/bindercopy-signing.keychain-db" || true
+          rm -f "$RUNNER_TEMP/bindercopy-development.p12" "$RUNNER_TEMP/bindercopy-profile.provisionprofile" "$RUNNER_TEMP/bindercopy-profile.plist"
+          if [[ -n "${MAC_PROFILE_UUID:-}" ]]; then
+            rm -f "$HOME/Library/MobileDevice/Provisioning Profiles/$MAC_PROFILE_UUID.provisionprofile" "$HOME/Library/Developer/Xcode/UserData/Provisioning Profiles/$MAC_PROFILE_UUID.provisionprofile"
+          fi
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: macos-signed-interaction-evidence
+          path: |
+            native-ui.xcresult
+            native-ui.log
+            metro.log
+            fixture.log
+            evidence
+          retention-days: 2

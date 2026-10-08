@@ -20,18 +20,23 @@ Ship the full native macOS client through TestFlight alongside iPhone, using the
 
 Extend Mac native XCTest through NSOpenPanel photo selection, colors-only generation, Keep and NSSavePanel export, checking the actual saved PNG bytes. This checks adapters with a fixture; production render fidelity remains a separate gate. Run 37720140611's evidence is retained under .local/native-smoke-37720140611. Media run 37721275072 at 940dcaa failed reopening the saved page: the Keychain deletion failure kept Library active, so no photo/export steps ran. Screenshot/log evidence is retained under .local/native-smoke-37721275072. Native compatibility run 37722303026 at 14065ca passed; do not claim the entitlement change fixes runtime storage yet. See docs/SIGNING.md.
 
+## Signing checkpoint
+
+Apple key 7QPC2737Q6 now authenticates successfully; dedicated development/distribution/installer certificates and BinderCopy profiles exist. Only development material is installed as encrypted GitHub secrets in the main-only apple-signing environment. A manual workflow uses pinned official actions and GitHub's fixed Intel Mac identity, imports into a temporary Keychain, verifies saved-page reopen/cold restart plus photo/export, and deletes signing material afterwards. The workflow is prepared; no signed runtime result yet. The App Store API key remains local to the protected backend operator directory.
+
+Public API https://bindercopy-api.clearpathsystems.tools now passes real Supabase JWT, two-account privacy, paid denial and deletion checks. Supabase project jmxlvjjuiykugraaqrib is active; Zoho email delivery and both new/returning delivered codes pass with 900-second sessions. Native UI login remains unverified. Native runtime on VPS remains fa603e1.
+
 ## Blockers
 
-- Supabase project jmxlvjjuiykugraaqrib is active, with ES256 JWTs, anonymous sign-in disabled, email confirmation required and a 900-second token lifetime. Live backend code verification/refresh/privacy/logout/deletion probe passed using two disposable identities, both removed. Actual email/native login remains pending.
-- Transactional email setup (Zoho CPaaS terms confirmation), authenticated public API and founder identity linking remain unfinished.
-- Apple API access is enabled and owner approved BinderCopy releases App Manager key G5BZLPY265. Browser one-time download timed out without a file path; owner asked to recover .p8. No usable local signing credential yet; existing Expo key untouched.
-- Physical-device/drag/complete visual proof, privacy/support disclosures and final dependency review remain release gates. Native paid API access stays disabled for every role.
+- Signed Mac persistence/media runtime proof and real native email-login checks remain release gates, not credential-download blockers.
+- Founder linking/catalog one-writer migration, complete visual/gesture evidence, privacy/support and rights/dependency review remain unfinished. Native paid dispatch stays disabled for every role.
+- Zoho customer review is pending; initial email delivery works within its 100/day trial limit.
 
 ## Next actions
 
-1. Recover the authorized signing credential and verify secure storage; rerun separate workspace/media tests and finish drag/focus/parity proof.
-2. Finish transactional email delivery and actual native login before external testers. Backend live provider checks passed; see backend CURRENT_STATE.md.
-3. Complete backup/one-writer/public API gates, signing and both TestFlight uploads; verify actual beta availability.
+1. Dispatch and inspect the signed Intel Mac native workspace/media tests; repair verified failures.
+2. Build distribution archives using public production settings, verify native auth and scoped parity.
+3. Finish beta gates, upload both platforms and verify actual TestFlight availability.
 
 ## Verification
 
@@ -39,4 +44,4 @@ The passing Mac test uses actual native controls and local disposable fixtures. 
 
 ## Last checkpoint
 
-2026-10-07 local — counted/reserved $134.833235, unreserved $365.166765 across all repos. Public Mac CI is free; private iOS reservations remain conservative pending billing reconciliation. No new paid AI calls.
+2026-10-07 local — counted/reserved $134.833235, unreserved $365.166765 across all repos. Public Mac CI is free; private iOS reservations remain conservative pending billing reconciliation. No new paid AI calls or paid CI reservation for this public-repository Mac workflow.

@@ -1,6 +1,6 @@
 # macOS signing and native secure-storage gate
 
-App: BinderCopy, com.clearpathsystems.bindercopy, team L349AVQ22W. App Store Connect record 6820310010. No distribution credential or upload exists yet.
+App: BinderCopy, com.clearpathsystems.bindercopy, team L349AVQ22W. App Store Connect record 6820310010. Dedicated distribution credentials/profiles exist; no archive or upload yet.
 
 ## Observed blocker
 
@@ -8,7 +8,9 @@ Native run 37720140611 passed the selected controls but its Library screenshot s
 
 The app now declares its own `$(AppIdentifierPrefix)$(PRODUCT_BUNDLE_IDENTIFIER)` Keychain access group. The native bridge preserves the OSStatus in the NSError without including stored values. Native workspace tests now fail when an error banner is present. Actual signed application entitlements, not just the source plist, must show the expected application identifier, team and Keychain group. The CI evidence step exports the actual entitlements and signing inspection. The entitlement change is not claimed to resolve runtime storage until tested with valid signing/provisioning.
 
-Apple API access is enabled. Owner approved BinderCopy releases App Manager team key G5BZLPY265 for BinderCopy-only automation. The browser download event timed out after Apple marked the key downloaded; the credential file has not been located. Owner recovery is pending. Do not claim signing access or duplicate/revoke keys without resolving that outcome. Existing Expo key is untouched and unavailable in the current EAS account. Unsigned native compile 37722303026 at 14065ca passed; signed runtime storage remains unverified.
+The usable App Manager key is 7QPC2737Q6, issuer 17312427-fdd0-4294-8c67-90655e47bd58. The owner downloaded it through external Chrome; Apple API authentication passed. Failed-download keys G5BZLPY265/XRGYNN2AZG are revoked and unrelated Expo resources are unchanged. Backend docs/APPLE_RELEASE.md records the new dedicated distribution/development/installer certificates and profiles. Secrets remain in ACL-restricted ignored local storage and the main-only GitHub apple-signing environment.
+
+The manual macos-signed-smoke workflow uses GitHub's fixed Intel UDID and a dedicated development profile, without uploading the Apple API key to CI. It pins official actions, guards repository/main, checks runner identity, imports into a temporary Keychain, and cleans credentials even after failure. Tests now reopen a saved page and repeat after app restart, with error-banner assertions. Its first signed run remains pending. Unsigned native compile 37722303026 is still the latest verified compile.
 
 ## Release sequence
 
