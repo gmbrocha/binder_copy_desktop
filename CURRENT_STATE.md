@@ -13,6 +13,8 @@ Deliver the owner-approved 1.1.0 native experience and paid-launch specification
 
 ## Active work
 
+Owner screenshot regressions: color generation repeated the only cached match; server now hydrates a bounded shortlist and never auto-repeats cards in color proposals, keeping locks and remaining slots on shortfall. Native empty slots now use full cream plus/numbers and four cream corner brackets. Backend 99 tests/typecheck and native 23/24 tests/typechecks/boundary checks passed locally. Deployment, iPhone visual verification and build-8 archives are next. $9 additionally reserved for two iPhone workflows; shared budget $328.475258 counted/reserved, $171.524742 remaining. No image-provider call needed for these changes.
+
 Medium presets and adaptive overlays are complete, deployed and available in build 7. Remaining work is the commercial launch gates below; no unrequested paid dispatch or public release. See docs/CUSTOM_COLORS.md.
 
 Native StoreKit 2 bridges support subscriptions/consumables, account tokens, localized offers, restore/manage and verify-before-finish. Recovery retains unfinished evidence, handles account switches and never initiates a purchase on launch. Settings history resets by account. Both client release archives passed tests/typecheck, native compilation, signature/entitlement and credential/contract checks.

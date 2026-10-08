@@ -239,17 +239,12 @@ export default function PageSheet({
             }}
             style={[
               s.slot,
-              !slot.cardId && {
-                borderWidth: 1,
-                borderStyle: "dashed",
-                borderColor: "#858c864d",
-              },
               selected >= 0 && selected !== i && { opacity: 0.82 },
               {
                 borderColor:
-                  target === i || selected === i ? colors.text : slot.cardId ? "transparent" : "#858c864d",
+                  target === i || selected === i ? overlayInk.cream : "transparent",
                 borderWidth:
-                  target === i || selected === i ? 2 : slot.cardId ? 0 : 1,
+                  target === i || selected === i ? 2 : 0,
               },
             ]}
           >
@@ -260,12 +255,18 @@ export default function PageSheet({
                 style={{ width: "100%", height: "100%" }}
               />
             ) : (
-              <View style={{ alignItems: "center", gap: 2 }}>
-                <Icon name="plus" size={18} color={colors.muted} />
-                <Text style={{ color: colors.muted, fontSize: 12 }}>
-                  {i + 1}
-                </Text>
-              </View>
+              <>
+                <View pointerEvents="none" style={[s.corner, s.topLeft]} />
+                <View pointerEvents="none" style={[s.corner, s.topRight]} />
+                <View pointerEvents="none" style={[s.corner, s.bottomLeft]} />
+                <View pointerEvents="none" style={[s.corner, s.bottomRight]} />
+                <View style={{ alignItems: "center", gap: 2 }}>
+                  <Icon name="plus" size={18} color={overlayInk.cream} />
+                  <Text style={{ color: overlayInk.cream, fontSize: 12 }}>
+                    {i + 1}
+                  </Text>
+                </View>
+              </>
             )}
           </Pressable>
           {selected === i && onSelect && (
@@ -319,6 +320,11 @@ const s = StyleSheet.create({
     overflow: "hidden",
   },
   position: { position: "absolute" },
+  corner: { position: "absolute", width: 12, height: 12, borderColor: overlayInk.cream },
+  topLeft: { top: 0, left: 0, borderTopWidth: 1.5, borderLeftWidth: 1.5 },
+  topRight: { top: 0, right: 0, borderTopWidth: 1.5, borderRightWidth: 1.5 },
+  bottomLeft: { bottom: 0, left: 0, borderBottomWidth: 1.5, borderLeftWidth: 1.5 },
+  bottomRight: { bottom: 0, right: 0, borderBottomWidth: 1.5, borderRightWidth: 1.5 },
   slot: {
     width: "100%",
     height: "100%",
