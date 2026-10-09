@@ -58,3 +58,10 @@ The owner considers the apps finished and requests free unlisted distribution to
 Replace the retiring image model with a supported, verified replacement and versioned rates. This supersedes the Mini-only and benchmark-backlog restriction. Legacy subscriptions/credits and the original $5/$52.17 ledgers remain historical; they must not constrain the new approved policy or be rewritten as fresh funds. The development budget remains separate.
 
 Submit finished iPhone/macOS releases to App Review with unlisted intent, keep release manual pending Apple's unlisted decision, and submit Apple's unlisted request. After native availability is confirmed, archive and sunset the PWA, its Windows tunnel and PWA-only Cloudflare resources under F:/Desktop/m; preserve shared native API, authentication, email, DNS and user data. Apple review is external, not instant.
+
+
+## 2026-10-08 local / October 9 UTC - reference images, in-app-only output and reviewer access
+
+Owner describes BinderCopy as an independent, free collection visualization/management tool with reference images analogous to media-library thumbnails. Generated backgrounds are explicitly user-requested and are not sold. Add accurate attribution/non-affiliation information. Do not assert that another app or a general fair-use precedent guarantees this exact use, or that a license was provided.
+
+Remove PNG/CSV export, file downloads, sharing and external save controls, while retaining private in-app pages/collection storage under the stated everything-stays-in-app purpose. Remove native service export routes; the frozen PWA is untouched pending retirement. Normal page preview and background generation remain. Owner approved standard password sign-in for a dedicated non-admin Apple review identity; existing email-code sign-in remains the default. No bypass token, hard-coded password or special staff grant. Review account receives the normal $5 monthly allowance.

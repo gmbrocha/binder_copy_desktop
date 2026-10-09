@@ -106,7 +106,7 @@ final class NativeSmoke: XCTestCase {
     XCTAssertFalse(app.buttons["Dismiss error"].exists, app.debugDescription)
   }
 
-  func testNativePhotoAndExport() throws {
+  func testNativePhotoAndPreview() throws {
     continueAfterFailure = false
     let app = XCUIApplication(bundleIdentifier: "com.clearpathsystems.bindercopy")
     app.launch()
@@ -122,7 +122,8 @@ final class NativeSmoke: XCTestCase {
     capture("Photo proposal", in: app)
     app.buttons["Keep this page"].click()
     waitUntilGone(app.buttons["Keep this page"], in: app)
-    XCTAssertTrue(app.buttons["Export"].waitForExistence(timeout: 10))
+    XCTAssertTrue(app.buttons["Preview"].waitForExistence(timeout: 10))
+    XCTAssertFalse(app.buttons["Export"].exists)
     capture("Kept desktop page", in: app)
     XCTAssertTrue(app.buttons["Custom color"].waitForExistence(timeout: 15), app.debugDescription)
     app.buttons["Custom color"].click()
@@ -137,20 +138,11 @@ final class NativeSmoke: XCTestCase {
     app.buttons["Apply color"].click()
     capture("Free custom background color", in: app)
 
-    app.buttons["Export"].click()
-    app.buttons["Download image"].click()
-    XCTAssertTrue(app.windows.buttons["OKButton"].waitForExistence(timeout: 15), app.debugDescription)
-    app.typeKey("g", modifierFlags: [.command, .shift])
-    app.typeText("/tmp/bindercopy-media-results")
-    app.typeKey(.return, modifierFlags: [])
-    app.windows.buttons["OKButton"].click()
-    let exported = URL(fileURLWithPath: "/tmp/bindercopy-media-results/BinderCopy.png")
-    let saved = expectation(for: NSPredicate { _, _ in FileManager.default.fileExists(atPath: exported.path) }, evaluatedWith: nil)
-    wait(for: [saved], timeout: 10)
-    XCTAssertEqual(try Data(contentsOf: exported), try Data(contentsOf: URL(fileURLWithPath: "/tmp/bindercopy-native-photo.png")))
-    let media = XCTAttachment(screenshot: app.screenshot())
-    media.name = "Native photo generation and saved PNG"
-    media.lifetime = .keepAlways
-    add(media)
+    app.buttons["Preview"].click()
+    XCTAssertTrue(app.buttons["Missing list"].waitForExistence(timeout: 15))
+    XCTAssertFalse(app.buttons["Download image"].exists)
+    app.buttons["Missing list"].click()
+    XCTAssertFalse(app.buttons["Export CSV"].exists)
+    capture("In-app preview and missing list", in: app)
   }
 }

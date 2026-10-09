@@ -30,6 +30,7 @@ export default function SettingsPanel({
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [confirmDelete, setConfirmDelete] = useState(false);
+  const [legalOpen, setLegalOpen] = useState(false);
   const pending = useRef(false);
   useEffect(() => {
     if (!bootstrap?.catalog?.running) return;
@@ -128,6 +129,15 @@ export default function SettingsPanel({
             onPress={() => run(async () => onBootstrap(await api.bootstrap()))}
           />
         )}
+      </View>
+      <View style={s.panel}>
+        <Action label={legalOpen ? "Close legal information" : "Legal & attribution"} disabled={busy || blocked} onPress={() => setLegalOpen(!legalOpen)} />
+        {legalOpen && <>
+          <Text style={s.heading}>Independent collection tool</Text>
+          <Text style={s.body}>BinderCopy is a free, independent tool for visualizing and organizing personal card collections. Card names and reference images identify the cards in your collection. Card artwork and trademarks belong to their respective owners.</Text>
+          <Text style={s.body}>BinderCopy is not affiliated with, endorsed by or sponsored by The Pokémon Company, Nintendo, Creatures or GAME FREAK. Catalog data and reference images are provided through TCGdex.</Text>
+          <Text style={s.body}>Background artwork is generated at your request. BinderCopy does not sell card artwork or generated backgrounds, and does not offer file exports or downloads. Pages and collections are managed inside the app.</Text>
+        </>}
       </View>
       {onDeleteAccount && bootstrap?.capabilities?.deleteAccount && <View style={s.panel}>
         {confirmDelete ? <>

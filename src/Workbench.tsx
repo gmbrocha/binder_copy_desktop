@@ -45,7 +45,7 @@ import {
   type Inspiration,
   type Proposal,
 } from "./features/build/generation";
-import { pickPhotoColors, saveExport } from "./platform/media";
+import { pickPhotoColors } from "./platform/media";
 import { colors as c, type as typography } from "./design/tokens";
 
 function Button({
@@ -155,7 +155,6 @@ export default function Workbench({
   const [themeOpen, setThemeOpen] = useState(false);
   const [theme, setTheme] = useState("");
   const [preview, setPreview] = useState(false);
-  const [exportOpen, setExportOpen] = useState(false);
   const [missingOpen, setMissingOpen] = useState(false);
   const busyRef = useRef(false);
   const closingAccount = useRef(false);
@@ -499,14 +498,6 @@ export default function Workbench({
       )
         throw new Error("Your page changed. Choose the photo again.");
       await generate({ kind: "photo", colors });
-    });
-  const exportPage = (format: "png" | "csv") =>
-    run(async () => {
-      if (!page.slots.some((slot) => slot.cardId))
-        throw new Error("Add a card to export.");
-      const data = await api.export(session.page, format);
-      await saveExport(data, format);
-      setExportOpen(false);
     });
   const more = () =>
     run(async () => {
@@ -1024,13 +1015,6 @@ export default function Workbench({
         disabled={!filled || busy}
         onPress={() => setPreview(true)}
       />
-      <Button
-        label="Export"
-        disabled={busy}
-        onPress={() =>
-          filled ? setExportOpen(true) : setError("Add a card to export.")
-        }
-      />
     </View>
   );
   const activeDialog = nameOpen
@@ -1051,9 +1035,7 @@ export default function Workbench({
                   ? "sources"
                   : missingOpen
                     ? "missing"
-                    : exportOpen
-                      ? "export"
-                      : preview
+                    : preview
                         ? "preview"
                         : settings
                           ? "settings"
@@ -1070,7 +1052,6 @@ export default function Workbench({
       setReplacement(null);
     } else if (activeDialog === "theme") setThemeOpen(false);
     else if (activeDialog === "sources") setSourceOptions(false);
-    else if (activeDialog === "export") setExportOpen(false);
     else if (activeDialog === "missing") setMissingOpen(false);
     else if (activeDialog === "preview") setPreview(false);
     else setSettings(false);
@@ -1504,7 +1485,7 @@ export default function Workbench({
           {selected < 0 && (
             <Button
               icon="eye"
-              label="Preview & export"
+              label="Preview"
               primary
               disabled={!filled || busy}
               onPress={() => setPreview(true)}
@@ -1867,15 +1848,6 @@ export default function Workbench({
                   onPress={() => setMissingOpen(true)}
                 />
               </View>
-              <View style={{ flex: 1.4 }}>
-                <Button
-                  label="Download image"
-                  icon="download"
-                  primary
-                  disabled={busy}
-                  onPress={() => exportPage("png")}
-                />
-              </View>
             </View>
           </ScreenInsets>
         )}
@@ -1891,28 +1863,6 @@ export default function Workbench({
               onClose={() => {
                 if (!busy) setMissingOpen(false);
               }}
-              onExport={() => exportPage("csv")}
-            />
-          </View>
-        )}
-        {activeDialog === "export" && (
-          <View style={s.modal}>
-            {modalStatus}
-            <Text style={s.title}>Export</Text>
-            <Button
-              label="Download image"
-              disabled={busy}
-              onPress={() => exportPage("png")}
-            />
-            <Button
-              label="Missing list (CSV)"
-              disabled={busy}
-              onPress={() => exportPage("csv")}
-            />
-            <Button
-              label="Done"
-              disabled={busy}
-              onPress={() => setExportOpen(false)}
             />
           </View>
         )}

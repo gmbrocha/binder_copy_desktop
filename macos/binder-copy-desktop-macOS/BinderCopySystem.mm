@@ -101,23 +101,4 @@ RCT_EXPORT_METHOD(pickPhotoPixels:(RCTPromiseResolveBlock)resolve rejecter:(RCTP
     }];
   });
 }
-RCT_EXPORT_METHOD(saveExport:(NSString *)base64 format:(NSString *)format resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
-  if ((! [format isEqualToString:@"png"] && ![format isEqualToString:@"csv"]) || base64.length > 80000000) { reject(@"export_format", @"Unsupported export.", nil); return; }
-  NSData *data = [[NSData alloc] initWithBase64EncodedString:base64 options:0];
-  if (!data) { reject(@"export_data", @"Export could not be read.", nil); return; }
-  dispatch_async(dispatch_get_main_queue(), ^{
-    NSSavePanel *panel = [NSSavePanel savePanel];
-    panel.nameFieldStringValue = [@"BinderCopy." stringByAppendingString:format];
-    panel.allowedContentTypes = @[[format isEqualToString:@"png"] ? UTTypePNG : UTTypeCommaSeparatedText];
-    [panel beginWithCompletionHandler:^(NSModalResponse response) {
-      if (response != NSModalResponseOK || !panel.URL) { resolve(@NO); return; }
-      BOOL scoped = [panel.URL startAccessingSecurityScopedResource];
-      NSError *error = nil;
-      BOOL saved = [data writeToURL:panel.URL options:NSDataWritingAtomic error:&error];
-      if (scoped) [panel.URL stopAccessingSecurityScopedResource];
-      if (!saved) { reject(@"export_write", @"The file could not be saved.", error); return; }
-      resolve(@YES);
-    }];
-  });
-}
 @end

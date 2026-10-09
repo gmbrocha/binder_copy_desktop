@@ -9,6 +9,8 @@ export default function AuthGate({ auth, children }: { auth: NativeAuth; childre
   const [email, setEmail] = useState('');
   const [sentTo, setSentTo] = useState('');
   const [code, setCode] = useState('');
+  const [password, setPassword] = useState('');
+  const [passwordMode, setPasswordMode] = useState(false);
   const [busy, setBusy] = useState(false);
   const pending = useRef(false);
   const [error, setError] = useState('');
@@ -28,7 +30,7 @@ export default function AuthGate({ auth, children }: { auth: NativeAuth; childre
     if (pending.current || busy) return;
     pending.current = true;
     setBusy(true); setError('');
-    try { await action(); } catch { setError(sentTo ? 'That code could not be verified. Check it or request another.' : 'Could not send a code. Check your email and try again.'); }
+    try { await action(); } catch { setError(passwordMode ? 'Could not sign in. Check your email and password.' : sentTo ? 'That code could not be verified. Check it or request another.' : 'Could not send a code. Check your email and try again.'); }
     finally { pending.current = false; setBusy(false); }
   };
   const send = () => run(async () => {
@@ -37,15 +39,23 @@ export default function AuthGate({ auth, children }: { auth: NativeAuth; childre
     if (Date.now() < retryAt) { setError('Please wait a minute before requesting another code.'); return; }
     await auth.sendCode(normalized); setSentTo(normalized); setCode(''); setRetryAt(Date.now() + 60_000);
   });
+  const signInPassword = () => run(async () => {
+    const normalized = email.trim().toLowerCase();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalized) || !password) { setError('Enter your email and password.'); return; }
+    try { await auth.signInWithPassword(normalized, password); } finally { setPassword(''); }
+  });
+  const submit = passwordMode ? signInPassword : sentTo ? () => run(() => auth.verifyCode(sentTo, code.trim())) : send;
   if (identity === undefined) return <View style={s.center}><LoadingTask /></View>;
   if (identity) return <React.Fragment key={identity}>{children(identity)}</React.Fragment>;
   return <KeyboardAvoidingView style={s.center} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
     <View style={s.form}>
       <Image source={require('../../assets/brand/wordmark.png')} accessibilityLabel="BinderCopy" style={{ width: 240, height: 58, alignSelf: 'center' }} resizeMode="contain" />
       <Text style={s.title}>{sentTo ? 'Check your email' : 'Sign in'}</Text>
-      {sentTo ? <><Text style={s.body}>{sentTo}</Text><TextInput accessibilityLabel="Email code" placeholder="Email code" placeholderTextColor={c.muted} value={code} onChangeText={setCode} textContentType="oneTimeCode" keyboardType="number-pad" autoComplete="one-time-code" maxLength={10} style={s.input} onSubmitEditing={() => run(() => auth.verifyCode(sentTo, code.trim()))} /></> : <TextInput accessibilityLabel="Email address" placeholder="Email address" placeholderTextColor={c.muted} value={email} onChangeText={setEmail} autoCapitalize="none" autoCorrect={false} textContentType="emailAddress" keyboardType="email-address" style={s.input} onSubmitEditing={send} />}
+      {sentTo ? <><Text style={s.body}>{sentTo}</Text><TextInput accessibilityLabel="Email code" placeholder="Email code" placeholderTextColor={c.muted} value={code} onChangeText={setCode} textContentType="oneTimeCode" keyboardType="number-pad" autoComplete="one-time-code" maxLength={10} style={s.input} onSubmitEditing={() => run(() => auth.verifyCode(sentTo, code.trim()))} /></> : <TextInput accessibilityLabel="Email address" placeholder="Email address" placeholderTextColor={c.muted} value={email} onChangeText={setEmail} autoCapitalize="none" autoCorrect={false} textContentType="emailAddress" keyboardType="email-address" editable={!busy} style={s.input} onSubmitEditing={submit} />}
+      {passwordMode && <TextInput accessibilityLabel="Password" placeholder="Password" placeholderTextColor={c.muted} value={password} onChangeText={setPassword} secureTextEntry textContentType="password" autoComplete="current-password" autoCapitalize="none" autoCorrect={false} editable={!busy} style={s.input} onSubmitEditing={signInPassword} />}
       {!!error && <Text accessibilityRole="alert" style={s.error}>{error}</Text>}
-      <Pressable accessibilityRole="button" disabled={busy} onPress={sentTo ? () => run(() => auth.verifyCode(sentTo, code.trim())) : send} style={[s.button, busy && { opacity: 0.5 }]}><Text style={s.label}>{busy ? 'Please wait…' : sentTo ? 'Sign in' : 'Send code'}</Text></Pressable>
+      <Pressable accessibilityRole="button" disabled={busy} onPress={submit} style={[s.button, busy && { opacity: 0.5 }]}><Text style={s.label}>{busy ? 'Please wait…' : passwordMode || sentTo ? 'Sign in' : 'Send code'}</Text></Pressable>
+      {!sentTo && <Pressable accessibilityRole="button" disabled={busy} onPress={() => { setPasswordMode(!passwordMode); setPassword(''); setCode(''); setError(''); }} style={s.secondary}><Text style={s.body}>{passwordMode ? 'Use email code' : 'Use password'}</Text></Pressable>}
       {!!sentTo && <View style={s.row}><Pressable accessibilityRole="button" disabled={busy} onPress={() => { setSentTo(''); setError(''); setCode(''); }} style={s.secondary}><Text style={s.body}>Change email</Text></Pressable><Pressable accessibilityRole="button" disabled={busy} onPress={send} style={s.secondary}><Text style={s.body}>Resend code</Text></Pressable></View>}
     </View>
   </KeyboardAvoidingView>;

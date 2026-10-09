@@ -43,3 +43,28 @@ test('sign out removes secure storage and never logs out other devices', async (
   assert.equal(storage.values.has('bindercopy.session'), false);
   auth.client.auth.stopAutoRefresh();
 });
+
+
+test('password sign-in uses the provider grant and persists only the resulting session', async () => {
+  const storage = store();
+  const auth = createNativeAuth(url, publicKey, storage, async (input, init) => {
+    assert.match(String(input), /\/token\?grant_type=password$/);
+    const body = JSON.parse(String(init?.body));
+    assert.equal(body.email, 'review@example.invalid');
+    assert.equal(body.password, 'fixture-password-only');
+    return new Response(JSON.stringify(session(Math.floor(Date.now()/1000)+3600)), {status:200,headers:{'Content-Type':'application/json'}});
+  });
+  await auth.signInWithPassword('review@example.invalid','fixture-password-only');
+  assert.equal(await auth.accessToken(),'fixture-access');
+  assert.ok([...storage.values.values()].every(value => !value.includes('fixture-password-only')));
+  auth.client.auth.stopAutoRefresh();
+});
+
+test('rejected password creates no authenticated session', async () => {
+  const storage = store();
+  const auth = createNativeAuth(url, publicKey, storage, async () => new Response(JSON.stringify({error:'invalid_grant',error_description:'Invalid login credentials'}),{status:400,headers:{'Content-Type':'application/json'}}));
+  await assert.rejects(auth.signInWithPassword('review@example.invalid','wrong-fixture'));
+  assert.equal(await auth.accessToken(),null);
+  assert.equal(storage.values.has('bindercopy.session'),false);
+  auth.client.auth.stopAutoRefresh();
+});

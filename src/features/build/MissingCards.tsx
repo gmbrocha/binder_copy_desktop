@@ -16,13 +16,11 @@ export default function MissingCards({
   page,
   onCard,
   onClose,
-  onExport,
 }: {
   api: ApiClient;
   page: Page;
   onCard: (card: Card) => void;
   onClose: () => void;
-  onExport: () => void;
 }) {
   const [cards, setCards] = useState<Card[]>([]);
   const [loading, setLoading] = useState(true);
@@ -128,7 +126,6 @@ export default function MissingCards({
               </Pressable>
             )}
           />
-          {button("Export CSV", onExport)}
         </>
       )}
     </View>

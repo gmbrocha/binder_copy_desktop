@@ -31,6 +31,10 @@ export function createNativeAuth(url: string, publishableKey: string, storage: S
       const { error } = await client.auth.verifyOtp({ email, token, type: 'email' });
       if (error) throw error;
     },
+    async signInWithPassword(email: string, password: string) {
+      const { error } = await client.auth.signInWithPassword({ email, password });
+      if (error) throw error;
+    },
     async signOut() {
       const { error } = await client.auth.signOut({ scope: 'local' });
       if (error) throw error;
