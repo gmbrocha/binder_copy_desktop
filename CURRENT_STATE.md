@@ -12,13 +12,15 @@ Ship BinderCopy iPhone and macOS free through Apple unlisted distribution, prese
 - Offline recovery drill preserved deletion denial, unrelated pages, usage, immutable person bindings, pricing halt and the catalog; source unchanged, drill not promoted.
 - Standard password reviewer account is provisioned, live sign-in verified, normal user role/no staff powers, generation enabled and $5/month. Native export routes return 404; private pages remain available. Credentials are stored only in protected operator files and Apple's private review fields.
 - Public /privacy and /support pages are live with michael@clearpathsystems.tools, factual image/data handling and attribution. Native billing configuration exposes the privacy URL. Anonymous account endpoints still return 401. Both URLs and revised descriptions/review notes are saved in Apple's drafts.
-- Apple pricing is Free; both 1.1.0 platform drafts use MANUAL release. App Review and unlisted request have NOT been submitted. iPhone 12 is VALID, IN_BETA_TESTING and attached to the manual iOS draft; Mac 9 is its last assigned build. Mac 10/11 are superseded and unassigned.
+- Apple pricing is Free; both 1.1.0 platform drafts use MANUAL release. App Review and unlisted request have NOT been submitted. iPhone 12 is VALID, IN_BETA_TESTING and attached to the manual iOS draft; Mac 12 is also VALID, IN_BETA_TESTING and attached to its manual draft. Mac 10/11 are superseded and unassigned.
 
 ## Active work
 
-Build 12 at iPhone bf81c07 / Mac 617bc33 removes export/download controls and the Mac save-panel bridge, adds standard password sign-in and expandable legal attribution. iPhone archive 37874481247 and native 13 Pro UI 37874483990 passed; verified package SHA d4a0c4e2110cc9a892e2cdf0a6531aa0c484e0d74fabd14850086209461ca845 is VALID, assigned to internal TestFlight and attached to the manual iOS draft. Mac archive 37874486987 passed; universal package, endpoints, decoded-secret and free-release checks passed, SHA 2410b0a6f26286f474cbfef2e280880e37729293ed852984a222a5d03d423ec4. Signed Mac UI 37874489191 passed three tests, zero failures, 100.593 seconds. Verified Mac 12 package uploaded and PROCESSING. A screenshot-only Mac suite captures the real native window at Apple's required 16:10 size, with public catalog fixtures; production app source is unchanged.
+Build 12 source iPhone bf81c07 / Mac 617bc33 removes external export/download controls and the Mac save-panel bridge, adds standard password sign-in and legal attribution. Both archives passed signing, package/endpoints/decoded-secret and free-release checks. iPhone native UI 37874483990 passed one 13 Pro flow; Mac signed UI 37874489191 passed three tests with zero failures in 100.593 seconds. Both packages are VALID, assigned to internal TestFlight, and attached to manual 1.1.0 drafts.
 
-Screenshot-only iPhone source beea530 adds a 13 Pro Max store-capture workflow using public card metadata and transient card references. Runtime source is unchanged. Run 37875843015 is in progress; inspect screenshots before uploading. Apple's privacy declaration is published with owner confirmation, Reference category and 9+ calculated age rating are saved, and US-only initial availability is configured. Content-rights declaration records the owner's asserted legally permitted reference-use basis, not a supplied license. App Review and unlisted request remain unsubmitted.
+Package SHA256: iPhone d4a0c4e2110cc9a892e2cdf0a6531aa0c484e0d74fabd14850086209461ca845; Mac 2410b0a6f26286f474cbfef2e280880e37729293ed852984a222a5d03d423ec4.
+
+Screenshot-only iPhone beea530 / Mac 132d3dd do not alter production runtime. iPhone capture 37875843015 passed; three actual 1284x2778 screenshots were visually inspected, uploaded and reached COMPLETE in Apple. Mac capture 37876744933 is running, targeting a native 1280x800 window with public card fixtures. Privacy declaration is published with owner confirmation; Reference category, 9+ calculated rating and US-only initial availability are saved. Native Mac is separate; iPhone-on-Mac and Vision Pro distribution are opted out. Content-rights declaration records owner's asserted legally permitted reference-use basis, not a supplied license. Final reviewer notes and private credentials are saved. App Review and unlisted request remain unsubmitted.
 
 ## Blockers
 
@@ -28,7 +30,7 @@ Owner supplied review phone and approved reviewer password access. Public suppor
 
 ## Next actions
 
-1. Finish build-12 native UI verification, verify the Mac archive, upload/validate both packages and assign the tested builds; attach them to manual-release drafts.
+1. Inspect/upload the Mac store captures when run 37876744933 completes. Both build-12 packages and UI checks are already verified and assigned; do not rebuild/reupload them.
 2. Complete screenshots, age rating and truthful Apple privacy/content declarations, verify review credentials and final metadata. Submit finished App Review, then request unlisted distribution; retain manual release pending approval.
 3. Resolve generated-background retention with owner; update implementation/disclosures if changed. Bind verified Sagar and known invited friends individually.
 4. After native availability, follow backend docs/PWA_RETIREMENT.md to archive dirty PWA working tree and Git history under F:/Desktop/m, retire only its tunnel and PWA-specific settings, preserve shared native services.
