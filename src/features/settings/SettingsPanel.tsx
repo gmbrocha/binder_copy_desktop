@@ -91,7 +91,7 @@ export default function SettingsPanel({
       <View style={s.panel}>
         <Text style={s.heading}>Catalog</Text>
         <Text style={s.body}>
-          {(bootstrap?.catalog?.count ?? 0).toLocaleString()} cards Â·{" "}
+          {(bootstrap?.catalog?.count ?? 0).toLocaleString()} cards ·{" "}
           {(bootstrap?.catalog?.sets ?? 0).toLocaleString()} sets
         </Text>
         <Text style={s.body}>
@@ -110,7 +110,7 @@ export default function SettingsPanel({
         {bootstrap?.capabilities?.manageCatalog && (
           <Action
             label={
-              bootstrap.catalog?.running ? "Refreshingâ€¦" : "Refresh catalog"
+              bootstrap.catalog?.running ? "Refreshing…" : "Refresh catalog"
             }
             disabled={busy || blocked || bootstrap.catalog?.running}
             onPress={() =>
