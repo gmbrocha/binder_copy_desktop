@@ -1,6 +1,11 @@
 name: macOS signed interaction smoke
 on:
   workflow_dispatch:
+    inputs:
+      suite:
+        type: choice
+        default: smoke
+        options: [smoke, store]
 permissions:
   contents: read
 concurrency:
@@ -14,6 +19,7 @@ jobs:
     timeout-minutes: 60
     env:
       RCT_NEW_ARCH_ENABLED: '1'
+      BINDERCOPY_STORE_SCREENSHOTS: ${{ inputs.suite == 'store' && '1' || '0' }}
       DEVELOPER_DIR: /Applications/Xcode_26.3.app/Contents/Developer
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262

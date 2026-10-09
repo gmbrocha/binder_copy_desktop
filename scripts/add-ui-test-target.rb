@@ -17,7 +17,7 @@ end
 target = project.new_target(:ui_test_bundle, 'BinderCopyUITests', :osx, '14.0')
 target.add_dependency(app)
 group = project.main_group.new_group('BinderCopyUITests', 'BinderCopyUITests')
-target.source_build_phase.add_file_reference(group.new_file('NativeSmoke.swift'))
+target.source_build_phase.add_file_reference(group.new_file(ENV['BINDERCOPY_STORE_SCREENSHOTS'] == '1' ? 'StoreScreenshots.swift' : 'NativeSmoke.swift'))
 target.build_configurations.each do |configuration|
   configuration.build_settings.merge!({
     'GENERATE_INFOPLIST_FILE' => 'YES', 'SWIFT_VERSION' => '5.0',

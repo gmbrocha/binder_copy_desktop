@@ -1,0 +1,290 @@
+[
+  {
+    "id": "fixture-1",
+    "sourceId": "base1-1",
+    "name": "Alakazam",
+    "setId": "base1",
+    "setName": "Base Set",
+    "number": "1",
+    "image": "https://assets.tcgdex.net/en/base/base1/1",
+    "releaseDate": "1999-01-09",
+    "category": "Pokemon",
+    "rarity": "Rare",
+    "artist": "Ken Sugimori",
+    "types": [
+      "Psychic"
+    ],
+    "dexIds": [
+      65
+    ],
+    "art": "standard",
+    "tags": [],
+    "owned": false,
+    "curated": false,
+    "curationRevision": 0
+  },
+  {
+    "id": "fixture-2",
+    "sourceId": "base1-2",
+    "name": "Blastoise",
+    "setId": "base1",
+    "setName": "Base Set",
+    "number": "2",
+    "image": "https://assets.tcgdex.net/en/base/base1/2",
+    "releaseDate": "1999-01-09",
+    "category": "Pokemon",
+    "rarity": "Rare",
+    "artist": "Ken Sugimori",
+    "types": [
+      "Water"
+    ],
+    "dexIds": [
+      9
+    ],
+    "art": "standard",
+    "tags": [],
+    "owned": false,
+    "curated": false,
+    "curationRevision": 0
+  },
+  {
+    "id": "fixture-3",
+    "sourceId": "base1-3",
+    "name": "Chansey",
+    "setId": "base1",
+    "setName": "Base Set",
+    "number": "3",
+    "image": "https://assets.tcgdex.net/en/base/base1/3",
+    "releaseDate": "1999-01-09",
+    "category": "Pokemon",
+    "rarity": "Rare",
+    "artist": "Ken Sugimori",
+    "types": [
+      "Colorless"
+    ],
+    "dexIds": [
+      113
+    ],
+    "art": "standard",
+    "tags": [],
+    "owned": false,
+    "curated": false,
+    "curationRevision": 0
+  },
+  {
+    "id": "fixture-4",
+    "sourceId": "base1-4",
+    "name": "Charizard",
+    "setId": "base1",
+    "setName": "Base Set",
+    "number": "4",
+    "image": "https://assets.tcgdex.net/en/base/base1/4",
+    "releaseDate": "1999-01-09",
+    "category": "Pokemon",
+    "rarity": "Rare",
+    "artist": "Mitsuhiro Arita",
+    "types": [
+      "Fire"
+    ],
+    "dexIds": [
+      6
+    ],
+    "art": "standard",
+    "tags": [],
+    "owned": false,
+    "curated": false,
+    "curationRevision": 0
+  },
+  {
+    "id": "fixture-5",
+    "sourceId": "base1-5",
+    "name": "Clefairy",
+    "setId": "base1",
+    "setName": "Base Set",
+    "number": "5",
+    "image": "https://assets.tcgdex.net/en/base/base1/5",
+    "releaseDate": "1999-01-09",
+    "category": "Pokemon",
+    "rarity": "Rare",
+    "artist": "Ken Sugimori",
+    "types": [
+      "Colorless"
+    ],
+    "dexIds": [
+      35
+    ],
+    "art": "standard",
+    "tags": [],
+    "owned": false,
+    "curated": false,
+    "curationRevision": 0
+  },
+  {
+    "id": "fixture-6",
+    "sourceId": "base1-6",
+    "name": "Gyarados",
+    "setId": "base1",
+    "setName": "Base Set",
+    "number": "6",
+    "image": "https://assets.tcgdex.net/en/base/base1/6",
+    "releaseDate": "1999-01-09",
+    "category": "Pokemon",
+    "rarity": "Rare",
+    "artist": "Mitsuhiro Arita",
+    "types": [
+      "Water"
+    ],
+    "dexIds": [
+      130
+    ],
+    "art": "standard",
+    "tags": [],
+    "owned": false,
+    "curated": false,
+    "curationRevision": 0
+  },
+  {
+    "id": "fixture-7",
+    "sourceId": "base1-7",
+    "name": "Hitmonchan",
+    "setId": "base1",
+    "setName": "Base Set",
+    "number": "7",
+    "image": "https://assets.tcgdex.net/en/base/base1/7",
+    "releaseDate": "1999-01-09",
+    "category": "Pokemon",
+    "rarity": "Rare",
+    "artist": "Ken Sugimori",
+    "types": [
+      "Fighting"
+    ],
+    "dexIds": [
+      107
+    ],
+    "art": "standard",
+    "tags": [],
+    "owned": false,
+    "curated": false,
+    "curationRevision": 0
+  },
+  {
+    "id": "fixture-8",
+    "sourceId": "base1-8",
+    "name": "Machamp",
+    "setId": "base1",
+    "setName": "Base Set",
+    "number": "8",
+    "image": "https://assets.tcgdex.net/en/base/base1/8",
+    "releaseDate": "1999-01-09",
+    "category": "Pokemon",
+    "rarity": "Rare",
+    "artist": "Ken Sugimori",
+    "types": [
+      "Fighting"
+    ],
+    "dexIds": [
+      68
+    ],
+    "art": "standard",
+    "tags": [],
+    "owned": false,
+    "curated": false,
+    "curationRevision": 0
+  },
+  {
+    "id": "fixture-9",
+    "sourceId": "base1-9",
+    "name": "Magneton",
+    "setId": "base1",
+    "setName": "Base Set",
+    "number": "9",
+    "image": "https://assets.tcgdex.net/en/base/base1/9",
+    "releaseDate": "1999-01-09",
+    "category": "Pokemon",
+    "rarity": "Rare",
+    "artist": "Keiji Kinebuchi",
+    "types": [
+      "Lightning"
+    ],
+    "dexIds": [
+      82
+    ],
+    "art": "standard",
+    "tags": [],
+    "owned": false,
+    "curated": false,
+    "curationRevision": 0
+  },
+  {
+    "id": "fixture-10",
+    "sourceId": "base1-10",
+    "name": "Mewtwo",
+    "setId": "base1",
+    "setName": "Base Set",
+    "number": "10",
+    "image": "https://assets.tcgdex.net/en/base/base1/10",
+    "releaseDate": "1999-01-09",
+    "category": "Pokemon",
+    "rarity": "Rare",
+    "artist": "Ken Sugimori",
+    "types": [
+      "Psychic"
+    ],
+    "dexIds": [
+      150
+    ],
+    "art": "standard",
+    "tags": [],
+    "owned": false,
+    "curated": false,
+    "curationRevision": 0
+  },
+  {
+    "id": "fixture-11",
+    "sourceId": "base1-11",
+    "name": "Nidoking",
+    "setId": "base1",
+    "setName": "Base Set",
+    "number": "11",
+    "image": "https://assets.tcgdex.net/en/base/base1/11",
+    "releaseDate": "1999-01-09",
+    "category": "Pokemon",
+    "rarity": "Rare",
+    "artist": "Ken Sugimori",
+    "types": [
+      "Grass"
+    ],
+    "dexIds": [
+      34
+    ],
+    "art": "standard",
+    "tags": [],
+    "owned": false,
+    "curated": false,
+    "curationRevision": 0
+  },
+  {
+    "id": "fixture-12",
+    "sourceId": "base1-12",
+    "name": "Ninetales",
+    "setId": "base1",
+    "setName": "Base Set",
+    "number": "12",
+    "image": "https://assets.tcgdex.net/en/base/base1/12",
+    "releaseDate": "1999-01-09",
+    "category": "Pokemon",
+    "rarity": "Rare",
+    "artist": "Ken Sugimori",
+    "types": [
+      "Fire"
+    ],
+    "dexIds": [
+      38
+    ],
+    "art": "standard",
+    "tags": [],
+    "owned": false,
+    "curated": false,
+    "curationRevision": 0
+  }
+]
