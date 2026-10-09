@@ -16,6 +16,8 @@ Ship BinderCopy iPhone and macOS free through Apple unlisted distribution, prese
 
 ## Active work
 
+**PAUSED by owner, October 8, 2026 (America/Chicago), until Apple responds.** No builds, feature work, paid dispatch or PWA retirement during the pause. Keep reviewer access and existing services available. Resume from F:/Desktop/m/projects/binder_copy_backend/docs/HANDOFF_APPLE_REVIEW.md.
+
 Build 12 source iPhone bf81c07 / Mac 617bc33 removes external export/download controls and the Mac save-panel bridge, adds standard password sign-in and legal attribution. Both archives passed signing, package/endpoints/decoded-secret and free-release checks. iPhone native UI 37874483990 passed one 13 Pro flow; Mac signed UI 37874489191 passed three tests with zero failures in 100.593 seconds. Both packages are VALID, assigned to internal TestFlight, and attached to manual 1.1.0 drafts.
 
 Package SHA256: iPhone d4a0c4e2110cc9a892e2cdf0a6531aa0c484e0d74fabd14850086209461ca845; Mac 2410b0a6f26286f474cbfef2e280880e37729293ed852984a222a5d03d423ec4.
@@ -30,7 +32,7 @@ Owner supplied review phone and approved reviewer password access. Public suppor
 
 ## Next actions
 
-1. Await Apple App Review and the unlisted-distribution decision. Both native 1.1.0 (12) versions are WAITING_FOR_REVIEW and MANUAL release. Do not rebuild/reupload or release publicly while awaiting unlisted approval.
+1. Remain paused until Apple responds. Then inspect both App Review results and the separate unlisted-distribution decision using the canonical handoff. Both native 1.1.0 (12) versions are WAITING_FOR_REVIEW and MANUAL release. Do not rebuild/reupload or release publicly while awaiting unlisted approval.
 2. If Apple requests information, use backend docs/RELEASE_1_1_0_BUILD_12.md and APP_STORE_SUBMISSION_DRAFT.md. Submission receipt is verified, not approval. Optional Mac screenshot automation captured one accepted builder image, then encountered an XCTest hit-point failure; do not label that sequence passed. Earlier release interaction checks passed independently.
 3. Resolve generated-background retention with owner; update implementation/disclosures if changed. Bind verified Sagar and known invited friends individually.
 4. After native availability, follow backend docs/PWA_RETIREMENT.md to archive dirty PWA working tree and Git history under F:/Desktop/m, retire only its tunnel and PWA-specific settings, preserve shared native services.
@@ -42,6 +44,8 @@ Owner supplied review phone and approved reviewer password access. Public suppor
 Evidence: backend .local/transient-production-deploy.log, .local/reference-cache-removal.json, .local/transient-reference-verification.json; VPS /var/lib/bindercopy/monitor/transient-reference-verification.json and /var/backups/bindercopy/unlisted-restore-drill-c132ed7. Native artifacts are under each repo's .local/release-<run> and .local/unlisted-ui-<run>.
 
 ## Last checkpoint
+
+Owner requested a durable handoff and paused work pending Apple review. Approval of both platform releases plus confirmed unlisted distribution and real native availability gates the already-authorized PWA archive/configuration retirement. Canonical handoff saved; no runtime or service changes during this documentation checkpoint.
 
 October 9 UTC (October 8 local): card-reference cache removal live; reviewer and public information pages verified; both build-12 native archives and interaction checks passed; both native versions WAITING_FOR_REVIEW and the unlisted request received by Apple. Shared budget $391.475258 counted/reserved, $108.524742 unreserved, including $9 already reserved for build-12 iPhone archive/UI; Mac standard public runners included. No further paid inference. Preserve unrelated backend docs/NATIVE_USER_GUIDE.md, both docs/UI_PARITY.md and iPhone MINOR_TODO_AND_IDEAS.txt.
 
