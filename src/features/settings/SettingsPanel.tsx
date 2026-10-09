@@ -9,7 +9,7 @@ import {
 import type { ApiClient, Bootstrap } from "../../api/client";
 import Action from "../../components/Action";
 import { colors as c, type as t } from "../../design/tokens";
-import SubscriptionPanel from "../billing/SubscriptionPanel";
+import UsagePanel from "../billing/UsagePanel";
 export default function SettingsPanel({
   api,
   bootstrap,
@@ -87,11 +87,11 @@ export default function SettingsPanel({
           />
         )}
       </View>
-      {bootstrap?.user.id && <SubscriptionPanel key={bootstrap.user.id} api={api} accountId={bootstrap.user.id} blocked={busy || blocked} onChanged={async () => onBootstrap(await api.bootstrap())} />}
+      {bootstrap?.user.id && <UsagePanel key={bootstrap.user.id} api={api} accountId={bootstrap.user.id} blocked={busy || blocked} />}
       <View style={s.panel}>
         <Text style={s.heading}>Catalog</Text>
         <Text style={s.body}>
-          {(bootstrap?.catalog?.count ?? 0).toLocaleString()} cards ·{" "}
+          {(bootstrap?.catalog?.count ?? 0).toLocaleString()} cards Â·{" "}
           {(bootstrap?.catalog?.sets ?? 0).toLocaleString()} sets
         </Text>
         <Text style={s.body}>
@@ -110,7 +110,7 @@ export default function SettingsPanel({
         {bootstrap?.capabilities?.manageCatalog && (
           <Action
             label={
-              bootstrap.catalog?.running ? "Refreshing…" : "Refresh catalog"
+              bootstrap.catalog?.running ? "Refreshingâ€¦" : "Refresh catalog"
             }
             disabled={busy || blocked || bootstrap.catalog?.running}
             onPress={() =>

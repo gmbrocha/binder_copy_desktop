@@ -50,3 +50,11 @@ Owner corrected the nearly-white presets to medium muted colors, and requested c
 ## 2026-10-08 — approved loading animation
 
 Owner approved the separate cream-on-black Poké Ball mock for implementation in the next native build. Replace the visible Loading text with a 48-point silhouette turning clockwise every 1.4 seconds over the existing dimmed screen. Keep the 750ms reveal threshold and rendered-result completion timing. Native animation must stop offscreen/in the background and honor Reduce Motion; assistive technology retains Loading/busy semantics. This is deterministic UI animation, with no image generation, provider calls or model changes.
+
+## 2026-10-08 — free unlisted release supersedes monetization
+
+The owner considers the apps finished and requests free unlisted distribution to Sagar and known friends. Remove paid-tier/purchase UI and grant all admitted users generation features. Admin and curator permissions remain separate. Sagar alone has unlimited app-level API spending, bound to his verified issuer/subject; everyone else, including the owner, has USD $5 per calendar month (UTC), shared across devices and API features, with no rollover. Preserve reservations, unknown outcomes and historical cost ledgers. The owner handles explaining this to friends. Restrict admission to the known group; do not treat possession of an unlisted link as privileged authorization.
+
+Replace the retiring image model with a supported, verified replacement and versioned rates. This supersedes the Mini-only and benchmark-backlog restriction. Legacy subscriptions/credits and the original $5/$52.17 ledgers remain historical; they must not constrain the new approved policy or be rewritten as fresh funds. The development budget remains separate.
+
+Submit finished iPhone/macOS releases to App Review with unlisted intent, keep release manual pending Apple's unlisted decision, and submit Apple's unlisted request. After native availability is confirmed, archive and sunset the PWA, its Windows tunnel and PWA-only Cloudflare resources under F:/Desktop/m; preserve shared native API, authentication, email, DNS and user data. Apple review is external, not instant.

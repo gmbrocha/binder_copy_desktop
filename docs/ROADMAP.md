@@ -1,5 +1,7 @@
 # Roadmap
 
+**Current priority:** free unlisted iPhone/macOS release; see the latest DECISIONS.md and CURRENT_STATE.md. Earlier commercial activation and Mini-only backlog instructions below are superseded.
+
 1. Establish documentation, state maintenance, source provenance and contract boundaries.
 2. Resume existing VPS access; prepare Linux backend and isolated paid-disabled staging.
 3. Verify baseline backend parity, restore and CPU search performance; migrate hosting with one writer.

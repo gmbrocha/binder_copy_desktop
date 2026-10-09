@@ -146,6 +146,8 @@ export type BillingState = {
   remainingMicroUsd: number;
   halted: boolean;
   paidApi: boolean;
+  distribution?: 'unlisted';
+  unlimitedUsage?: boolean;
   credits?: { includedImages: number; includedThemes: number; purchasedImages: number; purchasedDebt: number };
 };
 export type BillingOffer = {

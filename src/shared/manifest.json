@@ -1,8 +1,8 @@
 {
-  "version": "0.2.3",
-  "backendRevision": "b6b1ed588459a7b5e6fc67525bd4535e49d6ef8f",
+  "version": "0.2.4",
+  "backendRevision": "160e698f40887c1289fc77f9bf06af4cbe0ced52",
   "files": {
-    "contracts/index.ts": "d96f1cdb0bd99a23d20f786b64df01b576f773633b0759d4a463c8862051fe21",
+    "contracts/index.ts": "624a9671e21681dcd0213cd17e8e51743f2ce96dd072fd0cd3c0d9e28e039d15",
     "domain/palettes.ts": "0fb26d351105d902c520c37a3a040eb36ebb3edb2d16d3894cfbee96193b5855",
     "domain/colors.ts": "e4d137bbb055b62bc330bae30551456b5d43c7fb8dec470fd7b9d020399f4edb",
     "domain/backdrops.ts": "04a9bb601620effeba5b71aa98349455bbb57b30e0ccac1235e6ea44c33e8b92",
