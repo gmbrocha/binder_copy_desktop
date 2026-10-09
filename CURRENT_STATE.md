@@ -1,4 +1,4 @@
-# Current state â€” BinderCopy macOS
+# Current state — BinderCopy macOS
 
 ## Objective
 Ship the finished iPhone/macOS apps free through Apple unlisted distribution. The October 8 free-unlisted decision supersedes the commercial plan. Preserve the accepted design; enable generation for the known group with $5/person/calendar month (UTC), unlimited for verified Sagar only.
@@ -7,7 +7,7 @@ Ship the finished iPhone/macOS apps free through Apple unlisted distribution. Th
 
 - Both platforms **1.1.0 (9)** are VALID / IN_BETA_TESTING in existing private internal group ba56be7f-b9ef-4031-b191-a677f79a0edd, verified October 8 at 23:46 UTC. One tester is confirmed. Prior builds remain available; no public/external release. Physical build-9 acceptance remains pending.
 - iPhone runtime **30db2b4**, archive **37858500047**, parity **37858503701**, Apple **e3f7bfe5-9737-44bc-8f91-b3940714c60e**. Mac runtime **66bac70**, universal archive **37858492571**, signed interactions **37858496318**, Apple **caf3a7ff-7b6b-452e-baa9-c91552e65350**. Exact hashes and verification limits are in the release record.
-- The approved 48-point cream PokÃ© Ball is the sole app-rendered loading indicator: no visible Loading text and no old ActivityIndicator wheels (13 removed per client). It rotates every 1.4 seconds after the existing 750ms threshold over a dimmed background. Modal layering and media/render holds remain. Reduce Motion keeps it static; background/unmount stops rotation. Screen-reader Loading/busy semantics remain.
+- The approved 48-point cream Poké Ball is the sole app-rendered loading indicator: no visible Loading text and no old ActivityIndicator wheels (13 removed per client). It rotates every 1.4 seconds after the existing 750ms threshold over a dimmed background. Modal layering and media/render holds remain. Reduce Motion keeps it static; background/unmount stops rotation. Screen-reader Loading/busy semantics remain.
 - OVH API runtime **1d31475799b1bc772bcf4af5e944ad2d6cff3925** remains live at https://bindercopy-api.clearpathsystems.tools. This release needed no backend deployment or paid inference.
 - Shared contract snapshot **0.2.3** is pinned to b6b1ed5. Catalog has 21,256 cards. Private pages/collections, shared tags, auth/deletion and backup/restore remain verified; frozen PWA is untouched.
 - Prior generation hydration/duplicate avoidance, locked/existing card preservation, cream empty-slot marks, free custom colors, medium presets, independent title/logo contrast, and Reapply saved artwork remain included.
@@ -15,7 +15,7 @@ Ship the finished iPhone/macOS apps free through Apple unlisted distribution. Th
 
 ## Active work
 
-Implementing the approved free-unlisted transition: account-bound monthly API metering, verified Sagar exemption, removal of purchase UI, supported image model, App Review and unlisted request. Purchase UI has been replaced with concise Generation usage, including the unlimited flag. Contract 0.2.4 is pinned to backend 160e698. Typecheck, 26 tests and contract/credential checks pass locally. New native signing/upload is pending reviewer-auth requirements to avoid spending on a knowingly superseded archive. Apple records use 1.1.0 and MANUAL release; neither platform is submitted. No new runtime deployment or store submission is claimed yet. Build 9 and the backend revision listed above are the last verified live versions; their old founder-only budget is historical live behavior pending migration.
+Implementing the approved free-unlisted transition: account-bound monthly API metering, verified Sagar exemption, removal of purchase UI, supported image model, App Review and unlisted request. Purchase UI has been replaced with concise Generation usage, including the unlimited flag. Contract 0.2.4 is pinned to backend 160e698. Typecheck, 26 tests and contract/credential checks pass locally. Signed build 10 is running for internal testing of the free configuration; App Review remains pending reviewer access and metadata. Apple records use 1.1.0 and MANUAL release; neither platform is submitted. No new runtime deployment or store submission is claimed yet. Build 9 and the backend revision listed above are the last verified live versions; their old founder-only budget is historical live behavior pending migration.
 
 ## Blockers
 

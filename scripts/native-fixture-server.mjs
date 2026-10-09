@@ -16,7 +16,7 @@ const server = http.createServer(async (req, res) => {
     if (pathname === '/api/page-overlays') return send({title:'cream',logo:'dark'});
     if (pathname.startsWith('/api/backdrops/')) { res.writeHead(200, { 'Content-Type': 'image/png' }); return res.end(contrastImage); }
     if (pathname === '/api/health') return send({ ok: true });
-    if (pathname === '/api/billing') return send({ state: { tier: 'free', environment: null, expiresAt: null, needsRefresh: false, period: '2026-10', allowanceMicroUsd: 0, committedMicroUsd: 0, remainingMicroUsd: 0, halted: false, paidApi: false }, productIds: [], purchasingAvailable: false });
+    if (pathname === '/api/billing') return send({ state: { tier: 'complimentary', distribution: 'unlisted', unlimitedUsage: false, environment: null, expiresAt: null, needsRefresh: false, period: '2026-10', allowanceMicroUsd: 5000000, committedMicroUsd: 0, remainingMicroUsd: 5000000, halted: false, paidApi: false }, productIds: [], purchasingAvailable: false });
     if (pathname === '/api/export/png') { res.writeHead(200, { 'Content-Type': 'image/png' }); return res.end(art); }
     if (pathname === '/api/bootstrap') return send({ user: { id: 'native-ui-fixture', name: 'UI test', role: 'user' }, capabilities: { curateTags: false, manageCatalog: false, paidApi: false }, aiConfigured: false, backdropConfigured: false, tags: [{ id: 'blue', label: 'Blue', category: 'color', aliases: [] }], sets: [{ id: 'demo', name: 'Demo set' }], types: [{ name: 'Water' }], categories: [{ name: 'Pokemon' }], years: [{ year: '2026' }], catalog: { count: 12, sets: 1 }, visual: { indexed: 12 } });
     if (pathname.startsWith('/api/art/')) { res.writeHead(200, { 'Content-Type': 'image/png' }); return res.end(art); }
