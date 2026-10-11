@@ -16,13 +16,13 @@ October 11 owner instruction: replace “A card’s colors” with **Start from 
 
 ## Active work
 
-Native iPhone art selection/loading/preview/keep check passed (38156104127), and screenshots were inspected. A retained grid-only subtitle/disabled button was found after Keep; corrected to View surround with no slot-replacement copy. Replacement archive/native check pending before beta upload; no build 13 uploaded yet.
+Native iPhone art selection/loading/preview/keep check passed (38156104127), and screenshots were inspected. A retained grid-only subtitle/disabled button was found after Keep; corrected to View surround with no slot-replacement copy. Replacement archive/native check pending before beta upload; iPhone build 13 uploaded; Apple processing pending.
 
-Build **1.1.0 (13)** for both platforms and focused native UI checks are running. Do not call this TestFlight availability until uploads are VALID and internally assigned.
+iPhone **1.1.0 (13)** is VALID and IN_BETA_TESTING in the existing internal group (verified October 11 17:01 UTC). Apple build ID f5d9a8b2-d288-4321-a5ce-416278b99aab. Final archive 38156888448 and native UI 38156927755 passed; screenshots inspected, exactly one POST across generation and reopening. Mac final archive 38156891980 and UI 38156932920 are running. Do not claim TestFlight availability until VALID and internally assigned.
 
-- iPhone archive 38156101587; native UI 38156104127.
-- Mac archive 38156106405; native UI 38156108538.
-- Shared budget: USD **409.627252** counted/reserved, **90.372748** unreserved. Includes USD 9 reserved before these two private iPhone workflows. Mac public standard runners remain included. No paid image calls this checkpoint.
+- Final iPhone runtime 6e27f7f; UI workflow fix 5e43994 changes no app source. Signed IPA SHA256 2db4a3c162db0a8b84926c3e4baa8cb56edcb7ada22d402ddf6db1419c61f34d.
+- Final Mac runtime 50450af; UI workflow fix 445b577 changes no app source. Initial Mac archive/UI were cancelled before upload in favor of final sources.
+- Shared budget: USD **409.627252** counted/reserved, **90.372748** unreserved. Includes USD 18 reserved before the initial and final private iPhone archive/UI workflows. Mac public standard runners remain included. No paid image calls this checkpoint.
 
 ## Blockers
 
@@ -40,10 +40,14 @@ Six-pass provider compatibility was already proven October 10 (USD 0.151994, abo
 
 ## Last checkpoint
 
-October 11: feature source committed/pushed; backend deployed with backups and restore verification; live surround capability and cached reads confirmed. Native archives/UI still running. Last confirmed available TestFlight builds remain **1.1.0 (12)** for iPhone and Mac. Build-12 App Review and the separate unlisted request were left untouched; their previously recorded state was waiting for review, not rechecked in this task. PWA/tunnel/Cloudflare retirement remains deferred until owner-approved native availability/distribution; no sunset action this task.
+October 11: feature source committed/pushed; backend deployed with backups and restore verification; live surround capability and cached reads confirmed. Native archives/UI still running. Last confirmed available TestFlight builds: **iPhone 1.1.0 (13)**; Mac remains **1.1.0 (12)** until its final checks/upload finish. Build-12 App Review and the separate unlisted request were left untouched; their previously recorded state was waiting for review, not rechecked in this task. PWA/tunnel/Cloudflare retirement remains deferred until owner-approved native availability/distribution; no sunset action this task.
 
 Retain HANDOFF_PAUSED.md as the earlier checkpoint and backend docs/CARD_SURROUND.md for the runner. Preserve pre-existing backend docs/NATIVE_USER_GUIDE.md, both docs/UI_PARITY.md, and iPhone MINOR_TODO_AND_IDEAS.txt. Never commit credentials/operator artifacts.
 
 October 11 final source correction: saved surrounds now reopen directly from their saved asset without a new job request; View surround replaces the inactive grid regeneration button and obsolete slot subtitle. Native fixtures assert exactly one POST across creation and reopening. Replacement archive/UI reservations recorded before dispatch; earlier iPhone archive 13 is withheld, not uploaded.
 
 Native UI workflow syntax corrected before dispatch; the rejected dispatch ran no job and consumed no reservation. Runtime sources and signed archive inputs are unchanged.
+
+October 11 17:01 UTC: iPhone 13 assigned and IN_BETA_TESTING, with release notes. Mac final jobs still running. No App Review draft or distribution change.
+
+Mac native UI 38156932920 failed before generation: XCTest could not find an automatic ScrollView hit point for the visibly rendered first card. Screenshot inspected; corrected test to click within the card frame without auto-scroll. Removed the transient spinner timing assertion from Mac (iPhone already verified it); still checks full preview/Keep/reopen and exactly one job POST. Application runtime/archive 50450af unchanged. Public-runner retry pending; iPhone remains available.

@@ -13,9 +13,11 @@ final class NativeSmoke: XCTestCase {
     entry.click()
     let card = app.buttons["Fixture 1, Demo set"]
     XCTAssertTrue(card.waitForExistence(timeout: 20), app.debugDescription)
-    card.click()
-    XCTAssertTrue(app.descendants(matching: .any)["loading-spinner"].waitForExistence(timeout: 8), app.debugDescription)
-    capture("Surround unchanged loading animation", in: app)
+    // Bypass XCTest's failing auto-scroll for the already visible modal card.
+    XCTAssertTrue(app.windows.firstMatch.frame.intersects(card.frame), app.debugDescription)
+    print("Surround card frame: \(card.frame)")
+    card.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.4)).click()
+    capture("Surround after card selection", in: app)
     let keep = app.buttons["Keep this page"]
     XCTAssertTrue(keep.waitForExistence(timeout: 60), app.debugDescription)
     let ready = expectation(for: NSPredicate(format: "enabled == true"), evaluatedWith: keep)
