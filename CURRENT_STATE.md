@@ -1,5 +1,7 @@
 # Current state - BinderCopy macOS
 
+**PAUSED BY OWNER — October 10, 2026.** Read [HANDOFF_PAUSED.md](HANDOFF_PAUSED.md). Resume only after an explicit owner request; prior release and implementation plans below are historical context, not active authorization.
+
 ## Objective
 
 Ship BinderCopy iPhone and macOS free through Apple unlisted distribution, preserving the accepted design. All admitted people receive generation with $5 per person per UTC month; only verified Sagar is unlimited. Keep private Library records, remove external export/download/sharing, process card-reference images without persistent VPS image caching. Sunset the frozen PWA only after native availability is confirmed.
@@ -15,6 +17,8 @@ Ship BinderCopy iPhone and macOS free through Apple unlisted distribution, prese
 - Apple pricing is Free; both 1.1.0 platform drafts use MANUAL release. Both iPhone and Mac App Review are WAITING_FOR_REVIEW (1.1.0 build 12). The unlisted request was submitted with explicit owner acknowledgment, and Apple displayed its receipt confirmation. iPhone 12 is VALID, IN_BETA_TESTING and attached to the manual iOS draft; Mac 12 is also VALID, IN_BETA_TESTING and attached to its manual draft. Mac 10/11 are superseded and unassigned.
 
 ## Active work
+
+None. Documentation handoff only; collaborator testing and scope/distribution decisions are awaited. Apple submissions, services and billing remain unchanged. The details below record completed work, not an instruction to continue.
 
 **October 10, 2026: owner authorized Card surround runner and app-option implementation.** This narrowly resumes feature source work. Apple submission/release and PWA retirement remain at their existing gates; no new live deployment, paid dispatch or Apple upload in this checkpoint. See backend docs/CARD_SURROUND.md for the durable recipe, six-stage runner, API jobs, operator usage and activation checks.
 
@@ -32,10 +36,7 @@ Owner supplied review phone and approved reviewer password access. Public suppor
 
 ## Next actions
 
-1. Validate the Card surround API provider/price bound with a budgeted pilot, then stage and run native interaction checks before enabling BINDERCOPY_SURROUND_ENABLED. The source option is gated off by default. Independently inspect Apple responses using the canonical handoff; do not replace the pending manual release or retire the PWA as part of this source checkpoint.
-2. If Apple requests information, use backend docs/RELEASE_1_1_0_BUILD_12.md and APP_STORE_SUBMISSION_DRAFT.md. Submission receipt is verified, not approval. Optional Mac screenshot automation captured one accepted builder image, then encountered an XCTest hit-point failure; do not label that sequence passed. Earlier release interaction checks passed independently.
-3. Resolve generated-background retention with owner; update implementation/disclosures if changed. Bind verified Sagar and known invited friends individually.
-4. After native availability, follow backend docs/PWA_RETIREMENT.md to archive dirty PWA working tree and Git history under F:/Desktop/m, retire only its tunnel and PWA-specific settings, preserve shared native services.
+Wait for explicit owner resumption. Then follow HANDOFF_PAUSED.md: inspect worktrees, collect testing/requirements, decide distribution and IP-review scope, recheck Apple/TestFlight/service status and budget, and agree a bounded next task. No automatic release, withdrawal, provider calls or PWA retirement. Backend docs/CARD_SURROUND_API_CHECK.md records the completed real API check; broader benchmarking was declined.
 
 ## Verification
 
@@ -47,6 +48,8 @@ October 10 Card surround verification: backend 115 tests passed with serial exec
 Evidence: backend .local/transient-production-deploy.log, .local/reference-cache-removal.json, .local/transient-reference-verification.json; VPS /var/lib/bindercopy/monitor/transient-reference-verification.json and /var/backups/bindercopy/unlisted-restore-drill-c132ed7. Native artifacts are under each repo's .local/release-<run> and .local/unlisted-ui-<run>.
 
 ## Last checkpoint
+
+October 10 owner pause: added short HANDOFF_PAUSED.md and pause instructions. Documentation only; no runtime, deployment, Apple, hosting or credential changes. Pre-existing local edits preserved. The backend API check is complete (.151994); shared counted/reserved budget is .627252 with .372748 remaining. These handoff commits do not authorize resuming development.
 
 October 10: Card surround source implementation and durable runner completed. Backend contract 0.2.5 is pinned to b2042b2eb530977e1b511d57d8590ccf47973d45 and adds the optional surround layout; both clients have preview/keep, rounded center-card placement, Undo and job recovery. Generated stages use hard pixel protection, atomic per-person reservations and no uncertain-call replay. Source references remain transient. Real recorded responses replayed offline through the runner and were visually inspected. Original evidence archived under F:/Desktop/m/archives/bindercopy/michi-approved-pipeline-20261010.zip; exact original prompts and mask geometry are tracked in backend docs/michi-reference. No paid inference, native archive/upload, backend deployment or Apple/PWA changes. Preserve unrelated existing documentation edits.
 

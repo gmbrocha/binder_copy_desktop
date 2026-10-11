@@ -1,5 +1,9 @@
 # BinderCopy agent instructions
 
+## Owner pause — October 10, 2026
+
+Development is paused. Read [HANDOFF_PAUSED.md](HANDOFF_PAUSED.md) first. Resume only on an explicit owner request; this supersedes older autonomous-work instructions below. No automatic feature work, spending, deployment, submission changes or PWA retirement.
+
 ## Mission and scope
 
 Deliver native macOS client using React Native macOS, with a required compatibility spike, as part of the shared iPhone/macOS TestFlight objective. Preserve the accepted BinderCopy product, behavior and visual system. Remain in this project and these three repositories; the historical PWA is a frozen reference. The latest explicit user instruction takes precedence over these guidelines.
