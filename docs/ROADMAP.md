@@ -1,5 +1,7 @@
 # Roadmap
 
+**October 11 priority:** art-surround start flow, original artwork cache restoration, and both TestFlight build-13 betas. See CURRENT_STATE.md; older release/pause tasks below are historical until explicitly resumed.
+
 **Current priority:** free unlisted iPhone/macOS release; see the latest DECISIONS.md and CURRENT_STATE.md. Earlier commercial activation and Mini-only backlog instructions below are superseded.
 
 1. Establish documentation, state maintenance, source provenance and contract boundaries.

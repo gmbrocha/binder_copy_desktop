@@ -25,6 +25,10 @@ final class NativeSmoke: XCTestCase {
     XCTAssertTrue(app.buttons["Generation source options"].waitForExistence(timeout: 20), app.debugDescription)
     XCTAssertFalse(app.staticTexts["Background unavailable"].exists)
     capture("Surround kept", in: app)
+    XCTAssertTrue(app.buttons["View surround"].waitForExistence(timeout: 10), app.debugDescription)
+    app.buttons["View surround"].click()
+    XCTAssertTrue(app.buttons["Keep this page"].waitForExistence(timeout: 30), app.debugDescription)
+    app.buttons["Close"].click()
   }
   override func tearDown() {
     let screen = XCTAttachment(screenshot: XCUIScreen.main.screenshot())

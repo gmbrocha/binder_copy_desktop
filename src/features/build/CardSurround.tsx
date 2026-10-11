@@ -15,9 +15,9 @@ export default function CardSurround({api, session, cards, cardId, createId, blo
   createId: () => string; blocked: boolean; onBusy: (busy: boolean) => void; onClose: () => void;
 }) {
   const [busy, setBusy] = useState(false), [error, setError] = useState('');
-  const [job, setJob] = useState<SurroundJob | null>(null);
+  const [job, setJob] = useState<SurroundJob | null>(() => session.page.surround?.cardId === cardId && session.page.backdrop ? {id:session.page.backdrop.assetId,cardId,status:'complete',backdrop:session.page.backdrop} : null);
   const captured = useRef(backgroundSource(session.page));
-  const started = useRef(false), pending = useRef(false), attempt = useRef<string | null>(null);
+  const started = useRef(!!job), pending = useRef(false), attempt = useRef<string | null>(null);
   const loading = useLoading();
   const launch = async (recover = false) => {
     if (pending.current || blocked) return;

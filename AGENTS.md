@@ -1,6 +1,6 @@
 # BinderCopy agent instructions
 
-## Owner pause — October 10, 2026
+## Authorized resumption — October 11, 2026
 
 October 11: owner explicitly resumed two changes and TestFlight delivery for both platforms: replace card-colors generation with card-art surround, and restore the prior server artwork cache. Preserve the loading animation. Public/unlisted submission changes and PWA retirement remain outside this scope. HANDOFF_PAUSED.md preserves the earlier checkpoint.
 

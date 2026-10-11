@@ -817,17 +817,20 @@ export default function Workbench({
         <Text numberOfLines={1} style={[s.buttonText, { fontWeight: "600" }]}>
           {sourceLabel} ▾
         </Text>
-        <Text numberOfLines={1} style={s.caption}>
+        {!page.surround && <Text numberOfLines={1} style={s.caption}>
           Replaces the {page.slots.filter((slot) => !slot.locked).length}{" "}
           unlocked slots
-        </Text>
+        </Text>}
       </Pressable>
       <View style={desktop ? { width: "100%" } : undefined}>
         <Button
-          label="Regenerate"
-          icon="shuffle"
-          disabled={busy || !!page.surround || page.slots.every((slot) => slot.locked)}
-          onPress={() => run(() => generate({ kind: "repeat" }))}
+          label={page.surround ? "View surround" : "Regenerate"}
+        icon={page.surround ? "eye" : "shuffle"}
+        disabled={busy || (!page.surround && page.slots.every((slot) => slot.locked))}
+        onPress={() => {
+          if (page.surround) { const card=cards[page.surround.cardId]; if(card)setSurroundCard(card); }
+          else void run(() => generate({ kind: "repeat" }));
+        }}
         />
       </View>
     </View>
