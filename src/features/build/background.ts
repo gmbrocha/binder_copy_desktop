@@ -18,5 +18,5 @@ export async function requestBackground(api: Pick<ApiClient, 'request'>, attempt
 }
 export function keepBackground(page: Page, proposal: BackgroundProposal): Page {
   if (backgroundSource(page) !== proposal.source) throw new Error('Your cards or colors changed. This background belongs to the previous layout.');
-  return { ...page, backdrop: proposal.backdrop, backdropMode: 'art' };
+  return { ...page, surround: undefined, backdrop: proposal.backdrop, backdropMode: 'art' };
 }

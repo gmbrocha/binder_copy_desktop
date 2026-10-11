@@ -842,6 +842,8 @@ export default function Workbench({
         !!bootstrap?.backdropConfigured &&
         bootstrap?.capabilities?.paidApi !== false
       }
+      canSurround={!!bootstrap?.surroundConfigured && bootstrap?.capabilities?.paidApi !== false}
+      selectedCardId={page.slots[selected]?.cardId ?? undefined}
     />
   );
   const selectedSlot = page.slots[selected];

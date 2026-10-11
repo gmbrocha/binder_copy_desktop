@@ -4,7 +4,7 @@ import { Image, Text, View, type ImageProps, type ImageURISource } from 'react-n
 import type { ApiClient } from '../api/client';
 import { colors, type } from '../design/tokens';
 
-export default function CardImage({ api, id, style, ...props }: Omit<ImageProps, 'source'> & { api: ApiClient; id: string }) {
+export default function CardImage({ api, id, style, resizeMode = 'contain', ...props }: Omit<ImageProps, 'source'> & { api: ApiClient; id: string }) {
   const rendered = useLoadingMedia(id);
   const [source, setSource] = useState<ImageURISource>();
   const [failed, setFailed] = useState(false);
@@ -15,5 +15,5 @@ export default function CardImage({ api, id, style, ...props }: Omit<ImageProps,
     return () => { active = false; };
   }, [api, id]);
   if (!source || failed) return <View style={[style, { backgroundColor: colors.sunken, alignItems: 'center', justifyContent: 'center' }]}>{failed && <Text style={{ ...type.caption, color: colors.muted }}>Artwork unavailable</Text>}</View>;
-  return <Image {...props} source={source} style={style} resizeMode="contain" onLoadEnd={rendered} onError={() => { setFailed(true); rendered(); }} />;
+  return <Image {...props} source={source} style={style} resizeMode={resizeMode} onLoadEnd={rendered} onError={() => { setFailed(true); rendered(); }} />;
 }

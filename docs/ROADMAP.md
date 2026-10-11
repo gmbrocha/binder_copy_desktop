@@ -16,3 +16,8 @@ Immediate repository task: finish the free unlisted release under UNLISTED_RELEA
 Use CURRENT_STATE.md for the live work queue. Changes in order may be justified by access/dependencies; record reasons without dropping required gates.
 
 Deferred October 8: a local supported-image-model cost/quality benchmark is tracked in the shared backend's docs/ROADMAP.md. It is independent of this native build; do not switch models or make paid benchmark calls as part of release 8.
+
+
+## Card surround - October 10 source checkpoint
+
+Runner, authenticated jobs and iPhone/macOS source option implemented. See backend docs/CARD_SURROUND.md. Next: bounded production-provider pilot, stage/restore checks and native interaction verification before enabling the feature and scheduling a release. Existing Apple submission remains unchanged.

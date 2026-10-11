@@ -28,6 +28,9 @@ export class PageSession {
   }
   edit(update: (page: Page) => Page) {
     const next = update(clone(this.page));
+    if (next.surround && (next.size!==3 || next.slots[4]?.cardId!==next.surround.cardId || next.slots.some((s,i)=>i!==4&&s.cardId))) {
+      next.surround=undefined; next.backdrop=undefined; next.backdropMode='color';
+    }
     if (next.id !== this.page.id) throw new Error('Edit must preserve page identity.');
     if (content(next) === content(this.page)) return;
     this.history = [...this.history.slice(-49), clone(this.page)];

@@ -52,6 +52,7 @@ export const pageSchema = z
     seedCardId: z.string().max(80).optional(),
     themeSource: z.string().max(300).optional(),
     backdropMode: z.enum(["color", "art"]).optional(),
+    surround: z.object({ version: z.literal('michi-staged-v1'), cardId: z.string().min(1).max(80) }).optional(),
     colorInspiration: z
       .object({
         source: z.enum(["photo", "card"]),
@@ -71,6 +72,10 @@ export const pageSchema = z
   .refine(
     (p) => p.slots.length === p.size * p.size,
     "Slot count must match grid size",
+  )
+  .refine(
+    p => !p.surround || (p.size === 3 && p.slots[4]?.cardId === p.surround.cardId && p.slots.every((s,i) => i === 4 || !s.cardId)),
+    'A card surround requires a 3x3 page with only its center card',
   );
 export type Page = z.infer<typeof pageSchema>;
 export type Slot = z.infer<typeof slotSchema>;

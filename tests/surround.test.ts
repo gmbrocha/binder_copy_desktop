@@ -1,0 +1,34 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { newPage, PageSession } from '../src/features/build/pageSession';
+import { backgroundSource } from '../src/features/build/background';
+import { keepSurround, type SurroundJob } from '../src/features/build/surround';
+const id = 'fe9d30c4-5e36-44d6-9a33-f8c9dd53530c';
+const job: SurroundJob = { id, cardId: 'card', status: 'complete', backdrop: { kind: 'generated', assetId: id, sourceHash: 'a'.repeat(64), layoutVersion: 1 } };
+test('surround is a preview until kept, preserves page identity/name, Undo restores grid', () => {
+    const page = newPage(id, 4);
+    page.name = 'My card';
+    page.slots[0].cardId = 'card';
+    page.slots[1].cardId = 'other';
+    const source = backgroundSource(page), kept = keepSurround(page, source, job);
+    assert.equal(page.size, 4);
+    assert.equal(kept.size, 3);
+    assert.equal(kept.name, 'My card');
+    assert.equal(kept.id, id);
+    assert.equal(kept.slots[4].cardId, 'card');
+    assert.equal(kept.slots.filter(s => s.cardId).length, 1);
+    const session = new PageSession(page, async (p) => p, () => { });
+    session.edit(() => kept);
+    session.undo();
+    assert.deepEqual(session.page, page);
+    assert.throws(() => keepSurround({ ...page, palette: 'ocean' }, source, job), /changed/);
+});
+test('changing the center or populating another slot returns to grid instead of mismatching the surround', () => {
+    const page = newPage(id), kept = keepSurround(page, backgroundSource(page), job);
+    const session = new PageSession(kept, async (p) => p, () => { });
+    session.edit(p => ({ ...p, slots: p.slots.map((s, i) => i === 4 ? { ...s, cardId: 'different' } : s) }));
+    assert.equal(session.page.surround, undefined);
+    assert.equal(session.page.backdrop, undefined);
+    session.undo();
+    assert.equal(session.page.surround?.cardId, 'card');
+});

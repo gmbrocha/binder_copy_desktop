@@ -14,6 +14,7 @@ export type Bootstrap = {
   years: { year: string }[];
   aiConfigured: boolean;
   backdropConfigured: boolean;
+  surroundConfigured?: boolean;
   catalog: {
     count?: number;
     sets?: number;

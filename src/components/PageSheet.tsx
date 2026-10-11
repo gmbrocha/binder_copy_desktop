@@ -14,6 +14,7 @@ import type { ApiClient } from "../api/client";
 import type { Card, Page } from "../shared/contracts";
 import { pagePalette } from "../shared/domain/palettes";
 import { getPageLayout } from "../shared/domain/backdrops";
+import { surroundLayout } from '../shared/domain/surround';
 import { swapTarget, type Rect } from "../features/build/dragGeometry";
 import { colors } from "../design/tokens";
 import CardImage from "./CardImage";
@@ -60,7 +61,7 @@ export default function PageSheet({
   const drag = useRef<Drag | null>(null);
   const suppressUntil = useRef(0);
   const offset = useRef(new Animated.ValueXY()).current;
-  const layout = getPageLayout(page.size);
+  const layout = page.surround ? surroundLayout : getPageLayout(page.size);
   const scale = width / layout.width;
   const rects = page.slots.map((_slot, i): Rect => ({
     left:
@@ -170,7 +171,7 @@ export default function PageSheet({
         <CraftedBackground key={contrast.key} palette={page.palette} visible={contrast.visible} onLoad={contrast.onLoad} onError={contrast.onError} />
       )}
       {contrast.failed && <Text style={{ position: "absolute", bottom: 4, right: 8, color: "#fff", backgroundColor: "#000b", fontSize: 11 }}>Background unavailable</Text>}
-      <Text
+      {!page.surround && <Text
         testID={`page-title-${contrast.overlays.title}`}
         numberOfLines={1}
         style={{
@@ -190,8 +191,8 @@ export default function PageSheet({
         }}
       >
         {page.name}
-      </Text>
-      <Image
+      </Text>}
+      {!page.surround && <Image
         testID={`page-logo-${contrast.overlays.logo}`}
         source={contrast.overlays.logo === "dark" ? require("../../assets/brand/wordmark-dark.png") : require("../../assets/brand/wordmark.png")}
         resizeMode="contain"
@@ -202,8 +203,8 @@ export default function PageSheet({
           width: 220 * scale,
           height: 45 * scale,
         }}
-      />
-      {page.slots.map((slot, i) => (
+      />}
+      {page.slots.map((slot, i) => page.surround && i!==4 ? null : (
         <View
           key={i}
           style={[s.position, rects[i], { opacity: floating === i ? 0.24 : 1 }]}
@@ -239,12 +240,13 @@ export default function PageSheet({
             }}
             style={[
               s.slot,
+              page.surround && {borderRadius:34*scale,backgroundColor:'transparent'},
               selected >= 0 && selected !== i && { opacity: 0.82 },
               {
                 borderColor:
                   target === i || selected === i ? overlayInk.cream : "transparent",
                 borderWidth:
-                  target === i || selected === i ? 2 : 0,
+                  !page.surround && (target === i || selected === i) ? 2 : 0,
               },
             ]}
           >
@@ -252,6 +254,7 @@ export default function PageSheet({
               <CardImage
                 api={api}
                 id={slot.cardId}
+                resizeMode={page.surround ? 'stretch' : 'contain'}
                 style={{ width: "100%", height: "100%" }}
               />
             ) : (

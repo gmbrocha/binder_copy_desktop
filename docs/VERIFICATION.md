@@ -61,3 +61,10 @@ Run 37738728360 at 9a13fe9 passed testNativeWorkspace (44.295 seconds), includin
 - Local iPhone 16, Mac 17 and backend 54 tests pass (87 total); all typechecks, complete bundles, credential checks and contract hashes pass. Actual release credentials/endpoints/entitlements verified; Mac supports arm64 and x86_64. Native screenshots and real backend PNG visually inspected. Fixture export evidence is distinct from real-output delivery on physical devices.
 - Documentation encoding, stale setup/release instructions and controls guide reconciled. Tracked-file checks find no copied private environment values or signing artifacts. Backend production dependencies have no audit advisories; upstream native build-tool findings remain documented in client DEPENDENCY_REVIEW.md.
 - Shared counted/reserved budget remains $157.333235, leaving $342.666765; no new paid AI usage. Frozen PWA application baseline f35163d is untouched. Its clean checkout is at handoff commit 000b623, which adds documentation only; SOURCE_BASELINE.json records both.
+
+
+## 2026-10-10 Card surround
+
+October 10 Card surround verification: backend 115 tests passed with serial execution (one initial parallel Windows seed-test process exited with a native heap error; serial full suite passed), all three typechecks passed; iPhone 29 / Mac 30 tests passed; both client boundary/docs checks passed. Recorded-response pipeline replay and rounded-corner preview inspected. iOS/macOS JavaScript bundles passed locally; this is not an Xcode compile, signed native interaction test, TestFlight upload or production deployment. No new provider calls or paid CI dispatch.
+
+Backend commands: `npm run typecheck`, `npx tsx --test --test-concurrency=1 tests/*.test.ts`, focused `tests/surround.test.ts`, and `npm run surround` with recorded six-stage responses and the original Gloom perimeter mask. Client commands: `npm run typecheck`, `npm test`, `npm run verify:boundary`, `npm run verify:docs`, `npm run bundle:ios` / `npm run bundle:macos`. Activation remains gated on a separately budgeted API-provider pilot and actual native UI verification.

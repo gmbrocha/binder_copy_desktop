@@ -1,11 +1,12 @@
 {
-  "version": "0.2.4",
-  "backendRevision": "160e698f40887c1289fc77f9bf06af4cbe0ced52",
+  "version": "0.2.5",
+  "backendRevision": "b2042b2eb530977e1b511d57d8590ccf47973d45",
   "files": {
-    "contracts/index.ts": "624a9671e21681dcd0213cd17e8e51743f2ce96dd072fd0cd3c0d9e28e039d15",
+    "contracts/index.ts": "4864170ab3eb4612026a4e3bd08ff85dfd86cc632321a148cd14ddd14d1153bd",
     "domain/palettes.ts": "0fb26d351105d902c520c37a3a040eb36ebb3edb2d16d3894cfbee96193b5855",
     "domain/colors.ts": "e4d137bbb055b62bc330bae30551456b5d43c7fb8dec470fd7b9d020399f4edb",
     "domain/backdrops.ts": "04a9bb601620effeba5b71aa98349455bbb57b30e0ccac1235e6ea44c33e8b92",
-    "domain/overlays.ts": "b7aaa47a04df8a56d68bc9be404d3453a30ff22a90a55080746e57a71b5745f3"
+    "domain/overlays.ts": "b7aaa47a04df8a56d68bc9be404d3453a30ff22a90a55080746e57a71b5745f3",
+    "domain/surround.ts": "7acff274ad5f24ff141a32d69c3d148c58842e3332027b9803f73512248f0b26"
   }
 }
