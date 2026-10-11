@@ -53,33 +53,8 @@ jobs:
           xcodebuild -workspace macos/binder-copy-desktop.xcworkspace -scheme binder-copy-desktop-macOS -configuration Debug -destination 'platform=macOS,arch=x86_64' -derivedDataPath build -resultBundlePath native-ui.xcresult ONLY_ACTIVE_ARCH=YES ${{ inputs.suite == 'surround' && '-only-testing:BinderCopyUITests/NativeSmoke/testNativeSurround' || '-skip-testing:BinderCopyUITests/NativeSmoke/testNativeSurround' }} test 2>&1 | tee native-ui.log
       - name: Verify surround reopening makes no new generation request
         if: inputs.suite == 'surround'
-        run: test "$(grep -c '^POST /api/surrounds
-        if: always()
         run: |
-          mkdir -p evidence
-          codesign -d --entitlements :- build/Build/Products/Debug/binder-copy-desktop.app > evidence/app-entitlements.plist 2> evidence/signing-inspection.log || true
-          codesign -dv build/Build/Products/Debug/binder-copy-desktop.app 2>> evidence/signing-inspection.log || true
-          xcrun xcresulttool export attachments --path native-ui.xcresult --output-path evidence/screenshots || true
-      - name: Remove temporary credentials
-        if: always()
-        run: |
-          security delete-keychain "$RUNNER_TEMP/bindercopy-signing.keychain-db" || true
-          rm -f "$RUNNER_TEMP/bindercopy-development.p12" "$RUNNER_TEMP/bindercopy-profile.provisionprofile" "$RUNNER_TEMP/bindercopy-profile.plist"
-          if [[ -n "${MAC_PROFILE_UUID:-}" ]]; then
-            rm -f "$HOME/Library/MobileDevice/Provisioning Profiles/$MAC_PROFILE_UUID.provisionprofile" "$HOME/Library/Developer/Xcode/UserData/Provisioning Profiles/$MAC_PROFILE_UUID.provisionprofile"
-          fi
-      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
-        if: always()
-        with:
-          name: macos-signed-interaction-evidence
-          path: |
-            native-ui.xcresult
-            native-ui.log
-            metro.log
-            fixture.log
-            evidence
-          retention-days: 2
- fixture.log)" = 1
+          test "$(grep -c '^POST /api/surrounds$' fixture.log)" = 1
       - name: Export native evidence
         if: always()
         run: |

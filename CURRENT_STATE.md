@@ -45,3 +45,5 @@ October 11: feature source committed/pushed; backend deployed with backups and r
 Retain HANDOFF_PAUSED.md as the earlier checkpoint and backend docs/CARD_SURROUND.md for the runner. Preserve pre-existing backend docs/NATIVE_USER_GUIDE.md, both docs/UI_PARITY.md, and iPhone MINOR_TODO_AND_IDEAS.txt. Never commit credentials/operator artifacts.
 
 October 11 final source correction: saved surrounds now reopen directly from their saved asset without a new job request; View surround replaces the inactive grid regeneration button and obsolete slot subtitle. Native fixtures assert exactly one POST across creation and reopening. Replacement archive/UI reservations recorded before dispatch; earlier iPhone archive 13 is withheld, not uploaded.
+
+Native UI workflow syntax corrected before dispatch; the rejected dispatch ran no job and consumed no reservation. Runtime sources and signed archive inputs are unchanged.
