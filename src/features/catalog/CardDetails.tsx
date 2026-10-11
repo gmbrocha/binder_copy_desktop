@@ -42,7 +42,7 @@ export default function CardDetails({
   onUpdate: (card: Card) => void;
   onClose: () => void;
   onPlace?: (card: Card) => void;
-  onBuild?: (kind: "favorite" | "card-colors", card: Card) => void;
+  onBuild?: (kind: "favorite" | "card-art", card: Card) => void;
 }) {
   const wide = useWindowDimensions().width >= 768;
   const [card, setCard] = useState(initial);
@@ -174,7 +174,7 @@ export default function CardDetails({
           {rowAction(prices ? "Refresh prices" : "Check prices", "tag", () => run(async () => setPrices(await api.request<CardPrices>(path + "/prices"))))}
           {onBuild && <>
             {rowAction("Build around this card", "favorite", () => onBuild("favorite", card))}
-            {rowAction("Use this card’s colors", "droplet", () => onBuild("card-colors", card))}
+            {rowAction("Start from this card’s art (bg surround)", "droplet", () => onBuild("card-art", card))}
           </>}
           {canCurate && rowAction("Edit tags", "tag", () => {setDraft(card.tags);setArt(card.art);setEditing(true);})}
           {prices && (

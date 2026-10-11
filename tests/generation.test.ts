@@ -26,16 +26,21 @@ test('stale proposals and malformed responses cannot replace newer work or locke
   page.slots[2] = { cardId: 'locked', locked: true };
   await assert.rejects(propose(api((_path, body) => ({ ...generated(_path, body), slots: body.slots.map(() => ({ cardId: 'wrong', locked: false })) })), page, { kind: 'repeat' }), /locked card/);
 });
-test('photo requests carry only colors; card palette provenance survives shuffle and keep', async () => {
+test('photo requests carry only colors; legacy card palette provenance survives shuffle', async () => {
   const page = newPage(id);
   const requests: unknown[] = [];
   const photo = await propose(api((path, body) => { requests.push({ path, body }); return generated(path, body); }), page, { kind: 'photo', colors: ['#102030', '#f0d0a0'] });
   assert.equal((requests[0] as any).path, '/colors/generate');
   assert.deepEqual(Object.keys((requests[0] as any).body).sort(), ['colors', 'filters', 'slots']);
   assert.deepEqual(photo.page.colorInspiration, { source: 'photo', colors: ['#102030', '#f0d0a0'] });
-  const card = await propose(api((path, body) => path === '/colors/from-card' ? { colors: ['#eeccaa'] } : generated(path, body)), page, { kind: 'card-colors', card: favorite });
-  assert.equal(card.page.colorInspiration?.cardId, favorite.id);
-  assert.equal(card.page.slots[4].locked, true);
+  const card = {input: {...page, colorInspiration: {source: 'card' as const,cardId:favorite.id,colors:['#eeccaa']}}, page: {...page, colorInspiration: {source: 'card' as const,cardId:favorite.id,colors:['#eeccaa']}}};
   const shuffled = await propose(api(generated), card.input, { kind: 'repeat' });
   assert.deepEqual(shuffled.page.colorInspiration, card.page.colorInspiration);
+});
+
+test('starting a new grid from a surround clears incompatible layout metadata', async () => {
+ const page={...newPage(id),surround:{cardId:favorite.id,jobId:id,version:1}} as Page;
+ const proposal=await propose(api(generated),page,{kind:'favorite',card:favorite});
+ assert.equal(proposal.page.surround,undefined);
+ assert.equal(page.surround?.cardId,favorite.id);
 });

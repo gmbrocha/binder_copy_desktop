@@ -8,6 +8,7 @@ const job: SurroundJob = { id, cardId: 'card', status: 'complete', backdrop: { k
 test('surround is a preview until kept, preserves page identity/name, Undo restores grid', () => {
     const page = newPage(id, 4);
     page.name = 'My card';
+    page.seedCardId='old';page.themeSource='old theme';page.colorInspiration={source:'card',cardId:'old',colors:['#112233']};
     page.slots[0].cardId = 'card';
     page.slots[1].cardId = 'other';
     const source = backgroundSource(page), kept = keepSurround(page, source, job);
@@ -15,6 +16,7 @@ test('surround is a preview until kept, preserves page identity/name, Undo resto
     assert.equal(kept.size, 3);
     assert.equal(kept.name, 'My card');
     assert.equal(kept.id, id);
+    assert.equal(kept.seedCardId,undefined);assert.equal(kept.colorInspiration,undefined);assert.equal(kept.themeSource,undefined);
     assert.equal(kept.slots[4].cardId, 'card');
     assert.equal(kept.slots.filter(s => s.cardId).length, 1);
     const session = new PageSession(page, async (p) => p, () => { });

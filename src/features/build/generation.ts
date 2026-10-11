@@ -1,7 +1,7 @@
 import type { ApiClient } from '../../api/client';
 import { colorsSchema, pageSchema, type Card, type Page } from '../../shared/contracts/index';
 
-export type Inspiration = { kind: 'favorite'; card: Card } | { kind: 'card-colors'; card: Card } | { kind: 'photo'; colors: string[] } | { kind: 'theme'; query: string } | { kind: 'repeat' };
+export type Inspiration = { kind: 'favorite'; card: Card } | { kind: 'photo'; colors: string[] } | { kind: 'theme'; query: string } | { kind: 'repeat' };
 export type Proposal = { source: string; input: Page; page: Page; cards: Card[]; note: string };
 export const fingerprint = (page: Page) => JSON.stringify({ ...page, revision: 0 });
 export async function propose(api: Pick<ApiClient, 'request'>, current: Page, inspiration: Inspiration): Promise<Proposal> {
@@ -10,17 +10,13 @@ export async function propose(api: Pick<ApiClient, 'request'>, current: Page, in
   if (inspiration.kind !== 'repeat') {
     input.seedCardId = undefined; input.themeSource = undefined; input.colorInspiration = undefined;
     input.filters = { ...input.filters, q: '', themeTags: [] };
-    input.backdrop = undefined; input.backdropMode = 'color';
+    input.backdrop = undefined; input.backdropMode = 'color'; input.surround = undefined;
   }
   if (inspiration.kind === 'favorite') {
     input.seedCardId = inspiration.card.id;
     const center = input.size % 2 === 1 ? Math.floor(input.slots.length / 2) : 0;
     const target = input.slots[center].locked ? input.slots.findIndex(slot => !slot.locked) : center;
     input.slots[target] = { cardId: inspiration.card.id, locked: true };
-  } else if (inspiration.kind === 'card-colors') {
-    const result = await api.request<{ colors: string[] }>('/colors/from-card', 'POST', { cardId: inspiration.card.id });
-    input.colorInspiration = { source: 'card', cardId: inspiration.card.id, colors: colorsSchema.parse(result.colors) };
-    if (input.size % 2 && input.slots.every(slot => !slot.cardId && !slot.locked)) input.slots[Math.floor(input.slots.length / 2)] = { cardId: inspiration.card.id, locked: true };
   } else if (inspiration.kind === 'photo') input.colorInspiration = { source: 'photo', colors: colorsSchema.parse(inspiration.colors) };
   else if (inspiration.kind === 'theme') {
     if (!inspiration.query.trim() || inspiration.query.length > 300) throw new Error('Enter a theme of up to 300 characters.');

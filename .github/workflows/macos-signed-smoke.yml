@@ -5,7 +5,7 @@ on:
       suite:
         type: choice
         default: smoke
-        options: [smoke, store]
+        options: [smoke, store, surround]
 permissions:
   contents: read
 concurrency:
@@ -19,6 +19,7 @@ jobs:
     timeout-minutes: 60
     env:
       RCT_NEW_ARCH_ENABLED: '1'
+      BINDERCOPY_SURROUND_UI: ${{ inputs.suite == 'surround' && '1' || '0' }}
       BINDERCOPY_STORE_SCREENSHOTS: ${{ inputs.suite == 'store' && '1' || '0' }}
       DEVELOPER_DIR: /Applications/Xcode_26.3.app/Contents/Developer
     steps:
@@ -49,7 +50,7 @@ jobs:
         shell: bash
         run: |
           set -o pipefail
-          xcodebuild -workspace macos/binder-copy-desktop.xcworkspace -scheme binder-copy-desktop-macOS -configuration Debug -destination 'platform=macOS,arch=x86_64' -derivedDataPath build -resultBundlePath native-ui.xcresult ONLY_ACTIVE_ARCH=YES test 2>&1 | tee native-ui.log
+          xcodebuild -workspace macos/binder-copy-desktop.xcworkspace -scheme binder-copy-desktop-macOS -configuration Debug -destination 'platform=macOS,arch=x86_64' -derivedDataPath build -resultBundlePath native-ui.xcresult ONLY_ACTIVE_ARCH=YES ${{ inputs.suite == 'surround' && '-only-testing:BinderCopyUITests/NativeSmoke/testNativeSurround' || '-skip-testing:BinderCopyUITests/NativeSmoke/testNativeSurround' }} test 2>&1 | tee native-ui.log
       - name: Export native evidence
         if: always()
         run: |

@@ -1,12 +1,18 @@
 # Current state - BinderCopy macOS
 
-**PAUSED BY OWNER — October 10, 2026.** Read [HANDOFF_PAUSED.md](HANDOFF_PAUSED.md). Resume only after an explicit owner request; prior release and implementation plans below are historical context, not active authorization.
+**RESUMED October 11, 2026:** card-art surround entry point, historical artwork cache restoration, backend deployment and both TestFlight betas. Existing store submissions remain untouched.
 
 ## Objective
 
-Ship BinderCopy iPhone and macOS free through Apple unlisted distribution, preserving the accepted design. All admitted people receive generation with $5 per person per UTC month; only verified Sagar is unlimited. Keep private Library records, remove external export/download/sharing, process card-reference images without persistent VPS image caching. Sunset the frozen PWA only after native availability is confirmed.
+Ship BinderCopy iPhone and macOS free through Apple unlisted distribution, preserving the accepted design. All admitted people receive generation with $5 per person per UTC month; only verified Sagar is unlimited. Keep private Library records, remove external export/download/sharing, reuse a shared server artwork cache for responsive browsing and generation (restored by owner instruction October 11). Sunset the frozen PWA only after native availability is confirmed.
+
+## October 11 implementation checkpoint
+
+Source now replaces the card-colors start action with “A card’s art (bg surround)” and runs the existing six-stage durable API job. Preview/Keep retains page identity, Undo and recovery; the loading animation is unchanged. Historical artwork/vision cache restored in source with bounded downloads. Backend 115 tests, iPhone 30 tests and Mac 31 tests passed; all typechecks and client boundary checks passed; new native CI and build 13 are pending. Cache archive copied to VPS but not yet extracted. Public privacy source updated for caching; deployment pending. Shared budget: USD 400.627252 counted/reserved, USD 99.372748 remaining, including USD 9 reserved for iPhone build 13 and native UI.
 
 ## Verified state
+
+Historical build-12 baseline follows; cache policy is superseded by the October 11 work above.
 
 - Production backend bbbbec3216a07e74ecf65dc6bf6a990cdd05b649 is live at https://bindercopy-api.clearpathsystems.tools after staging, backups, full tests and promotion. Contract 0.2.4 remains pinned to 160e698 in both clients; catalog 21,256 cards.
 - Removed 430 historical card-image cache files (11,742,210 bytes) from production/staging. Two authenticated public requests succeeded and recreated no artwork/vision-images directories. Image serving, palettes, tagging references and visual indexing now process image bytes in memory. Caddy has no image response cache; device display caching and derived embeddings/colors remain.
@@ -18,7 +24,7 @@ Ship BinderCopy iPhone and macOS free through Apple unlisted distribution, prese
 
 ## Active work
 
-None. Documentation handoff only; collaborator testing and scope/distribution decisions are awaited. Apple submissions, services and billing remain unchanged. The details below record completed work, not an instruction to continue.
+Implement the owner-requested art-surround replacement and historical server cache restoration. Verify staged backend, native UI and signed builds, then deliver both TestFlight betas. Keep the existing loading animation. Update public data-handling copy to match restored image caching.
 
 **October 10, 2026: owner authorized Card surround runner and app-option implementation.** This narrowly resumes feature source work. Apple submission/release and PWA retirement remain at their existing gates; no new live deployment, paid dispatch or Apple upload in this checkpoint. See backend docs/CARD_SURROUND.md for the durable recipe, six-stage runner, API jobs, operator usage and activation checks.
 
@@ -36,7 +42,7 @@ Owner supplied review phone and approved reviewer password access. Public suppor
 
 ## Next actions
 
-Wait for explicit owner resumption. Then follow HANDOFF_PAUSED.md: inspect worktrees, collect testing/requirements, decide distribution and IP-review scope, recheck Apple/TestFlight/service status and budget, and agree a bounded next task. No automatic release, withdrawal, provider calls or PWA retirement. Backend docs/CARD_SURROUND_API_CHECK.md records the completed real API check; broader benchmarking was declined.
+Implement and test the two changes, deploy with backup/restore checks, warm the artwork cache, then archive/upload fresh iPhone and Mac builds and confirm TestFlight availability. Do not replace the App Review submissions or change distribution.
 
 ## Verification
 
@@ -49,7 +55,7 @@ Evidence: backend .local/transient-production-deploy.log, .local/reference-cache
 
 ## Last checkpoint
 
-October 10 owner pause: added short HANDOFF_PAUSED.md and pause instructions. Documentation only; no runtime, deployment, Apple, hosting or credential changes. Pre-existing local edits preserved. The backend API check is complete (.151994); shared counted/reserved budget is .627252 with .372748 remaining. These handoff commits do not authorize resuming development.
+October 10 owner pause: added short HANDOFF_PAUSED.md and pause instructions. Documentation only; no runtime, deployment, Apple, hosting or credential changes. Pre-existing local edits preserved. The backend API check is complete (USD 0.151994); shared counted/reserved budget is USD 391.627252 with USD 108.372748 remaining. These handoff commits do not authorize resuming development.
 
 October 10: Card surround source implementation and durable runner completed. Backend contract 0.2.5 is pinned to b2042b2eb530977e1b511d57d8590ccf47973d45 and adds the optional surround layout; both clients have preview/keep, rounded center-card placement, Undo and job recovery. Generated stages use hard pixel protection, atomic per-person reservations and no uncertain-call replay. Source references remain transient. Real recorded responses replayed offline through the runner and were visually inspected. Original evidence archived under F:/Desktop/m/archives/bindercopy/michi-approved-pipeline-20261010.zip; exact original prompts and mask geometry are tracked in backend docs/michi-reference. No paid inference, native archive/upload, backend deployment or Apple/PWA changes. Preserve unrelated existing documentation edits.
 

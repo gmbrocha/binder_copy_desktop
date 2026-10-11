@@ -1,6 +1,31 @@
 import XCTest
 
 final class NativeSmoke: XCTestCase {
+  func testNativeSurround() throws {
+    continueAfterFailure = false
+    let app = XCUIApplication(bundleIdentifier: "com.clearpathsystems.bindercopy")
+    app.launch()
+    XCTAssertTrue(app.buttons["New"].waitForExistence(timeout: 90), app.debugDescription)
+    app.buttons["New"].click()
+    let entry = app.buttons["A card’s art (bg surround)"]
+    XCTAssertTrue(entry.waitForExistence(timeout: 20), app.debugDescription)
+    XCTAssertFalse(app.buttons["A card’s colors"].exists)
+    entry.click()
+    let card = app.buttons["Fixture 1, Demo set"]
+    XCTAssertTrue(card.waitForExistence(timeout: 20), app.debugDescription)
+    card.click()
+    XCTAssertTrue(app.descendants(matching: .any)["loading-spinner"].waitForExistence(timeout: 8), app.debugDescription)
+    capture("Surround unchanged loading animation", in: app)
+    let keep = app.buttons["Keep this page"]
+    XCTAssertTrue(keep.waitForExistence(timeout: 60), app.debugDescription)
+    let ready = expectation(for: NSPredicate(format: "enabled == true"), evaluatedWith: keep)
+    wait(for: [ready], timeout: 30)
+    capture("Surround proposal", in: app)
+    keep.click()
+    XCTAssertTrue(app.buttons["Generation source options"].waitForExistence(timeout: 20), app.debugDescription)
+    XCTAssertFalse(app.staticTexts["Background unavailable"].exists)
+    capture("Surround kept", in: app)
+  }
   override func tearDown() {
     let screen = XCTAttachment(screenshot: XCUIScreen.main.screenshot())
     screen.name = "Final native screen"

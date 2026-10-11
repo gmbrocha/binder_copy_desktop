@@ -13,6 +13,7 @@ export function surroundPage(page: Page, job: SurroundJob): Page {
     if (job.status !== 'complete' || !job.backdrop)
         throw new Error('The surround is not ready.');
     return pageSchema.parse({ ...page, size: 3, slots: Array.from({ length: 9 }, (_, i) => ({ cardId: i === 4 ? job.cardId : null, locked: i === 4 })),
+        seedCardId: undefined, colorInspiration: undefined, themeSource: undefined,
         surround: { version: 'michi-staged-v1', cardId: job.cardId }, backdrop: job.backdrop, backdropMode: 'art' });
 }
 export function keepSurround(page: Page, source: string, job: SurroundJob) {

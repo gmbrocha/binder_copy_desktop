@@ -15,7 +15,7 @@ import { paletteSchema } from "../../shared/contracts";
 import { palettes } from "../../shared/domain/palettes";
 import { colors as c, type as typography } from "../../design/tokens";
 import CustomColor from "./CustomColor";
-import CardSurround from './CardSurround';
+
 import PageSheet from "../../components/PageSheet";
 import Icon from "../../components/Icon";
 import type { PageSession } from "./pageSession";
@@ -34,8 +34,6 @@ export default function Appearance({
   cards,
   createId,
   canGenerate,
-  canSurround = false,
-  selectedCardId,
   onBusy,
   blocked,
 }: {
@@ -44,8 +42,6 @@ export default function Appearance({
   cards: Record<string, Card>;
   createId: () => string;
   canGenerate: boolean;
-  canSurround?: boolean;
-  selectedCardId?: string;
   onBusy: (busy: boolean) => void;
   blocked: boolean;
 }) {
@@ -129,7 +125,6 @@ export default function Appearance({
       : null;
   return (
     <View style={{ gap: 16 }}>
-      {canSurround && <CardSurround api={api} session={session} cards={cards} createId={createId} cardId={selectedCardId ?? (page.slots.filter(s=>s.cardId).length===1 ? page.slots.find(s=>s.cardId)?.cardId ?? undefined : undefined)} blocked={blocked||busy} onBusy={onBusy}/>}
       {page.surround && button('Return to grid',()=>session.edit(p=>({...p,surround:undefined,backdrop:undefined,backdropMode:'color'})))}
       <View style={s.row}>
         <Text style={[s.heading, { flex: 1 }]}>Backdrop</Text>

@@ -29,6 +29,7 @@ import { swapSlots } from "./features/build/dragGeometry";
 import CardDetails from "./features/catalog/CardDetails";
 import { emptyFilters, type Card, type Page } from "./shared/contracts/index";
 import Appearance from "./features/build/Appearance";
+import CardSurround from "./features/build/CardSurround";
 import PagesLibrary from "./features/library/PagesLibrary";
 import MissingCards from "./features/build/MissingCards";
 import SearchControls from "./features/catalog/SearchControls";
@@ -141,9 +142,10 @@ export default function Workbench({
     action: () => Promise<void>;
   } | null>(null);
   const [library, setLibrary] = useState<"Pages" | "Collection">("Pages");
-  const [picker, setPicker] = useState<"manual" | "favorite" | "colors" | null>(
+  const [picker, setPicker] = useState<"manual" | "favorite" | "surround" | null>(
     null,
   );
+  const [surroundCard, setSurroundCard] = useState<Card | null>(null);
   const [replacement, setReplacement] = useState<Replacement | null>(null);
   const [similar, setSimilar] = useState<Card[]>([]);
   const [detail, setDetail] = useState<Card | null>(null);
@@ -464,9 +466,12 @@ export default function Workbench({
     });
   const choose = async (card: Card) => {
     remember([card]);
-    if (picker === "favorite" || picker === "colors")
+    if (picker === "surround") {
+      if (!bootstrap?.surroundConfigured || bootstrap.capabilities?.paidApi === false) throw new Error("Art surround is unavailable for this account.");
+      setPicker(null); setSurroundCard(card);
+    } else if (picker === "favorite")
       await generate(
-        { kind: picker === "favorite" ? "favorite" : "card-colors", card },
+        { kind: "favorite", card },
         { ...session.page, filters: activeFilters },
       );
     else if (replacement) {
@@ -706,12 +711,14 @@ export default function Workbench({
     </View>
   );
   const filled = page.slots.filter((slot) => slot.cardId).length;
-  const sourceLabel = page.seedCardId
+  const sourceLabel = page.surround
+    ? `Art surround · ${cards[page.surround.cardId]?.name ?? "Card"}`
+    : page.seedCardId
     ? `Around ${cards[page.seedCardId]?.name ?? "a favorite card"}`
     : page.colorInspiration
       ? page.colorInspiration.source === "photo"
         ? "Colors from a photo"
-        : "Colors from a card"
+        : "Saved color inspiration"
       : page.themeSource
         ? page.themeSource
         : "";
@@ -720,7 +727,7 @@ export default function Workbench({
       <Text style={s.heading}>{desktop ? "Build a page" : "Start from"}</Text>
       {!desktop && (
         <Text style={s.caption}>
-          Each one opens a proposal you can shuffle before keeping.
+          Preview before keeping.
         </Text>
       )}
       <View style={[s.row, { flexWrap: "wrap" }]}>
@@ -735,12 +742,13 @@ export default function Workbench({
             },
           },
           {
-            label: "A card’s colors",
+            label: "A card’s art (bg surround)",
+            disabled: !bootstrap?.surroundConfigured || bootstrap?.capabilities?.paidApi === false,
             icon: "droplet" as IconName,
             action: () => {
               setSourceOptions(false);
               setQuery("");
-              setPicker("colors");
+              setPicker("surround");
             },
           },
           {
@@ -765,12 +773,12 @@ export default function Workbench({
             key={option.label}
             accessibilityRole="button"
             accessibilityLabel={option.label}
-            disabled={busy}
+            disabled={busy || option.disabled}
             onPress={option.action}
             style={[
               s.sourceTile,
               { width: desktop ? "100%" : "47%", minHeight: desktop ? 48 : 60 },
-              busy && s.disabled,
+              (busy || option.disabled) && s.disabled,
             ]}
           >
             <View style={s.sourceIcon}>
@@ -818,7 +826,7 @@ export default function Workbench({
         <Button
           label="Regenerate"
           icon="shuffle"
-          disabled={busy || page.slots.every((slot) => slot.locked)}
+          disabled={busy || !!page.surround || page.slots.every((slot) => slot.locked)}
           onPress={() => run(() => generate({ kind: "repeat" }))}
         />
       </View>
@@ -842,8 +850,6 @@ export default function Workbench({
         !!bootstrap?.backdropConfigured &&
         bootstrap?.capabilities?.paidApi !== false
       }
-      canSurround={!!bootstrap?.surroundConfigured && bootstrap?.capabilities?.paidApi !== false}
-      selectedCardId={page.slots[selected]?.cardId ?? undefined}
     />
   );
   const selectedSlot = page.slots[selected];
@@ -1027,6 +1033,8 @@ export default function Workbench({
         ? "tags"
         : detail
           ? "detail"
+          : surroundCard
+            ? "surround"
           : proposal
             ? "proposal"
             : picker
@@ -1048,6 +1056,7 @@ export default function Workbench({
     else if (activeDialog === "confirm") setConfirm(null);
     else if (activeDialog === "tags") setTagsOpen(false);
     else if (activeDialog === "detail") setDetail(null);
+    else if (activeDialog === "surround") setSurroundCard(null);
     else if (activeDialog === "proposal") setProposal(null);
     else if (activeDialog === "picker") {
       setPicker(null);
@@ -1603,8 +1612,8 @@ export default function Workbench({
               <Text style={[s.heading, { flex: 1 }]}>
                 {picker === "favorite"
                   ? "Pick a favorite card"
-                  : picker === "colors"
-                    ? "Choose a card’s colors"
+                  : picker === "surround"
+                    ? "Choose a card’s art (bg surround)"
                     : replacement
                       ? `Replace slot ${replacement.target + 1}`
                       : `Fill slot ${selected + 1}`}
@@ -1681,6 +1690,7 @@ export default function Workbench({
             )}
           </View>
         )}
+        {activeDialog === "surround" && surroundCard && <CardSurround key={surroundCard.id} api={api} session={session} cards={cards} cardId={surroundCard.id} createId={createId} blocked={busy} onBusy={active=>{busyRef.current=active;setBusy(active);}} onClose={()=>setSurroundCard(null)}/> }
         {activeDialog === "proposal" && (
           <View style={s.modal}>
             {modalStatus}
@@ -1880,7 +1890,10 @@ export default function Workbench({
                 onBuild={(kind, card) => {
                   setDetail(null);
                   setTab("Build");
-                  void run(() => generate({ kind, card }));
+                  if (kind === "card-art") {
+                    if (!bootstrap?.surroundConfigured || bootstrap.capabilities?.paidApi === false) {setError("Art surround is unavailable for this account.");return;}
+                    remember([card]); setPicker(null); setSurroundCard(card);
+                  } else void run(() => generate({ kind, card }));
                 }}
                 onPlace={(card) => {
                   if (picker) {setDetail(null);void run(() => choose(card));return;}

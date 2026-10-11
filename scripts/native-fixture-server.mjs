@@ -6,6 +6,8 @@ const storeScreenshots = process.env.BINDERCOPY_STORE_SCREENSHOTS === '1';
 const cards = storeScreenshots ? JSON.parse(fs.readFileSync(new URL('./fixtures/store-cards.json', import.meta.url), 'utf8')) : Array.from({ length: 12 }, (_, i) => ({ id: `fixture-${i + 1}`, name: `Fixture ${i + 1}`, setId: 'demo', setName: 'Demo set', number: String(i + 1), image: '', releaseDate: '2026-01-01', category: 'Pokemon', rarity: 'Demo', artist: 'Fixture', types: ['Water'], dexIds: [], art: 'full', tags: ['blue'], owned: false, curated: false, curationRevision: 0 }));
 const contrastImage = fs.readFileSync(new URL('./fixtures/contrast.png', import.meta.url));
 const contrastPage = { id: '11111111-1111-4111-8111-111111111111', name: 'Contrast test', size: 2, revision: 1, palette: 'ocean', backdropMode: 'art', filters: { q: '', tags: [], themeTags: [], art: 'all', ownership: 'all' }, slots: cards.slice(0,4).map(c => ({cardId:c.id,locked:false})), backdrop: { kind:'generated',assetId:'22222222-2222-4222-8222-222222222222',sourceHash:'a'.repeat(64),layoutVersion:1 } };
+const surroundUI=process.env.BINDERCOPY_SURROUND_UI==='1';
+let surroundJob=null, surroundPolls=0;
 const pages = new Map(storeScreenshots ? [] : [[contrastPage.id,contrastPage]]);
 const server = http.createServer(async (req, res) => {
   const pathname = new URL(req.url, 'http://127.0.0.1').pathname;
@@ -14,12 +16,14 @@ const server = http.createServer(async (req, res) => {
   try {
     let raw = ''; for await (const chunk of req) { raw += chunk; if (raw.length > 100000) throw new Error('Oversized fixture request'); }
     const body = raw ? JSON.parse(raw) : {};
+    if (surroundUI && pathname === '/api/surrounds') { if(req.method==='POST'){ if(!surroundJob || surroundJob.id!==body.requestId){surroundJob={id:body.requestId,cardId:body.cardId,status:'running',stage:'near'};surroundPolls=0;} return send(surroundJob,202);} return send({job:surroundJob}); }
+    if(surroundUI && pathname.startsWith('/api/surrounds/')){surroundPolls++;if(surroundPolls>=4)surroundJob={...surroundJob,status:'complete',backdrop:contrastPage.backdrop};return send(surroundJob);}
     if (pathname === '/api/page-overlays') return send({title:'cream',logo:'dark'});
     if (pathname.startsWith('/api/backdrops/')) { res.writeHead(200, { 'Content-Type': 'image/png' }); return res.end(contrastImage); }
     if (pathname === '/api/health') return send({ ok: true });
     if (pathname === '/api/billing') return send({ state: { tier: 'complimentary', distribution: 'unlisted', unlimitedUsage: false, environment: null, expiresAt: null, needsRefresh: false, period: '2026-10', allowanceMicroUsd: 5000000, committedMicroUsd: 0, remainingMicroUsd: 5000000, halted: false, paidApi: false }, productIds: [], purchasingAvailable: false });
     if (pathname === '/api/export/png') { res.writeHead(200, { 'Content-Type': 'image/png' }); return res.end(art); }
-    if (pathname === '/api/bootstrap') return send({ user: { id: 'native-ui-fixture', name: 'UI test', role: 'user' }, capabilities: { curateTags: false, manageCatalog: false, paidApi: false }, aiConfigured: false, backdropConfigured: false, tags: [{ id: 'blue', label: 'Blue', category: 'color', aliases: [] }], sets: [{ id: 'demo', name: 'Demo set' }], types: [{ name: 'Water' }], categories: [{ name: 'Pokemon' }], years: [{ year: '2026' }], catalog: { count: 12, sets: 1 }, visual: { indexed: 12 } });
+    if (pathname === '/api/bootstrap') return send({ user: { id: 'native-ui-fixture', name: 'UI test', role: 'user' }, capabilities: { curateTags: false, manageCatalog: false, paidApi: surroundUI }, surroundConfigured: surroundUI, aiConfigured: false, backdropConfigured: false, tags: [{ id: 'blue', label: 'Blue', category: 'color', aliases: [] }], sets: [{ id: 'demo', name: 'Demo set' }], types: [{ name: 'Water' }], categories: [{ name: 'Pokemon' }], years: [{ year: '2026' }], catalog: { count: 12, sets: 1 }, visual: { indexed: 12 } });
     if (pathname.startsWith('/api/art/')) {
       if (storeScreenshots) {
         const card = cards.find(c => c.id === pathname.split('/').pop());
