@@ -1,6 +1,6 @@
 # Roadmap
 
-**October 11 priority:** art-surround start flow, original artwork cache restoration, and both TestFlight build-13 betas. See CURRENT_STATE.md; older release/pause tasks below are historical until explicitly resumed.
+**October 11 delivered:** art-surround start flow, original artwork cache restoration, and iPhone/Mac TestFlight 1.1.0 (13). See CURRENT_STATE.md for release evidence. The historical tasks below are not an instruction to resume public/unlisted submission changes or PWA retirement.
 
 **Current priority:** free unlisted iPhone/macOS release; see the latest DECISIONS.md and CURRENT_STATE.md. Earlier commercial activation and Mini-only backlog instructions below are superseded.
 
@@ -23,3 +23,7 @@ Deferred October 8: a local supported-image-model cost/quality benchmark is trac
 ## Card surround - October 10 source checkpoint
 
 Runner, authenticated jobs and iPhone/macOS source option implemented. See backend docs/CARD_SURROUND.md. Next: bounded production-provider pilot, stage/restore checks and native interaction verification before enabling the feature and scheduling a release. Existing Apple submission remains unchanged.
+
+## October 11 completed beta delivery
+
+Card-art surround replaces card-color generation; the original persistent artwork cache is restored and warmed. Both TestFlight 1.1.0 (13) builds are available. Await owner testing and a new instruction; do not automatically resume the historical queue above. See backend docs/ART_SURROUND_BETA.md.
