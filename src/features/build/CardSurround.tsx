@@ -6,7 +6,7 @@ import type {ApiClient} from '../../api/client';
 import type {Card} from '../../shared/contracts';
 import type {PageSession} from './pageSession';
 import {backgroundSource} from './background';
-import {keepSurround, surroundPage, type SurroundJob} from './surround';
+import {keepSurround, surroundPage, recoverSurround, type SurroundJob} from './surround';
 import {colors as c, type as typography} from '../../design/tokens';
 
 /** Hosted inside the builder's existing dialog; uses the unchanged loading animation. */
@@ -25,11 +25,9 @@ export default function CardSurround({api, session, cards, cardId, createId, blo
     try {
       await loading('action', async () => {
         let next: SurroundJob | undefined;
-        if (recover && !attempt.current) {
-          const latest = (await api.request<{job: SurroundJob | null}>('/surrounds')).job;
-          if (latest?.cardId === cardId && ['running', 'blocked', 'complete'].includes(latest.status)) {
-            next = latest; attempt.current = latest.id;
-          }
+        if (recover) {
+          next = await recoverSurround(path => api.request(path), cardId, attempt.current);
+          if (next) attempt.current = next.id;
         }
         if (!next || next.status === 'blocked') {
           attempt.current ??= createId();
@@ -38,7 +36,7 @@ export default function CardSurround({api, session, cards, cardId, createId, blo
         const began = Date.now();
         while (next.status === 'running') {
           setJob(next);
-          if (Date.now() - began > 15 * 60 * 1000) throw new Error('Still working. Check again shortly.');
+          if (Date.now() - began > 20 * 60 * 1000) throw new Error('Still working. Check again shortly.');
           await new Promise<void>(resolve => setTimeout(resolve, 2000));
           next = await api.request<SurroundJob>(`/surrounds/${attempt.current}`);
         }

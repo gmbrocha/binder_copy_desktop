@@ -2,7 +2,7 @@
 
 ## Objective
 
-October 11 requested scope is delivered: card-art surround replaces the card-colors start flow; the original server artwork cache is restored; both native apps have new TestFlight betas. Preserve the accepted UI and loading animation. Earlier public/unlisted review and PWA-retirement work remains paused unless separately authorized.
+Ship approved card-agnostic background analysis and continuous seam reconciliation in iPhone/macOS TestFlight 1.1.0 (14). Owner accepts current visual limitations; further duplicate-element refinement stays local after release. Preserve the UI/loading animation and existing saved pages.
 
 ## Verified state
 
@@ -18,7 +18,7 @@ October 11 requested scope is delivered: card-art surround replaces the card-col
 
 ## Active work
 
-None remaining in the requested beta delivery. Await owner testing/next instruction. No automatic expansion into distribution, payment, legal, new design or PWA retirement.
+Preparing build 14. Version-aware completed-job recovery avoids returning obsolete six-pass art for a fresh selection; known request recovery uses GET, preserving no-duplicate-charge behavior. Native fixture exercises analysis and all seven stages. No release claim until native workflows, package verification and Apple availability pass.
 
 ## Blockers
 
@@ -28,11 +28,11 @@ Sagar's unlimited admission still requires exact verified identity binding if no
 
 ## Next actions
 
-Owner installs **1.1.0 (13)** through TestFlight on each platform and tests Start from → A card’s art (bg surround). Older clients do not understand the surround layout faithfully; update both before editing surround pages across devices. View surround reopens saved artwork without generation; New surround explicitly requests another result. Preserve the current private Library and Undo behavior.
-
-Do not replace App Review submissions, change distribution, retire the PWA/tunnel/Cloudflare setup, or trigger paid experiments without a new task. Maintain the existing operational services and budgets.
+Run local checks, signed archives and focused native UI on both platforms. Deploy the matching backend only after staging and restore verification, then upload and assign validated build-14 packages to the existing internal TestFlight group. App Review submissions/unlisted status and PWA retirement remain unchanged.
 
 ## Verification
+
+Build-14 local typecheck, tests, client boundary and documentation checks pass. Native archive/UI verification is pending.
 
 Backend 115 tests; iPhone 30 tests; Mac 31 tests; all relevant typechecks, source-boundary/docs checks and native release/UI workflows passed. Loading animation source/assets were unchanged. Initial iPhone UI passed but screenshot inspection caught obsolete grid-only copy, corrected before final upload. Initial Mac jobs were cancelled; use the final runs above.
 
@@ -40,6 +40,4 @@ Backend docs/ART_SURROUND_BETA.md contains package hashes and release evidence. 
 
 ## Last checkpoint
 
-October 11, 2026: both betas available. Feature/cache implementation and release records committed/pushed. Shared delivery budget **USD 409.627252 counted/reserved; USD 90.372748 unreserved**, including USD 18 reserved for initial/final iPhone archive/UI jobs; Mac standard public runners included. Retain holds pending actual billing reconciliation. Prior surround API experiment USD 0.151994 was already included; do not count it again.
-
-Preserve historical HANDOFF_PAUSED.md and backend docs/CARD_SURROUND.md plus CARD_SURROUND_API_CHECK.md. Unrelated existing edits remain untouched: backend docs/NATIVE_USER_GUIDE.md, both docs/UI_PARITY.md, and iPhone MINOR_TODO_AND_IDEAS.txt. Secrets/operator journals remain ignored.
+October 11: build 14 preparation; build 13 remains the last available beta. Shared budget is authoritative in backend docs/BUDGET.md. Reserve USD 9 for iPhone archive/UI; public Mac standard runners included. Preserve unrelated docs/UI_PARITY.md and iPhone MINOR_TODO_AND_IDEAS.txt.

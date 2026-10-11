@@ -16,8 +16,8 @@ const server = http.createServer(async (req, res) => {
   try {
     let raw = ''; for await (const chunk of req) { raw += chunk; if (raw.length > 100000) throw new Error('Oversized fixture request'); }
     const body = raw ? JSON.parse(raw) : {};
-    if (surroundUI && pathname === '/api/surrounds') { if(req.method==='POST'){ if(!surroundJob || surroundJob.id!==body.requestId){surroundJob={id:body.requestId,cardId:body.cardId,status:'running',stage:'near'};surroundPolls=0;} return send(surroundJob,202);} return send({job:surroundJob}); }
-    if(surroundUI && pathname.startsWith('/api/surrounds/')){surroundPolls++;if(surroundPolls>=4)surroundJob={...surroundJob,status:'complete',backdrop:contrastPage.backdrop};return send(surroundJob);}
+    if (surroundUI && pathname === '/api/surrounds') { if(req.method==='POST'){ if(!surroundJob || surroundJob.id!==body.requestId){surroundJob={id:body.requestId,cardId:body.cardId,status:'running',stage:'analysis',currentPipeline:true};surroundPolls=0;} return send(surroundJob,202);} return send({job:surroundJob}); }
+    if(surroundUI && pathname.startsWith('/api/surrounds/')){surroundPolls++;surroundJob={...surroundJob,stage:['analysis','near','wide','inner','ring','top','bottom','reconcile'][Math.min(surroundPolls,7)]};if(surroundPolls>=8)surroundJob={...surroundJob,status:'complete',backdrop:contrastPage.backdrop};return send(surroundJob);}
     if (pathname === '/api/page-overlays') return send({title:'cream',logo:'dark'});
     if (pathname.startsWith('/api/backdrops/')) { res.writeHead(200, { 'Content-Type': 'image/png' }); return res.end(contrastImage); }
     if (pathname === '/api/health') return send({ ok: true });

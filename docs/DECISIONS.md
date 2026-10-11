@@ -74,3 +74,7 @@ Owner approved the staged Michi surround direction and requested a durable runne
 ## October 11, 2026 — art surround and cache beta
 
 Owner resumed work to replace the card-colors starting workflow with “A card’s art (bg surround)” and deliver both TestFlight betas. The app starts the existing six-pass server runner from the chosen card, previews the result and keeps it with Undo. Restore the historical persistent artwork/vision image cache and warm card art; this explicitly supersedes the previous transient-reference requirement. Preserve account metering, private data boundaries and the loading animation. Existing App Review submissions/distribution and PWA retirement remain unchanged.
+
+## October 11 — approved surround refinement release
+
+Owner accepted the five-card results for now and requested implementation in both TestFlight apps. Ship the same generic analysis and seven-image pipeline; no per-card prompt branches. Recover known jobs without resubmitting, distinguish historical completed jobs from the current generator, preserve saved images and loading animation. Further duplication refinements stay local after delivery.

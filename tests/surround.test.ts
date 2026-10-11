@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { newPage, PageSession } from '../src/features/build/pageSession';
 import { backgroundSource } from '../src/features/build/background';
-import { keepSurround, type SurroundJob } from '../src/features/build/surround';
+import { keepSurround, recoverSurround, type SurroundJob } from '../src/features/build/surround';
 const id = 'fe9d30c4-5e36-44d6-9a33-f8c9dd53530c';
 const job: SurroundJob = { id, cardId: 'card', status: 'complete', backdrop: { kind: 'generated', assetId: id, sourceHash: 'a'.repeat(64), layoutVersion: 1 } };
 test('surround is a preview until kept, preserves page identity/name, Undo restores grid', () => {
@@ -33,4 +33,17 @@ test('changing the center or populating another slot returns to grid instead of 
     assert.equal(session.page.backdrop, undefined);
     session.undo();
     assert.equal(session.page.surround?.cardId, 'card');
+});
+
+test('recovery checks a known job without starting another, and excludes obsolete completed artwork', async () => {
+    const paths: string[] = [];
+    const request = async <T>(path: string): Promise<T> => { paths.push(path); return (path === '/surrounds' ? {job} : job) as T; };
+    assert.equal(await recoverSurround(request, 'card', null), undefined);
+    assert.equal(await recoverSurround(request, 'card', id), job);
+    assert.deepEqual(paths, ['/surrounds', '/surrounds/' + id]);
+    const current = {...job,currentPipeline:true};
+    assert.equal(await recoverSurround(async <T>()=>({job:current}) as T,'card',null),current);
+    assert.equal(await recoverSurround(async <T>()=>({job:{...job,status:'running'}}) as T,'card',null).then(x=>x?.status),'running');
+    assert.equal(await recoverSurround(async <T>()=>({job:current}) as T,'other',null),undefined);
+    await assert.rejects(recoverSurround(request,'other',id),/another card/);
 });
