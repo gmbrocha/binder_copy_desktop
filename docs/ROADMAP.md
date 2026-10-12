@@ -1,5 +1,7 @@
 # Roadmap
 
+**Current distribution decision (October 11): TestFlight only.** App Store submissions are rejected; owner does not want resubmission or withdrawal work. Historical public/unlisted and PWA retirement tasks below remain inactive. Await Sagar's renewed Apple team-invitation acceptance before completing internal tester enrollment.
+
 **Latest delivery:** approved card-agnostic analysis and seven-pass seam repair are live on backend 88fea1b and both TestFlight 1.1.0 (14) builds. Native creation, Keep and no-charge reopening checks passed. See CURRENT_STATE.md and backend docs/SURROUND_BUILD_14.md. Further duplicated-element refinement is deferred to local follow-up; older release instructions below are historical.
 
 **October 11 delivered:** art-surround start flow, original artwork cache restoration, and iPhone/Mac TestFlight 1.1.0 (13). See CURRENT_STATE.md for release evidence. The historical tasks below are not an instruction to resume public/unlisted submission changes or PWA retirement.

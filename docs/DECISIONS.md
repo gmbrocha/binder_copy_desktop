@@ -78,3 +78,10 @@ Owner resumed work to replace the card-colors starting workflow with “A card�
 ## October 11 — approved surround refinement release
 
 Owner accepted the five-card results for now and requested implementation in both TestFlight apps. Ship the same generic analysis and seven-image pipeline; no per-card prompt branches. Recover known jobs without resubmitting, distinguish historical completed jobs from the current generator, preserve saved images and loading animation. Further duplication refinements stay local after delivery.
+
+
+## October 11, 2026 — TestFlight-only continuation
+
+Owner reports both submitted apps were rejected and explicitly chooses to keep both as TestFlight betas for now. App Store Connect shows iOS and macOS 1.1.0 Rejected, with 2.1.0 App Completeness visible on iOS. Do not conflate App Review rejection with independently verified disposition of the separate unlisted request. Do not appeal, resubmit, withdraw, release publicly or retire PWA infrastructure automatically. Build 14 remains the delivered internal beta. Further development follows explicit owner requests.
+
+Owner requested a fresh invitation for Sagar. His prior team invitation was expired and no tester/user account was present in the API lookup. The release API key could not renew it; the signed-in Users and Access UI successfully displayed Invitation Resent. Same BinderCopy-only Marketing access; no provisioning or broader app access. Await acceptance, then add him to the existing internal TestFlight group.

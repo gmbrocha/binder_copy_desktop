@@ -2,6 +2,8 @@
 
 ## Objective
 
+Owner decision October 11: remain in TestFlight only for now. Do not pursue App Store/unlisted resubmission, withdrawal or PWA retirement automatically.
+
 Approved generic card-art surround pipeline delivered to iPhone and macOS TestFlight **1.1.0 (14)**. Owner accepts current visual quality, including occasional repeated elements, and defers further refinement to local work after this release. Preserve the UI/loading animation, cached artwork and account limits.
 
 ## Verified state
@@ -22,7 +24,7 @@ Release complete. Await owner testing. Further unique-element duplication and so
 
 ## Blockers
 
-No release blocker. Generated artwork can still repeat scene elements or change form scale; Umbreon's second moon is documented. Owner accepted these limitations for now. Apple public/unlisted review state and Sagar's identity-binding state were not re-audited.
+No release blocker. Generated artwork can still repeat scene elements or change form scale; Umbreon's second moon is documented. Owner accepted these limitations for now. Both iOS and macOS App Store versions show Rejected; the iOS page names 2.1.0 App Completeness. The separate unlisted-request decision was not independently checked. These rejections do not change the verified build-14 internal beta checkpoint. Sagar's expired App Store Connect invitation was resent through Users and Access; Apple displayed Invitation Resent. Acceptance remains required before adding him to the internal tester group. His app-level identity binding was not changed.
 
 ## Next actions
 
@@ -39,6 +41,8 @@ Backup services and isolated restore rehearsal passed before production cutover.
 Release evidence: backend docs/SURROUND_BUILD_14.md; local release/UI artifacts and Apple beta evidence. Server restore: /var/backups/bindercopy/surround-build14-restore-20261011. Server probes: /var/lib/bindercopy/monitor/surround-build14-release.json and art-surround-release-check.json.
 
 ## Last checkpoint
+
+October 11 follow-up: owner chose TestFlight-only continuation. Renewed Sagar's existing BinderCopy-only Marketing invitation without expanding permissions. Waiting for his acceptance; no TestFlight invitation or install acceptance is claimed. No app code, runtime deployment or submission mutation.
 
 October 11, 2026: backend deployed; both 1.1.0 (14) builds available internally. Source/release documentation checkpoint committed and pushed across all three repositories. Shared delivery budget USD 420.020594 counted/reserved, USD 79.979406 unreserved; USD 9 iPhone archive/UI reservation retained pending billing reconciliation. Public standard Mac runners included.
 
