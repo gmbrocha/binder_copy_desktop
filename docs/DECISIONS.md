@@ -85,3 +85,8 @@ Owner accepted the five-card results for now and requested implementation in bot
 Owner reports both submitted apps were rejected and explicitly chooses to keep both as TestFlight betas for now. App Store Connect shows iOS and macOS 1.1.0 Rejected, with 2.1.0 App Completeness visible on iOS. Do not conflate App Review rejection with independently verified disposition of the separate unlisted request. Do not appeal, resubmit, withdraw, release publicly or retire PWA infrastructure automatically. Build 14 remains the delivered internal beta. Further development follows explicit owner requests.
 
 Owner requested a fresh invitation for Sagar. His prior team invitation was expired and no tester/user account was present in the API lookup. The release API key could not renew it; the signed-in Users and Access UI successfully displayed Invitation Resent. Same BinderCopy-only Marketing access; no provisioning or broader app access. Await acceptance, then add him to the existing internal TestFlight group.
+
+
+## October 11, 2026 — owner generation exemption
+
+Owner requests no app-level monthly spending cap for his own verified account. He was already an active founder admin; Collector is merely the fallback display name. Backend 7a68cc3 and the exact-identity operator setting now provide unlimited usage to the owner, while Sagar remains authorized for the same exemption after verified onboarding. Other members retain USD 5/person/UTC-month. Retain immutable costs/reservations and abnormal-price safety stops. No native rebuild or legal-link relocation requested.
